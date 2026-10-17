@@ -51,14 +51,14 @@ namespace AlgeCardAdventure.UI
         private bool _hasDealt = false;
         private Coroutine _shuffleCoroutine;
 
-        // Formasi melengkung (fanned arc) untuk 5 kartu di canvas 1080x1920
+        // Formasi melengkung (fanned arc) untuk 5 kartu di canvas 1080x1920 (proporsional 215x365 px)
         private readonly Vector2[] _fannedPositions = new Vector2[]
         {
-            new Vector2(-280f, -35f),
-            new Vector2(-140f, -5f),
-            new Vector2(0f, 10f),
-            new Vector2(140f, -5f),
-            new Vector2(280f, -35f)
+            new Vector2(-360f, -42f),
+            new Vector2(-180f, -9f),
+            new Vector2(0f, 14f),
+            new Vector2(180f, -9f),
+            new Vector2(360f, -42f)
         };
 
         private readonly float[] _fannedRotations = new float[]

@@ -108,4 +108,33 @@
 - [x] Keputusan `DEC-19` dicatat di `Docs/Decision_Log.md`.
 - [x] Changelog `changelog/17/10/2026/17/45.md` dibuat (**Pilar 5**).
 
+---
+
+## 📋 Checklist Batch 6 (Phase 5 — Ultra-HD Modular UI & High-Fidelity Proportions)
+
+- [x] Analisis mendalam root cause visual: resolusi rendah 430x920 piksel (1x DPI) dan ruang kosong hijau masif akibat monolithic baking.
+- [x] Ekstraksi 12 aset modular vektor resolusi ultra-tinggi (3x supersampling) dari `Docs/Ui Template/03_mission_card/code.html`:
+  - `mission_card_bg.png` (1080x2400 clean landscape, maxTextureSize 4096).
+  - `mascot_green_cricket.png` & `mascot_orange_cricket.png` (320x380 transparent sprites).
+  - `speech_bubble.png` (680x160 parchment bubble, border amber tajam).
+  - `mission_badge.png` (330x130 wood plaque & difficulty pill).
+  - `btn_back_orange.png` (110x110 orange 3D button).
+  - `mission_card_back.png` (420x700 royal blue & gold card back).
+  - `shelf_books.png` (320x180 Science & Math 3D books).
+  - `shelf_map_compass.png` (320x180 map & compass).
+  - `shelf_table_leaves.png` (1080x440 wood table & foliage leaves).
+  - `stationary_deck_base.png` (230x290 3D deck stack base).
+  - `btn_shuffle_badge.png` (400x115 golden shuffle pill badge).
+- [x] Rekonstruksi layout `03_MissionCard.unity` secara modular:
+  - TopSafePanel (BackButton, MissionBadge, Mascots + Speech bubble).
+  - CenterPlayArea (Logo, Status Pill, 5 Kartu Kipas proporsional 215x365 px, sebaran -360 s/d +360).
+  - BottomShelfPanel (Meja kayu 440px, buku Science & Math, tumpukan kartu diam, tombol emas, peta & kompas).
+  - Jarak kartu ke meja dipersempit rapat, mengeliminasi jurang kosong hijau.
+- [x] `_fannedPositions` di `MissionCardController.cs` dikalibrasi ke (-360, -180, 0, 180, 360).
+- [x] Verifikasi visual `scratch/unity_canvas_composite_preview.png` mengonfirmasi 100% keselarasan dengan acuan Image 1.
+- [x] Solusi build C# `AlgeCardAdventure.Runtime` dan `AlgeCardAdventure.Tests`: 0 Warning, 0 Error.
+- [x] Seluruh 38 kasus uji otomatis diverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
+- [x] Keputusan `DEC-20` dicatat di `Docs/Decision_Log.md`.
+- [x] Changelog `changelog/17/10/2026/19/15.md` dibuat (**Pilar 5**).
+
 
