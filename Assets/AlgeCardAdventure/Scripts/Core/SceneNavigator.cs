@@ -55,6 +55,26 @@ namespace AlgeCardAdventure.Core
             LoadScene(SceneSplashScreen);
         }
 
+        public static void GoToMissionCard()
+        {
+            LoadScene(SceneMissionCard);
+        }
+
+        public static void GoToAlgebraCardBoard()
+        {
+            LoadScene(SceneAlgebraCardBoard);
+        }
+
+        public static void GoToTrueOrFalse()
+        {
+            LoadScene(SceneTrueOrFalse);
+        }
+
+        public static void GoToScoreResults()
+        {
+            LoadScene(SceneScoreResults);
+        }
+
         public static void GoToCredits()
         {
             LoadScene(SceneCredits);

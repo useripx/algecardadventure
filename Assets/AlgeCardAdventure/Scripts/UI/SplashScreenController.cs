@@ -45,6 +45,9 @@ namespace AlgeCardAdventure.UI
 
             Debug.Log("[SplashScreen] Layar diketuk! Memulai petualangan AlgeCard Adventure...");
 
+            // Mainkan audio ketukan layar
+            AlgeCardAdventure.Audio.AudioManager.Instance?.PlayButtonClick();
+
             if (promptContainer != null)
             {
                 promptContainer.SetActive(false);
