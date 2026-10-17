@@ -1,8 +1,8 @@
 # Task Status — AlgeCard Adventure
 
-> **Terakhir Diperbarui:** 17 Oktober 2026 22:05 WIB  
-> **Status Keseluruhan Proyek:** Phase 6 Selesai — Screen 04 (Algebra Card Board) & Polish Screen 03 Siap Ditinjau  
-> **Total Progres:** ~70% (Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, Screen 02, Screen 03, & Screen 04)  
+> **Terakhir Diperbarui:** 17 Oktober 2026 22:45 WIB  
+> **Status Keseluruhan Proyek:** Phase 6 Selesai — Screen 03 Modal Alignment & Screen 04 URP Camera Fix Terverifikasi  
+> **Total Progres:** ~72% (Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, Screen 02, Screen 03, & Screen 04)  
 
 ---
 
@@ -240,6 +240,25 @@
 - [x] Kompilasi `AlgeCardAdventure.Runtime.csproj` dan `AlgeCardAdventure.Tests.csproj`: **0 Warning, 0 Error**.
 - [x] Keputusan arsitektur `DEC-24` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
 - [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
+---
+
+## 📋 Checklist Batch 11 (Perbaikan Presisi Modal Layar 03 & Resolusi Kamera URP Layar 04)
+
+- [x] **Penyelarasan Presisi Koordinat Kartu Modal Layar 03 (`03_MissionCard.unity`):**
+  - Kartu modal disesuaikan ke ukuran `750x1048 px` dengan posisi vertikal `y = 70`.
+  - Tiga bintang dinamis (`Star1`, `Star2`, `Star3`) diposisikan sejajar horizontal di `y = -318` (`x = 45, 105, 165`), pas di samping kanan label bawaan cetak `DIFFICULTY LEVEL:`.
+  - Teks poin misi (`MissionPointsText`) diposisikan di `y = -384`, `x = 135` (size `160x44`, font 30 bold `#FBBF24`), pas di samping label bawaan cetak `MISSION POINTS:`.
+  - Tombol Continue dinaikkan dari `y = -615` ke `y = -470` (size `380x82`), pas menempel rapi di bawah kartu tanpa melorot melewati batas bawah layar ponsel.
+- [x] **Resolusi Kamera URP Layar 04 (`04_AlgebraCardBoard.unity`):**
+  - Objek `Main Camera` ditambahkan komponen resmi URP `UniversalAdditionalCameraData` (`guid: a79441f348de89743a2939f4d699eac1`).
+  - Objek `Canvas` dihubungkan `worldCamera: {fileID: 12}` (`Main Camera`).
+  - Masalah layar hitam bertuliskan *"Display 1: No cameras rendering"* dan peringatan audio listener teratasi secara tuntas.
+- [x] Kompilasi solusi: `dotnet build AlgeCardAdventure.Tests.csproj` menghasilkan **0 Warning, 0 Error**.
+- [x] Unit test EditMode `AlgebraBoardTests.cs` (6 test) terverifikasi **100% PASS** (**Pilar 6**).
+- [x] Keputusan arsitektur `DEC-25` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
+- [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
 
 
 
