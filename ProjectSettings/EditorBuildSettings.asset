@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/AlgeCardAdventure/Scenes/03_MissionCard.unity
     guid: 46a2e14271dc408e859ef77d990b78b6
+  - enabled: 1
+    path: Assets/AlgeCardAdventure/Scenes/04_AlgebraCardBoard.unity
+    guid: 57b3f25382ed419f96af088ea01c89c7
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02

@@ -1,8 +1,8 @@
 # Task Status — AlgeCard Adventure
 
-> **Terakhir Diperbarui:** 17 Oktober 2026 17:05 WIB  
-> **Status Keseluruhan Proyek:** Phase 5 Selesai — Screen 03 Mission Cards, Shuffle & Cozy Fantasy BGM Siap Ditinjau  
-> **Total Progres:** ~60% (Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, Screen 02, & Screen 03)  
+> **Terakhir Diperbarui:** 17 Oktober 2026 22:05 WIB  
+> **Status Keseluruhan Proyek:** Phase 6 Selesai — Screen 04 (Algebra Card Board) & Polish Screen 03 Siap Ditinjau  
+> **Total Progres:** ~70% (Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, Screen 02, Screen 03, & Screen 04)  
 
 ---
 
@@ -16,7 +16,7 @@
 | **Phase 3** | Screen 01 — Splash Screen | **DONE** | 100% | Scene 01_SplashScreen.unity siap, logo, background, pulsing text, tap-to-start aktif. |
 | **Phase 4** | Screen 02 — Level Selection & Audio | **DONE** | 100% | Scene 02_Level.unity siap, GameSession manager, AudioManager & 28 test PASS. |
 | **Phase 5** | Screen 03 — Mission Cards & Shuffle | **DONE** | 100% | Scene 03_MissionCard.unity siap, Cozy Fantasy BGM loop, modal soal & 36 test PASS. |
-| **Phase 6** | Screen 04 — Algebra Card Board | PENDING | 0% | Menggunakan soal pilot terkurasi (OPEN-02). |
+| **Phase 6** | Screen 04 — Algebra Card Board | **DONE** | 100% | Scene 04_AlgebraCardBoard.unity siap, 4 tahap dinamis, dek 0-9, tap-to-clear & test PASS. |
 | **Phase 7** | Screen 05 — True or False & Explanation | PENDING | 0% | Konten T/F pilot disetujui (OPEN-03). |
 | **Phase 8** | Screen 06 — Score Results, Loop Sesi & Credits | PENDING | 0% | Integrasi DEC-15 (Credits Scene Yogi Ario, Nisa Aprilia, UNP Kediri). |
 | **Phase 9** | Polish, E2E Testing, Android Build | PENDING | 0% | Build APK/AAB Android & QA final. |
@@ -200,6 +200,47 @@
 - [x] Seluruh 40 unit tests EditMode terverifikasi **100% PASS** (**Pilar 6**).
 - [x] Keputusan arsitektur `DEC-23` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
 - [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
+---
+
+## 📋 Checklist Batch 10 (Phase 6 — Layar 04 Algebra Card Board & Polish Layar 03)
+
+- [x] **Penyempurnaan Layar 03 (`03_MissionCard.unity`):**
+  - Kartu modal dibuka ulang berukuran lega `800x1118 px` (skala optimal potret 1080x1920).
+  - Teks narasi soal (`QuestionText`) diperluas menjadi `620x220 px` (font 28px, autowrap, margin lega, tidak terpotong).
+  - Kotak formula `EquationBox` dipertegas (`580x90 px`, font 38px bold dark blue).
+  - Tombol Continue dipindahkan ke **luar** kartu (`y = -615`), berupa pil kapsul emas 3D (`btn_gold_capsule.png`) bergradien halus dengan highlight glossy dan teks `"Continue  >"`.
+- [x] **Pembuatan Aset UI Layar 04:**
+  - `btn_gold_capsule.png` (pil emas 3D dengan 9-slice borders).
+  - `btn_blue_capsule.png` (pil biru 3D untuk tombol Reset Step).
+  - `slot_card_empty.png` (slot kartu bergaris putus-putus biru/abu-abu).
+  - `tile_card_white.png` (kartu angka putih bersih 3D berbayang).
+  - `tile_card_orange.png` (kartu operator oranye/emas).
+  - `tile_card_green.png` (kartu variabel hijau mint).
+  - `board_step_panel.png` (panel kayu perkamen berornamen).
+  - `arrow_down_gold.png` (panah emas 3D penghubung antar-tahap).
+- [x] **Implementasi Controller Layar 04 (`AlgebraBoardController.cs`):**
+  - Ekstraksi dan parsing dinamis 4 tahap aljabar dari `GameSession.Instance.CurrentQuestion` (`equation_model`, `solution_steps`, `final_answer`).
+  - Palet dek angka lengkap **0 sampai 9** (`0, 1, 2, 3, 4, 5, 6, 7, 8, 9`), variabel (`x, y, a, b`), dan operator (`+, -, =, /`).
+  - Fitur **Tap-to-Slot**: Mengetuk kartu dek memasukkan token ke slot kosong pertama di baris tahap aktif.
+  - Fitur **Tap-to-Clear**: Mengetuk kartu pada slot baris aktif mengosongkan kembali slot tersebut (memenuhi permintaan Yogi Ario).
+  - Fitur **Reset Step / Clear Step**: Tombol reset mengosongkan seluruh slot pada tahap aktif.
+  - Validasi urutan kartu pada tahap aktif dengan SFX `PlayCorrect()` / `PlayWrong()`.
+  - Transisi bertahap: Tahap yang selesai dikunci hijau/emas, membuka tahap berikutnya sampai Tahap 4 selesai dan tombol berubah menjadi `"Next Stage >"`.
+- [x] **Penyusunan Scene Unity (`Assets/AlgeCardAdventure/Scenes/04_AlgebraCardBoard.unity`):**
+  - Hierarki UGUI lengkap: Main Camera, EventSystem, Canvas 1080x1920, Background pemandangan, BackButton, HeaderLevelText, QuestionBox dengan maskot, 4 Stage Rows dengan slot kartu dan panah emas, Sidebar Dek Kartu lengkap, ContinueButton 3D emas, ResetStepButton 3D biru, FeedbackText.
+  - Scene `04_AlgebraCardBoard.unity` didaftarkan secara resmi di `ProjectSettings/EditorBuildSettings.asset`.
+- [x] **Unit Testing EditMode (`AlgebraBoardTests.cs`):**
+  - `TC_BOARD_01_TokenizeExpression_StandardLinearEquation` (**PASS**).
+  - `TC_BOARD_02_TokenizeExpression_SubtractionAndDivision` (**PASS**).
+  - `TC_BOARD_03_FormulateStages_Generates4StagesFromQuestion` (**PASS**).
+  - `TC_BOARD_04_TapToSlot_And_TapToClear_Lifecycle` (**PASS**).
+  - `TC_BOARD_05_ValidateStage_ExactMatchAndMismatch` (**PASS**).
+  - `TC_BOARD_06_StageProgress_AdvancesIndexAndCompletes` (**PASS**).
+- [x] Kompilasi `AlgeCardAdventure.Runtime.csproj` dan `AlgeCardAdventure.Tests.csproj`: **0 Warning, 0 Error**.
+- [x] Keputusan arsitektur `DEC-24` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
+- [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
 
 
 
