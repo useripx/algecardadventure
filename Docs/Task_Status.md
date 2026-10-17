@@ -54,9 +54,10 @@
   - Plakat kayu tengah *"Select Level"* dengan 3 kartu tombol: Easy (Biru `★`), Normal (Hijau `★★`), Hard (Oranye `★★★`).
   - Tombol *"◀ BACK"* navigasi kembali ke Splash Screen.
 - [x] Scene `02_Level.unity` didaftarkan di `EditorBuildSettings.asset` (Index 1).
-- [x] Unit test `GameSessionTests.cs` (6 test) dan `AudioManagerTests.cs` (4 test) dibuat.
-- [x] Seluruh 28 kasus uji otomatis diverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
+- [x] Unit test `GameSessionTests.cs` (6 test), `AudioManagerTests.cs` (4 test), dan navigasi Screen 02 dibuat.
+- [x] Perbaikan binding tombol Hard di `02_Level.unity` (menunjuk ke Button ID `896`) dan logging defensif `LevelSelectionController.cs`.
+- [x] Seluruh 30 kasus uji otomatis diverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
 - [x] Keputusan `DEC-17` (Audio Foundation & Procedural Fallback) dicatat di `Docs/Decision_Log.md`.
 - [x] Dokumentasi `Docs/Task_Status.md` dan `Docs/Test_Report.md` diperbarui (**Pilar 5**).
-- [x] Changelog `changelog/17/10/2026/16/15.md` dibuat (**Pilar 5**).
+- [x] Changelog `changelog/17/10/2026/16/30.md` dibuat (**Pilar 5**).
 

@@ -94,5 +94,55 @@ namespace AlgeCardAdventure.Tests
             Assert.AreEqual(Vector2.zero, rt.offsetMax);
             Object.DestroyImmediate(go);
         }
+
+        [Test]
+        public void TC_NAV_03_LevelSelectionController_OnLevelSelected_StartsGameSessionAndNavigates()
+        {
+            var sessionGo = new GameObject("TestSession");
+            var session = sessionGo.AddComponent<AlgeCardAdventure.Session.GameSession>();
+
+            var controllerGo = new GameObject("TestController");
+            var controller = controllerGo.AddComponent<LevelSelectionController>();
+
+            string navigatedScene = null;
+            void Handler(string s) => navigatedScene = s;
+            SceneNavigator.OnBeforeSceneLoad += Handler;
+
+            try
+            {
+                controller.OnLevelSelected("Hard");
+                Assert.AreEqual("Hard", session.CurrentLevel);
+                Assert.AreEqual(10, session.TotalQuestionsInSession);
+                Assert.AreEqual("03_MissionCard", navigatedScene);
+            }
+            finally
+            {
+                SceneNavigator.OnBeforeSceneLoad -= Handler;
+                Object.DestroyImmediate(controllerGo);
+                Object.DestroyImmediate(sessionGo);
+            }
+        }
+
+        [Test]
+        public void TC_NAV_04_LevelSelectionController_OnBackClicked_NavigatesToSplashScreen()
+        {
+            var controllerGo = new GameObject("TestController");
+            var controller = controllerGo.AddComponent<LevelSelectionController>();
+
+            string navigatedScene = null;
+            void Handler(string s) => navigatedScene = s;
+            SceneNavigator.OnBeforeSceneLoad += Handler;
+
+            try
+            {
+                controller.OnBackClicked();
+                Assert.AreEqual("01_SplashScreen", navigatedScene);
+            }
+            finally
+            {
+                SceneNavigator.OnBeforeSceneLoad -= Handler;
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
     }
 }

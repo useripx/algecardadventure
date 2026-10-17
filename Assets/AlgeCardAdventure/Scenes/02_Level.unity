@@ -508,7 +508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   easyButton: {fileID: 834}
   normalButton: {fileID: 864}
-  hardButton: {fileID: 894}
+  hardButton: {fileID: 896}
   backButton: {fileID: 954}
 --- !u!1 &500
 GameObject:

@@ -51,13 +51,15 @@
 | **TC-AUDIO-02** | `AudioManager` | Kontrol toggle dan set mute | Status `IsMuted` berganti konsisten | **PASS** |
 | **TC-AUDIO-03** | `AudioManager` | Clamping volume BGM dan SFX (0.0 s.d. 1.0) | Nilai di luar batas otomatis di-clamp aman | **PASS** |
 | **TC-AUDIO-04** | `ProceduralAudio` | Pembuatan 4 klip suara sintesis bawaan | Klip valid, durasi > 0, dan dapat diputar audio engine | **PASS** |
+| **TC-NAV-03** | `LevelSelectionController` | Pemilihan level 'Hard' | Menyimpan level 'Hard', inisialisasi batas 10 soal, dan berpindah ke Screen 03 | **PASS** |
+| **TC-NAV-04** | `LevelSelectionController` | Klik tombol Back | Memicu navigasi kembali ke Screen 01 Splash Screen | **PASS** |
 
 ---
 
 ## 📋 Ringkasan Hasil Pengujian Terakhir
 
-- **Total Kasus Uji:** 28
-- **Lulus (PASS):** 28 (100%)
+- **Total Kasus Uji:** 30
+- **Lulus (PASS):** 30 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

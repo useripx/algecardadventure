@@ -26,20 +26,36 @@ namespace AlgeCardAdventure.UI
             {
                 easyButton.onClick.AddListener(() => OnLevelSelected("Easy"));
             }
+            else
+            {
+                Debug.LogWarning("[LevelSelectionController] easyButton belum terpasang di Inspector!");
+            }
 
             if (normalButton != null)
             {
                 normalButton.onClick.AddListener(() => OnLevelSelected("Normal"));
+            }
+            else
+            {
+                Debug.LogWarning("[LevelSelectionController] normalButton belum terpasang di Inspector!");
             }
 
             if (hardButton != null)
             {
                 hardButton.onClick.AddListener(() => OnLevelSelected("Hard"));
             }
+            else
+            {
+                Debug.LogWarning("[LevelSelectionController] hardButton belum terpasang di Inspector!");
+            }
 
             if (backButton != null)
             {
                 backButton.onClick.AddListener(OnBackClicked);
+            }
+            else
+            {
+                Debug.LogWarning("[LevelSelectionController] backButton belum terpasang di Inspector!");
             }
         }
 
