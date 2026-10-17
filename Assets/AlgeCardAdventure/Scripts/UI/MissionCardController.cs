@@ -157,7 +157,7 @@ namespace AlgeCardAdventure.UI
 
             if (equationPreviewText != null)
             {
-                if (_selectedQuestion.equation_model != null && _selectedQuestion.equation_model.Count > 0)
+                if (_selectedQuestion.equation_model != null && _selectedQuestion.equation_model.Length > 0)
                 {
                     equationPreviewText.text = _selectedQuestion.equation_model[0];
                 }
