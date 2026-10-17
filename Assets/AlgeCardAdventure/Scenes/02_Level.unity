@@ -1964,7 +1964,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 890}
-  - component: {fileID: 891}
+  - component: {fileID: 8871}
   - component: {fileID: 892}
   m_Layer: 5
   m_Name: NormalPlayText
@@ -1993,7 +1993,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &891
+--- !u!222 &8871
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
