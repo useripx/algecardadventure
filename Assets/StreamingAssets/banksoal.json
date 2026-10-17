@@ -1,0 +1,1737 @@
+{
+  "schema_version": "1.0.0",
+  "title": "AlgeCard Adventure Question Bank",
+  "language": "en",
+  "source": {
+    "file_name": "bank soal.pdf",
+    "section": "English version only",
+    "page_range": "PDF pages 25-37 (as identified during review)",
+    "source_level_labels": [
+      "Easy",
+      "Medium",
+      "Hard"
+    ],
+    "transcription_note": "Question wording is based on the source English section. Equations and solution steps are normalized for JSON readability. Source ambiguities or apparent inconsistencies are explicitly flagged in review_status/review_note."
+  },
+  "game_configuration": {
+    "level_mapping": {
+      "Easy": "Easy",
+      "Medium": "Normal",
+      "Hard": "Hard"
+    },
+    "question_count_total": 60,
+    "question_count_by_ui_level": {
+      "Easy": 20,
+      "Normal": 20,
+      "Hard": 20
+    },
+    "true_false_content_policy": "True/False statements are not present in the source question bank and remain null until separately authored and mathematically validated.",
+    "random_selection_policy": "Game code should select question objects from the levels[].questions array using ui_level; do not hardcode individual questions in Unity scripts."
+  },
+  "levels": [
+    {
+      "source_level": "Easy",
+      "ui_level": "Easy",
+      "questions": [
+        {
+          "id": "EASY-001",
+          "source_number": 1,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Younger Sibling's Savings",
+          "question_text": "A younger sibling has some savings. Today, mother gave an additional Rp10,000. If the total money is now Rp25,000, what was the initial savings amount?",
+          "equation_model": [
+            "x + 10000 = 25000"
+          ],
+          "solution_steps": [
+            "Let the initial savings be x.",
+            "x + 10000 = 25000",
+            "x = 25000 - 10000",
+            "x = 15000"
+          ],
+          "final_answer": "Rp15,000",
+          "answer_summary": "Initial savings = 15000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-002",
+          "source_number": 2,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Cutting a Cake",
+          "question_text": "A sponge cake is cut into several pieces. Budi eats 3 pieces. Now, there are 5 pieces left on the plate. How many pieces of cake were there before Budi ate any?",
+          "equation_model": [
+            "y - 3 = 5"
+          ],
+          "solution_steps": [
+            "Let the initial number of pieces be y.",
+            "y - 3 = 5",
+            "y = 5 + 3",
+            "y = 8"
+          ],
+          "final_answer": "8 pieces",
+          "answer_summary": "Initial pieces = 8",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-003",
+          "source_number": 3,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Buying Pencils",
+          "question_text": "The price of 4 identical pencils is Rp12,000. What is the price of one pencil?",
+          "equation_model": [
+            "4p = 12000"
+          ],
+          "solution_steps": [
+            "Let the price of one pencil be p.",
+            "4p = 12000",
+            "p = 12000 / 4",
+            "p = 3000"
+          ],
+          "final_answer": "Rp3,000",
+          "answer_summary": "Price per pencil = 3000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-004",
+          "source_number": 4,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Sharing Candy",
+          "question_text": "A bag of candy is shared equally among 6 children. Each child receives 4 candies. What is the total number of candies in the bag?",
+          "equation_model": [
+            "n / 6 = 4"
+          ],
+          "solution_steps": [
+            "Let the total number of candies be n.",
+            "n / 6 = 4",
+            "n = 4 * 6",
+            "n = 24"
+          ],
+          "final_answer": "24 candies",
+          "answer_summary": "Total candies = 24",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-005",
+          "source_number": 5,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Buying Sugar and Parking",
+          "question_text": "Father buys 2 kg of sugar and pays a motorcycle parking fee of Rp2,000. If the total money spent by father is Rp32,000, what is the price of 1 kg of sugar?",
+          "equation_model": [
+            "2g + 2000 = 32000"
+          ],
+          "solution_steps": [
+            "Let the price of 1 kg of sugar be g.",
+            "2g + 2000 = 32000",
+            "2g = 30000",
+            "g = 15000"
+          ],
+          "final_answer": "Rp15,000",
+          "answer_summary": "Price per kg = 15000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-006",
+          "source_number": 6,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Shirt Discount",
+          "question_text": "The price of 3 shirts after a discount of Rp10,000 is Rp140,000. What is the normal price of one shirt?",
+          "equation_model": [
+            "3k - 10000 = 140000"
+          ],
+          "solution_steps": [
+            "Let the normal price of one shirt be k.",
+            "3k - 10000 = 140000",
+            "3k = 150000",
+            "k = 50000"
+          ],
+          "final_answer": "Rp50,000",
+          "answer_summary": "Normal price per shirt = 50000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-007",
+          "source_number": 7,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Older Sibling's Age",
+          "question_text": "An older sibling is 4 years older than the younger sibling. If the older sibling's current age is 16 years, what is the younger sibling's current age?",
+          "equation_model": [
+            "a + 4 = 16"
+          ],
+          "solution_steps": [
+            "Let the younger sibling's age be a.",
+            "a + 4 = 16",
+            "a = 16 - 4",
+            "a = 12"
+          ],
+          "final_answer": "12 years old",
+          "answer_summary": "Younger sibling's age = 12 years",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-008",
+          "source_number": 8,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Weight of Oranges",
+          "question_text": "On a table, there are 5 baskets of oranges, each with the same weight, plus 2 kg of oranges outside the baskets. If the total weight of all the oranges is 17 kg, what is the weight of the oranges in each basket?",
+          "equation_model": [
+            "5j + 2 = 17"
+          ],
+          "solution_steps": [
+            "Let the weight of one basket be j kg.",
+            "5j + 2 = 17",
+            "5j = 15",
+            "j = 3"
+          ],
+          "final_answer": "3 kg",
+          "answer_summary": "Weight per basket = 3 kg",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-009",
+          "source_number": 9,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Long Distance Travel",
+          "question_text": "The distance from Rini's house to her grandmother's house is 3 times the distance from Rini's house to her school. If the distance to her grandmother's house is 18 km, what is the distance from Rini's house to her school?",
+          "equation_model": [
+            "3s = 18"
+          ],
+          "solution_steps": [
+            "Let the distance to school be s km.",
+            "3s = 18",
+            "s = 18 / 3",
+            "s = 6"
+          ],
+          "final_answer": "6 km",
+          "answer_summary": "Distance to school = 6 km",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-010",
+          "source_number": 10,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Stack of Books",
+          "question_text": "There are 4 thick books of the same size stacked together, and on top of them is placed a thin book with a thickness of 2 cm. If the total height of the book stack is 14 cm, what is the thickness of one thick book?",
+          "equation_model": [
+            "4t + 2 = 14"
+          ],
+          "solution_steps": [
+            "Let the thickness of one thick book be t cm.",
+            "4t + 2 = 14",
+            "4t = 12",
+            "t = 3"
+          ],
+          "final_answer": "3 cm",
+          "answer_summary": "Thickness per thick book = 3 cm",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-011",
+          "source_number": 11,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Change",
+          "question_text": "Doni bought a magazine and handed over a Rp50,000 bill. He received Rp15,000 in change. What was the price of the magazine?",
+          "equation_model": [
+            "50000 - m = 15000"
+          ],
+          "solution_steps": [
+            "Let the price of the magazine be m.",
+            "50000 - m = 15000",
+            "m = 50000 - 15000",
+            "m = 35000"
+          ],
+          "final_answer": "Rp35,000",
+          "answer_summary": "Magazine price = 35000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-012",
+          "source_number": 12,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Temperature Increase",
+          "question_text": "The air temperature in a room is raised by 5 degrees Celsius from its initial temperature to make it warmer. The room temperature is now 22 degrees Celsius. What was its initial temperature?",
+          "equation_model": [
+            "x + 5 = 22"
+          ],
+          "solution_steps": [
+            "Let the initial temperature be x °C.",
+            "x + 5 = 22",
+            "x = 22 - 5",
+            "x = 17"
+          ],
+          "final_answer": "17°C",
+          "answer_summary": "Initial temperature = 17 °C",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-013",
+          "source_number": 13,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Bicycle Rental",
+          "question_text": "The cost to rent a tourist bicycle is Rp10,000 per hour, plus a one-time insurance fee of Rp5,000. If Nisa pays a total of Rp45,000, for how many hours did Nisa rent the bicycle?",
+          "equation_model": [
+            "10000j + 5000 = 45000"
+          ],
+          "solution_steps": [
+            "Let the rental duration be j hours.",
+            "10000j + 5000 = 45000",
+            "10000j = 40000",
+            "j = 4"
+          ],
+          "final_answer": "4 hours",
+          "answer_summary": "Rental duration = 4 hours",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-014",
+          "source_number": 14,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Rope Length",
+          "question_text": "Mr. Rahmat has a long piece of rope. He cuts off 12 meters of the rope to tie wood, leaving 25 meters. What was the length of Mr. Rahmat's rope before it was cut?",
+          "equation_model": [
+            "p - 12 = 25"
+          ],
+          "solution_steps": [
+            "Let the initial rope length be p meters.",
+            "p - 12 = 25",
+            "p = 25 + 12",
+            "p = 37"
+          ],
+          "final_answer": "37 meters",
+          "answer_summary": "Initial rope length = 37 m",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-015",
+          "source_number": 15,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Toy Collection",
+          "question_text": "Two toy boxes contain the same number of toy cars. After adding 3 new toy cars kept outside the boxes, Rio's total number of toy cars is now 27. How many toy cars are in each box?",
+          "equation_model": [
+            "2x + 3 = 27"
+          ],
+          "solution_steps": [
+            "Let the number of toy cars in one box be x.",
+            "2x + 3 = 27",
+            "2x = 24",
+            "x = 12"
+          ],
+          "final_answer": "12 toy cars",
+          "answer_summary": "Toy cars per box = 12",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-016",
+          "source_number": 16,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Mango Harvest",
+          "question_text": "Grandfather harvests mangoes and divides them into 3 large baskets. Including 5 mangoes left outside the baskets, the total harvest is 95 mangoes. How many mangoes are in each basket?",
+          "equation_model": [
+            "3m + 5 = 95"
+          ],
+          "solution_steps": [
+            "Let the number of mangoes in one basket be m.",
+            "3m + 5 = 95",
+            "3m = 90",
+            "m = 30"
+          ],
+          "final_answer": "30 mangoes",
+          "answer_summary": "Mangoes per basket = 30",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-017",
+          "source_number": 17,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Weight Loss",
+          "question_text": "After exercising regularly for a month, Anton's weight decreased by 4 kg. If Anton's current weight is 72 kg, what was his weight last month?",
+          "equation_model": [
+            "b - 4 = 72"
+          ],
+          "solution_steps": [
+            "Let last month's weight be b kg.",
+            "b - 4 = 72",
+            "b = 72 + 4",
+            "b = 76"
+          ],
+          "final_answer": "76 kg",
+          "answer_summary": "Last month's weight = 76 kg",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-018",
+          "source_number": 18,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Adding to Daily Allowance",
+          "question_text": "Dian's daily allowance is a constant amount every day. After saving for 5 days and receiving an additional gift from her mother of Rp10,000, Dian has accumulated Rp60,000. What is Dian's daily allowance?",
+          "equation_model": [
+            "5u + 10000 = 60000"
+          ],
+          "solution_steps": [
+            "Let the daily allowance be u.",
+            "5u + 10000 = 60000",
+            "5u = 50000",
+            "u = 10000"
+          ],
+          "final_answer": "Rp10,000",
+          "answer_summary": "Daily allowance = 10000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-019",
+          "source_number": 19,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Match Score",
+          "question_text": "The school futsal team scored goals from 6 consecutive penalty kicks. They received a 2-point deduction due to a foul. If their total score is now 16 points, how many points is one penalty goal worth?",
+          "equation_model": [
+            "6p - 2 = 16"
+          ],
+          "solution_steps": [
+            "Let the points for one goal be p.",
+            "6p - 2 = 16",
+            "6p = 18",
+            "p = 3"
+          ],
+          "final_answer": "3 points",
+          "answer_summary": "Points per goal = 3",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "EASY-020",
+          "source_number": 20,
+          "source_level": "Easy",
+          "ui_level": "Easy",
+          "title": "Filling a Bathtub",
+          "question_text": "A bathtub is already filled with 15 liters of water. The faucet is turned on, flowing water at a constant rate every minute. After 4 minutes, the total water in the tub is 55 liters. How many liters of water flow from the faucet each minute?",
+          "equation_model": [
+            "4x + 15 = 55"
+          ],
+          "solution_steps": [
+            "Let the water flow per minute be x liters.",
+            "4x + 15 = 55",
+            "4x = 40",
+            "x = 10"
+          ],
+          "final_answer": "10 liters/minute",
+          "answer_summary": "Flow rate = 10 L/min",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        }
+      ]
+    },
+    {
+      "source_level": "Medium",
+      "ui_level": "Normal",
+      "questions": [
+        {
+          "id": "NORMAL-001",
+          "source_number": 1,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Father and Budi's Ages",
+          "question_text": "Father's current age is 3 times Budi's age. Ten years from now, Father's age will be 2 times Budi's age. What is Budi's current age?",
+          "equation_model": [
+            "F = 3x",
+            "F + 10 = 2(x + 10)"
+          ],
+          "solution_steps": [
+            "Let Budi's current age be x; Father's age is 3x.",
+            "3x + 10 = 2(x + 10)",
+            "3x + 10 = 2x + 20",
+            "x = 10"
+          ],
+          "final_answer": "10 years old",
+          "answer_summary": "Budi's current age = 10 years",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-002",
+          "source_number": 2,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Older and Younger Sibling's Savings",
+          "question_text": "The older sibling's savings are Rp50,000 more than the younger sibling's savings. If twice the older sibling's savings is equal to three times the younger sibling's savings minus Rp10,000, how much are the younger sibling's savings?",
+          "equation_model": [
+            "Older = x + 50000",
+            "2(x + 50000) = 3x - 10000"
+          ],
+          "solution_steps": [
+            "Let the younger sibling's savings be x; the older sibling has x + 50000.",
+            "2(x + 50000) = 3x - 10000",
+            "2x + 100000 = 3x - 10000",
+            "x = 110000"
+          ],
+          "final_answer": "Rp110,000",
+          "answer_summary": "Younger sibling's savings = 110000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-003",
+          "source_number": 3,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Packs of Candy",
+          "question_text": "Andi bought 3 packs of candy. It turns out each pack contains 2 fewer candies than usual. If Andi's total candies are now equal to the amount in 2 normal packs plus 5 candies, how many normal candies are in one pack?",
+          "equation_model": [
+            "3(x - 2) = 2x + 5"
+          ],
+          "solution_steps": [
+            "Let the normal number of candies per pack be x.",
+            "3(x - 2) = 2x + 5",
+            "3x - 6 = 2x + 5",
+            "x = 11"
+          ],
+          "final_answer": "11 candies",
+          "answer_summary": "Normal candies per pack = 11",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-004",
+          "source_number": 4,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Park Perimeter",
+          "question_text": "A rectangular park has a length of (2x+5) meters and a width of x meters. If half of the park's perimeter is 26 meters, what is the value of x?",
+          "equation_model": [
+            "(2x + 5) + x = 26"
+          ],
+          "solution_steps": [
+            "Half the perimeter equals length plus width.",
+            "(2x + 5) + x = 26",
+            "3x + 5 = 26",
+            "3x = 21",
+            "x = 7"
+          ],
+          "final_answer": "7 meters",
+          "answer_summary": "x = 7; width is 7 m",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-005",
+          "source_number": 5,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Weighing Boxes of Books",
+          "question_text": "Four large boxes each contain a number of books, and 3 more books are placed on top. If the total number of books is equal to the number of books in 6 boxes minus 10 books, how many books are in one box?",
+          "equation_model": [
+            "4(x + 3) = 6x - 10"
+          ],
+          "solution_steps": [
+            "Let x be the stated number of books per box.",
+            "4(x + 3) = 6x - 10",
+            "4x + 12 = 6x - 10",
+            "2x = 22",
+            "x = 11"
+          ],
+          "final_answer": "11 books",
+          "answer_summary": "The source wording may mean 3 additional books per box, but does not make this explicit.",
+          "review_status": "needs_clarification",
+          "review_note": "Source solution treats this as 4(x + 3) = 6x - 10, while the story may be read as only 3 extra books total. Wording not rewritten; confirm with source owner.",
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-006",
+          "source_number": 6,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Salary Comparison",
+          "question_text": "An employee's salary at Store A is 3 times their sales bonus, plus Rp200,000. At Store B, the offered salary is 5 times the sales bonus, minus Rp400,000. If the salary at both stores is the exact same for the same bonus, what is the value of the bonus?",
+          "equation_model": [
+            "3x + 200000 = 5x - 400000"
+          ],
+          "solution_steps": [
+            "Let the sales bonus be x.",
+            "3x + 200000 = 5x - 400000",
+            "2x = 600000",
+            "x = 300000"
+          ],
+          "final_answer": "Rp300,000",
+          "answer_summary": "Sales bonus = 300000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-007",
+          "source_number": 7,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Math Exam Score",
+          "question_text": "In an exam, Dodi's score is calculated with the formula: 5 times the number of correct answers minus 4. This score turns out to be equal to 3 times the number of correct answers plus 20. How many questions did Dodi answer correctly?",
+          "equation_model": [
+            "5(x - 4) = 3x + 20"
+          ],
+          "solution_steps": [
+            "The source solution defines x as the number of correct answers.",
+            "5(x - 4) = 3x + 20",
+            "5x - 20 = 3x + 20",
+            "2x = 40",
+            "x = 20"
+          ],
+          "final_answer": "20 questions",
+          "answer_summary": "Source wording conventionally reads as 5x - 4, while the provided solution uses 5(x - 4).",
+          "review_status": "needs_clarification",
+          "review_note": "Do not silently reconcile: source wording implies 5x - 4, but the source solution uses 5(x - 4). The answers would differ; confirm which formula is intended.",
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-008",
+          "source_number": 8,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Vehicle Speed",
+          "question_text": "A car travels for 3 hours at a speed increased by 10 km/h from its normal speed. This travel distance turns out to be the same as if the car travelled for 4 hours at normal speed, but minus 10 km. What is the car's normal speed?",
+          "equation_model": [
+            "3(v + 10) = 4v - 10"
+          ],
+          "solution_steps": [
+            "Let the normal speed be v km/h.",
+            "3(v + 10) = 4v - 10",
+            "3v + 30 = 4v - 10",
+            "v = 40"
+          ],
+          "final_answer": "40 km/h",
+          "answer_summary": "Normal speed = 40 km/h",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-009",
+          "source_number": 9,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Making Square Sides Equal",
+          "question_text": "A carpenter is making a square frame. He measures one side with the equation (2x - 3) cm and the adjacent side as (x+4) cm. Since it's a square, all side lengths must be equal. What is the value of x?",
+          "equation_model": [
+            "2x - 3 = x + 4"
+          ],
+          "solution_steps": [
+            "The sides of a square are equal.",
+            "2x - 3 = x + 4",
+            "2x - x = 4 + 3",
+            "x = 7"
+          ],
+          "final_answer": "x = 7",
+          "answer_summary": "x = 7",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-010",
+          "source_number": 10,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "School Aid Fund",
+          "question_text": "Classes VII and VIII are collecting aid funds. Class VII, consisting of x students, each contributes Rp5,000 and receives an additional donation from the teacher of Rp20,000. Class VIII, which also has x students, each contributes Rp3,000 and receives an additional Rp50,000. If the total funds from both classes are equal, how many students x are in each class?",
+          "equation_model": [
+            "5000x + 20000 = 3000x + 50000"
+          ],
+          "solution_steps": [
+            "Set the two class totals equal.",
+            "5000x + 20000 = 3000x + 50000",
+            "2000x = 30000",
+            "x = 15"
+          ],
+          "final_answer": "15 students",
+          "answer_summary": "Students in each class = 15",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-011",
+          "source_number": 11,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Merchant's Wholesale Goods",
+          "question_text": "Merchant A buys 5 dozen books and receives a discount of Rp10,000. Merchant B buys 3 dozen of the same books but incurs an additional shipping cost of Rp30,000. If the total money they spent is exactly the same, what is the price of 1 dozen books?",
+          "equation_model": [
+            "5x - 10000 = 3x + 30000"
+          ],
+          "solution_steps": [
+            "Let the price of one dozen books be x.",
+            "5x - 10000 = 3x + 30000",
+            "2x = 40000",
+            "x = 20000"
+          ],
+          "final_answer": "Rp20,000",
+          "answer_summary": "Price per dozen = 20000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-012",
+          "source_number": 12,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Tourist Bus Passengers",
+          "question_text": "The first bus transports 4 groups of tourists, where each group consists of x people plus 2 local guides. The second bus transports 3 groups (with x people each) plus 15 reserve crew members. If the number of people in both buses is the same, what is the value of x?",
+          "equation_model": [
+            "4(x + 2) = 3x + 15"
+          ],
+          "solution_steps": [
+            "Let x be the number of tourists in each group.",
+            "4(x + 2) = 3x + 15",
+            "4x + 8 = 3x + 15",
+            "x = 7"
+          ],
+          "final_answer": "7 people",
+          "answer_summary": "x = 7 people per group",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-013",
+          "source_number": 13,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Fairly Sharing Candy",
+          "question_text": "Rio has 2 times as much candy as his younger sibling. Because his sibling cried, Rio gave 5 of his candies to his sibling, so the amount of candy they have now is exactly the same. How many candies did the younger sibling have initially?",
+          "equation_model": [
+            "2x - 5 = x + 5"
+          ],
+          "solution_steps": [
+            "Let the younger sibling initially have x candies; Rio has 2x.",
+            "2x - 5 = x + 5",
+            "2x - x = 5 + 5",
+            "x = 10"
+          ],
+          "final_answer": "10 candies",
+          "answer_summary": "Younger sibling initially had 10 candies",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-014",
+          "source_number": 14,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Width of a Rabbit Hutch",
+          "question_text": "A rectangular rabbit hutch has a length 3 meters more than twice its width. If the total length of half the hutch's perimeter (i.e., length plus width) is 24 meters, what is the width of the hutch?",
+          "equation_model": [
+            "Length = 2x + 3",
+            "(2x + 3) + x = 24"
+          ],
+          "solution_steps": [
+            "Let the width be x m; length is 2x + 3 m.",
+            "(2x + 3) + x = 24",
+            "3x + 3 = 24",
+            "3x = 21",
+            "x = 7"
+          ],
+          "final_answer": "7 meters",
+          "answer_summary": "Width = 7 m",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-015",
+          "source_number": 15,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Comparing Flagpole Heights",
+          "question_text": "The height of Flagpole A is 5 times the size of a wooden peg minus 10 cm. The height of Flagpole B is 3 times the size of the wooden peg plus 30 cm. If the heights of Flagpole A and Flagpole B are exactly the same, what is the size of the wooden peg?",
+          "equation_model": [
+            "5y - 10 = 3y + 30"
+          ],
+          "solution_steps": [
+            "Let the wooden peg size be y cm.",
+            "5y - 10 = 3y + 30",
+            "2y = 40",
+            "y = 20"
+          ],
+          "final_answer": "20 cm",
+          "answer_summary": "Wooden peg size = 20 cm",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-016",
+          "source_number": 16,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Water Flow Rate of Two Tanks",
+          "question_text": "Tank A currently contains 100 liters of water and is continuously filled at a rate of 5 liters per minute. Tank B currently contains 40 liters of water and is filled at a faster rate, which is 15 liters per minute. After how many minutes will the water volume in both tanks be the same?",
+          "equation_model": [
+            "100 + 5m = 40 + 15m"
+          ],
+          "solution_steps": [
+            "Let the time be m minutes.",
+            "100 + 5m = 40 + 15m",
+            "60 = 10m",
+            "m = 6"
+          ],
+          "final_answer": "6 minutes",
+          "answer_summary": "Time until volumes are equal = 6 minutes",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-017",
+          "source_number": 17,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Spending Money Given by Mother",
+          "question_text": "Mother gave Doni some money. Doni spent all the money on 2 books. It turns out the price of one book is exactly equal to the total amount of Doni's money minus Rp5,000. How much money did Mother give?",
+          "equation_model": [
+            "x = 2(x - 5000)"
+          ],
+          "solution_steps": [
+            "Let the money Mother gave be x; each book costs x - 5000.",
+            "x = 2(x - 5000)",
+            "x = 2x - 10000",
+            "x = 10000"
+          ],
+          "final_answer": "Rp10,000",
+          "answer_summary": "Money from mother = 10000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-018",
+          "source_number": 18,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Fruit Harvest Baskets",
+          "question_text": "Uncle harvested mangoes and put them into baskets. The weight of 3 baskets of mangoes, where the contents of each have been reduced by 4 rotten mangoes, is equal in number to 2 whole baskets of mangoes plus 6 mangoes. What is the mango content of one whole basket?",
+          "equation_model": [
+            "3(x - 4) = 2x + 6"
+          ],
+          "solution_steps": [
+            "Let the mango content of one full basket be x.",
+            "3(x - 4) = 2x + 6",
+            "3x - 12 = 2x + 6",
+            "x = 18"
+          ],
+          "final_answer": "18 mangoes",
+          "answer_summary": "Mangoes in one full basket = 18",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-019",
+          "source_number": 19,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Guessing a Cousin's Age",
+          "question_text": "Feri gave a riddle about his age: \"Twice my age plus 5 years is exactly equal to three times my age minus 7 years.\" What is Feri's actual age?",
+          "equation_model": [
+            "2x + 5 = 3x - 7"
+          ],
+          "solution_steps": [
+            "Let Feri's age be x.",
+            "2x + 5 = 3x - 7",
+            "3x - 2x = 5 + 7",
+            "x = 12"
+          ],
+          "final_answer": "12 years old",
+          "answer_summary": "Feri's age = 12 years",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "NORMAL-020",
+          "source_number": 20,
+          "source_level": "Medium",
+          "ui_level": "Normal",
+          "title": "Running Distance Target",
+          "question_text": "Leo runs with a target of x km per day from Monday to Friday. On Saturday and Sunday (2 days), he increases his running distance by 2 km each day. It turns out his total running distance during the weekdays (5 days) is equal to 4 times his daily distance on the weekend, plus 3 km. What is the target x in km?",
+          "equation_model": [
+            "5x = 4(x + 2) + 3"
+          ],
+          "solution_steps": [
+            "The source solution defines weekday distance as 5x and weekend daily distance as x + 2.",
+            "5x = 4(x + 2) + 3",
+            "5x = 4x + 11",
+            "x = 11"
+          ],
+          "final_answer": "11 km/day",
+          "answer_summary": "Story wording about the two weekend days is ambiguous compared with the supplied equation.",
+          "review_status": "needs_clarification",
+          "review_note": "The source wording refers to both weekend days but the provided equation uses 4(x + 2). Confirm the intended interpretation and align the wording before polishing.",
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        }
+      ]
+    },
+    {
+      "source_level": "Hard",
+      "ui_level": "Hard",
+      "questions": [
+        {
+          "id": "HARD-001",
+          "source_number": 1,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Buying Burgers and Drinks",
+          "question_text": "At a fast-food restaurant, Dina bought 3 burgers and 2 glasses of drinks for Rp70,000. At the same place, Eka bought 1 burger and 3 glasses of drinks for Rp42,000. What is the price of 1 burger and 1 glass of drink?",
+          "equation_model": [
+            "3x + 2y = 70000",
+            "x + 3y = 42000"
+          ],
+          "solution_steps": [
+            "Let x be the price of a burger and y the price of a drink.",
+            "3x + 2y = 70000",
+            "x + 3y = 42000",
+            "Multiply the second equation by 3: 3x + 9y = 126000",
+            "Subtract the first equation: 7y = 56000, so y = 8000",
+            "x + 3(8000) = 42000, so x = 18000"
+          ],
+          "final_answer": "Burger: Rp18,000; drink: Rp8,000",
+          "answer_summary": "Burger = 18000 IDR; drink = 8000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-002",
+          "source_number": 2,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Guessing Father's and Child's Ages",
+          "question_text": "A father's current age is 3 times his child's age. Five years from now, the sum of their ages will be 66 years. What are the father's and child's current ages?",
+          "equation_model": [
+            "a = 3b",
+            "(a + 5) + (b + 5) = 66"
+          ],
+          "solution_steps": [
+            "Let a be the father's age and b the child's age.",
+            "a = 3b",
+            "(a + 5) + (b + 5) = 66",
+            "a + b = 56",
+            "3b + b = 56",
+            "b = 14",
+            "a = 3(14) = 42"
+          ],
+          "final_answer": "Father: 42 years old; child: 14 years old",
+          "answer_summary": "Father = 42 years; child = 14 years",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-003",
+          "source_number": 3,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Vehicle Parking Lot",
+          "question_text": "In a parking lot, there are 50 vehicles consisting of cars (4 wheels) and motorcycles (2 wheels). If counted, the total number of wheels for all vehicles is 140. How many cars and motorcycles are there?",
+          "equation_model": [
+            "m + s = 50",
+            "4m + 2s = 140"
+          ],
+          "solution_steps": [
+            "Let m be the number of cars and s the number of motorcycles.",
+            "m + s = 50, so s = 50 - m",
+            "4m + 2(50 - m) = 140",
+            "2m = 40",
+            "m = 20",
+            "s = 50 - 20 = 30"
+          ],
+          "final_answer": "Cars: 20; motorcycles: 30",
+          "answer_summary": "Cars = 20; motorcycles = 30",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-004",
+          "source_number": 4,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Buying Stationery",
+          "question_text": "Rendi bought 2 notebooks and 3 pens for Rp17,000. Doni bought 3 notebooks and 1 pen of the same type for Rp18,500. What is the price of 1 notebook and 1 pen?",
+          "equation_model": [
+            "2b + 3p = 17000",
+            "3b + p = 18500"
+          ],
+          "solution_steps": [
+            "Let b be the notebook price and p the pen price.",
+            "2b + 3p = 17000",
+            "p = 18500 - 3b",
+            "2b + 3(18500 - 3b) = 17000",
+            "-7b = -38500, so b = 5500",
+            "p = 18500 - 3(5500) = 2000"
+          ],
+          "final_answer": "Notebook: Rp5,500; pen: Rp2,000",
+          "answer_summary": "Notebook = 5500 IDR; pen = 2000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-005",
+          "source_number": 5,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Grandfather's Livestock",
+          "question_text": "Grandfather raises chickens (2 legs) and goats (4 legs). The number of livestock heads is 30, while the number of livestock legs is 80. How many chickens and goats are there?",
+          "equation_model": [
+            "x + y = 30",
+            "2x + 4y = 80"
+          ],
+          "solution_steps": [
+            "Let x be chickens and y be goats.",
+            "x + y = 30",
+            "2x + 4y = 80",
+            "Subtract 2(x + y = 30), giving 2y = 20",
+            "y = 10",
+            "x = 30 - 10 = 20"
+          ],
+          "final_answer": "Chickens: 20; goats: 10",
+          "answer_summary": "Chickens = 20; goats = 10",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-006",
+          "source_number": 6,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Cinema Ticket Revenue",
+          "question_text": "A cinema sold 100 tickets. An adult ticket costs Rp50,000 and a child ticket costs Rp30,000. Total revenue is Rp4,200,000. How many adult and child tickets were sold?",
+          "equation_model": [
+            "d + c = 100",
+            "50000d + 30000c = 4200000"
+          ],
+          "solution_steps": [
+            "Let d be adult tickets and c be child tickets.",
+            "d + c = 100",
+            "50000d + 30000c = 4200000",
+            "Use c = 100 - d: 50000d + 30000(100 - d) = 4200000",
+            "20000d = 1200000",
+            "d = 60 and c = 40"
+          ],
+          "final_answer": "Adult: 60 tickets; child: 40 tickets",
+          "answer_summary": "The source includes an inconsistent intermediate line, '30,000d + 30,000a = 3,000,000', which does not match the stated adult ticket price. The question conditions and final answer imply the equations shown here.",
+          "review_status": "needs_source_check",
+          "review_note": "The final answer is consistent with the question, but one intermediate equation in the source solution appears mistyped. Verify against the PDF page before treating the worked solution as source-authoritative.",
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-007",
+          "source_number": 7,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Paper Money Denominations",
+          "question_text": "A wallet contains Rp500,000 in Rp10,000 and Rp20,000 denominations, totaling 35 bills. How many of each denomination are there?",
+          "equation_model": [
+            "x + y = 35",
+            "10000x + 20000y = 500000"
+          ],
+          "solution_steps": [
+            "Let x be Rp10,000 bills and y be Rp20,000 bills.",
+            "x + y = 35",
+            "x + 2y = 50",
+            "Subtract x + y = 35: y = 15",
+            "x = 35 - 15 = 20"
+          ],
+          "final_answer": "Rp10,000 bills: 20; Rp20,000 bills: 15",
+          "answer_summary": "Rp10,000 = 20 bills; Rp20,000 = 15 bills",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-008",
+          "source_number": 8,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Buying Fruit",
+          "question_text": "Sinta bought 2 kg of apples and 1 kg of oranges for Rp65,000. Nisa bought 1 kg of apples and 2 kg of oranges for Rp55,000. What is the price of 1 kg of apples and 1 kg of oranges?",
+          "equation_model": [
+            "2a + j = 65000",
+            "a + 2j = 55000"
+          ],
+          "solution_steps": [
+            "Let a be the price per kg of apples and j the price per kg of oranges.",
+            "2a + j = 65000, so j = 65000 - 2a",
+            "a + 2(65000 - 2a) = 55000",
+            "-3a = -75000",
+            "a = 25000",
+            "j = 65000 - 50000 = 15000"
+          ],
+          "final_answer": "Apples: Rp25,000/kg; oranges: Rp15,000/kg",
+          "answer_summary": "Apples = 25000 IDR/kg; oranges = 15000 IDR/kg",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-009",
+          "source_number": 9,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Lodging Rooms",
+          "question_text": "An inn has 40 rooms of Twin (2 beds) and Family (4 beds) types. If full, the total bed capacity is 100 guests. How many Twin and Family rooms are there?",
+          "equation_model": [
+            "t + f = 40",
+            "2t + 4f = 100"
+          ],
+          "solution_steps": [
+            "Let t be Twin rooms and f be Family rooms.",
+            "t + f = 40",
+            "2t + 4f = 100",
+            "Subtract 2(t + f = 40), giving 2f = 20",
+            "f = 10",
+            "t = 40 - 10 = 30"
+          ],
+          "final_answer": "Twin: 30 rooms; Family: 10 rooms",
+          "answer_summary": "Twin = 30 rooms; Family = 10 rooms",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-010",
+          "source_number": 10,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Buying Clothes",
+          "question_text": "The price of 3 shirts and 2 pants is Rp550,000. The price of 2 shirts and 4 pants is Rp700,000. What is the price of 1 shirt and 1 pair of pants?",
+          "equation_model": [
+            "3k + 2c = 550000",
+            "2k + 4c = 700000"
+          ],
+          "solution_steps": [
+            "Let k be the price of a shirt and c the price of pants.",
+            "3k + 2c = 550000",
+            "Multiply the first equation by 2: 6k + 4c = 1100000",
+            "Subtract the second equation: 4k = 400000",
+            "k = 100000",
+            "2(100000) + 4c = 700000, so c = 125000"
+          ],
+          "final_answer": "Shirt: Rp100,000; pants: Rp125,000",
+          "answer_summary": "Shirt = 100000 IDR; pants = 125000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-011",
+          "source_number": 11,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Guessing Two Numbers",
+          "question_text": "The sum of two whole numbers is 45, while the difference between the larger and smaller number is 15. What are the two numbers?",
+          "equation_model": [
+            "x + y = 45",
+            "x - y = 15"
+          ],
+          "solution_steps": [
+            "Let x be the larger number and y the smaller number.",
+            "x + y = 45",
+            "x - y = 15",
+            "Add the equations: 2x = 60",
+            "x = 30",
+            "30 + y = 45, so y = 15"
+          ],
+          "final_answer": "30 and 15",
+          "answer_summary": "Larger number = 30; smaller number = 15",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-012",
+          "source_number": 12,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Multiple Choice Exam Score",
+          "question_text": "An exam consists of 40 questions. Correct = +3, Incorrect = -1. Dodi answered all questions and got a total score of 80. How many questions did he answer correctly and incorrectly?",
+          "equation_model": [
+            "b + s = 40",
+            "3b - s = 80"
+          ],
+          "solution_steps": [
+            "Let b be correct answers and s be incorrect answers.",
+            "b + s = 40, so s = 40 - b",
+            "3b - (40 - b) = 80",
+            "4b = 120",
+            "b = 30",
+            "s = 40 - 30 = 10"
+          ],
+          "final_answer": "Correct: 30 questions; incorrect: 10 questions",
+          "answer_summary": "Correct = 30; incorrect = 10",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-013",
+          "source_number": 13,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Rectangular Park",
+          "question_text": "The perimeter of a rectangular park is 60 meters. Its length is 6 meters longer than its width. What are the length and width dimensions of the park?",
+          "equation_model": [
+            "2p + 2l = 60",
+            "p = l + 6"
+          ],
+          "solution_steps": [
+            "Let p be the length and l be the width.",
+            "2p + 2l = 60, so p + l = 30",
+            "p = l + 6",
+            "(l + 6) + l = 30",
+            "2l = 24, so l = 12",
+            "p = 12 + 6 = 18"
+          ],
+          "final_answer": "Length: 18 m; width: 12 m",
+          "answer_summary": "Length = 18 m; width = 12 m",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-014",
+          "source_number": 14,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Price of Wet Cakes",
+          "question_text": "Mother bought 2 sponge cakes and 3 brownies for Rp45,000. The next day she bought 4 sponge cakes and 1 brownie for Rp40,000. What is the unit price of a sponge cake and a brownie?",
+          "equation_model": [
+            "2b + 3c = 45000",
+            "4b + c = 40000"
+          ],
+          "solution_steps": [
+            "Let b be the price of a sponge cake and c the price of a brownie.",
+            "2b + 3c = 45000",
+            "Multiply the first equation by 2: 4b + 6c = 90000",
+            "Subtract 4b + c = 40000: 5c = 50000",
+            "c = 10000",
+            "4b + 10000 = 40000, so b = 7500"
+          ],
+          "final_answer": "Sponge cake: Rp7,500; brownie: Rp10,000",
+          "answer_summary": "Sponge cake = 7500 IDR; brownie = 10000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-015",
+          "source_number": 15,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Renting Boats of Different Capacities",
+          "question_text": "A pier rents large boats (10 people) and small boats (5 people). 105 tourists rented exactly 15 boats until full. How many large and small boats were rented?",
+          "equation_model": [
+            "b + k = 15",
+            "10b + 5k = 105"
+          ],
+          "solution_steps": [
+            "Let b be large boats and k be small boats.",
+            "b + k = 15",
+            "10b + 5k = 105",
+            "Subtract 5(b + k = 15): 5b = 30",
+            "b = 6",
+            "k = 15 - 6 = 9"
+          ],
+          "final_answer": "Large boats: 6; small boats: 9",
+          "answer_summary": "Large boats = 6; small boats = 9",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-016",
+          "source_number": 16,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Remembering Past Ages",
+          "question_text": "Five years ago, Mother's age was 4 times Tini's age. Currently, Mother's age is exactly 3 times Tini's age. What are Mother's and Tini's current ages?",
+          "equation_model": [
+            "i = 3t",
+            "i - 5 = 4(t - 5)"
+          ],
+          "solution_steps": [
+            "Let i be Mother's current age and t be Tini's current age.",
+            "i = 3t",
+            "i - 5 = 4(t - 5)",
+            "i - 4t = -15",
+            "3t - 4t = -15, so t = 15",
+            "i = 3(15) = 45"
+          ],
+          "final_answer": "Mother: 45 years old; Tini: 15 years old",
+          "answer_summary": "Mother = 45 years; Tini = 15 years",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-017",
+          "source_number": 17,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Rose and Tulip Flower Arrangements",
+          "question_text": "Bouquet A (3 roses, 4 tulips) = Rp85,000. Bouquet B (5 roses, 2 tulips) = Rp95,000. What is the price of one rose and one tulip?",
+          "equation_model": [
+            "3m + 4t = 85000",
+            "5m + 2t = 95000"
+          ],
+          "solution_steps": [
+            "Let m be the price of one rose and t the price of one tulip.",
+            "3m + 4t = 85000",
+            "Multiply the second equation by 2: 10m + 4t = 190000",
+            "Subtract the first equation: 7m = 105000",
+            "m = 15000",
+            "3(15000) + 4t = 85000, so t = 10000"
+          ],
+          "final_answer": "Rose: Rp15,000; tulip: Rp10,000",
+          "answer_summary": "Rose = 15000 IDR; tulip = 10000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-018",
+          "source_number": 18,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Opening a Coin Piggy Bank",
+          "question_text": "A piggy bank contains Rp500 and Rp1,000 coins, totaling 45 coins with a total value of Rp35,000. How many Rp500 and Rp1,000 coins are there?",
+          "equation_model": [
+            "x + y = 45",
+            "500x + 1000y = 35000"
+          ],
+          "solution_steps": [
+            "Let x be Rp500 coins and y be Rp1,000 coins.",
+            "x + y = 45",
+            "x + 2y = 70",
+            "Subtract x + y = 45: y = 25",
+            "x = 45 - 25 = 20"
+          ],
+          "final_answer": "Rp500 coins: 20; Rp1,000 coins: 25",
+          "answer_summary": "Rp500 = 20 coins; Rp1000 = 25 coins",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-019",
+          "source_number": 19,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Afternoon Snacks",
+          "question_text": "The price of 4 donuts and 5 pies is Rp72,000. The price of 2 donuts and 3 pies is Rp40,000. What is the price of one donut and one pie?",
+          "equation_model": [
+            "4d + 5p = 72000",
+            "2d + 3p = 40000"
+          ],
+          "solution_steps": [
+            "Let d be the price of one donut and p the price of one pie.",
+            "4d + 5p = 72000",
+            "Multiply the second equation by 2: 4d + 6p = 80000",
+            "Subtract the first equation: p = 8000",
+            "2d + 3(8000) = 40000",
+            "2d = 16000, so d = 8000"
+          ],
+          "final_answer": "Donut: Rp8,000; pie: Rp8,000",
+          "answer_summary": "Donut = 8000 IDR; pie = 8000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        },
+        {
+          "id": "HARD-020",
+          "source_number": 20,
+          "source_level": "Hard",
+          "ui_level": "Hard",
+          "title": "Part-Time Work Wages",
+          "question_text": "Wages for 5 regular days + 2 holidays = Rp700,000. Wages for 3 regular days + 4 holidays = Rp700,000. What is the daily wage for regular days and holidays?",
+          "equation_model": [
+            "5x + 2y = 700000",
+            "3x + 4y = 700000"
+          ],
+          "solution_steps": [
+            "Let x be the regular-day wage and y the holiday wage.",
+            "5x + 2y = 700000",
+            "Multiply the first equation by 2: 10x + 4y = 1400000",
+            "Subtract the second equation: 7x = 700000",
+            "x = 100000",
+            "3(100000) + 4y = 700000, so y = 100000"
+          ],
+          "final_answer": "Regular day: Rp100,000; holiday: Rp100,000",
+          "answer_summary": "Regular-day wage = 100000 IDR; holiday wage = 100000 IDR",
+          "review_status": "transcribed",
+          "review_note": null,
+          "true_false": {
+            "statement": null,
+            "correct_answer": null,
+            "explanation": null,
+            "content_origin": "not_provided_by_source"
+          }
+        }
+      ]
+    }
+  ]
+}

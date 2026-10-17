@@ -1,0 +1,709 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>AlgeCard Adventure - True or False</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Fredoka & Nunito for vibrant mobile game typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Nunito:wght@700;800;900&amp;display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            game: ['Fredoka', 'sans-serif'],
+            body: ['Nunito', 'sans-serif'],
+          },
+          colors: {
+            wood: {
+              light: '#fdf6e2',
+              DEFAULT: '#b36b21',
+              dark: '#6e390c',
+              border: '#452204'
+            },
+            leaf: '#55a313',
+            gameGreen: '#48c21a',
+            gameRed: '#e53935'
+          },
+          boxShadow: {
+            'wood-3d': '0 7px 0 #592c0a, 0 10px 14px rgba(0,0,0,0.45)',
+            'green-btn': '0 6px 0 #287a0c, 0 8px 12px rgba(0,0,0,0.3)',
+            'red-btn': '0 6px 0 #8c1a17, 0 8px 12px rgba(0,0,0,0.3)',
+            'orange-btn': '0 6px 0 #b45309, 0 8px 12px rgba(0,0,0,0.35)',
+            'gold-badge': '0 4px 0 #8d4a0f, 0 6px 8px rgba(0,0,0,0.25)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Game Styles -->
+<style data-purpose="custom-game-effects">
+    .game-text-shadow {
+      text-shadow: 2px 2px 0 #261304, -1px -1px 0 #261304, 1px -1px 0 #261304, -1px 1px 0 #261304;
+    }
+    .game-text-white-shadow {
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .badge-shadow {
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.7);
+    }
+    .wood-board {
+      background: radial-gradient(circle at 50% 20%, #fffbf0 0%, #f7ecd0 65%, #edd4a8 100%);
+      border: 6px solid #854917;
+      box-shadow: inset 0 0 15px rgba(133, 73, 23, 0.35), 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .wood-banner {
+      background: linear-gradient(180deg, #d9822b 0%, #a2520e 100%);
+      border: 3px solid #572905;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.4), 0 4px 0 #462004;
+    }
+    .green-ribbon {
+      background: linear-gradient(180deg, #5dd428 0%, #3ca710 100%);
+      border: 3px solid #1f6406;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.4), 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .red-ribbon {
+      background: linear-gradient(180deg, #f04d49 0%, #c42320 100%);
+      border: 3px solid #771210;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.4), 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .floating-arrow {
+      animation: floatDown 1.8s ease-in-out infinite;
+    }
+    @keyframes floatDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+    /* Animated real 3-second progress */
+    .bar-animating {
+      transition: width 3s linear;
+    }
+    .toast-anim {
+      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.85) translateY(20px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+  </style>
+<!-- END: Custom Game Styles -->
+</head>
+<body class="bg-slate-900 font-game min-h-screen flex justify-center items-start p-0 sm:py-6 selection:bg-amber-400 selection:text-amber-950">
+<!-- Mobile Screen Container (Standard iOS Viewport Frame) -->
+<div class="w-full max-w-[460px] min-h-screen bg-[#65b2e8] relative overflow-hidden flex flex-col shadow-2xl pb-10">
+<!-- Scenic Forest & Fantasy Castle Background Decor -->
+<div class="absolute inset-0 pointer-events-none z-0">
+<!-- Sky Gradient -->
+<div class="h-96 w-full bg-gradient-to-b from-[#38bdf8] via-[#7dd3fc] to-[#a7f3d0]"></div>
+<!-- Cartoon Mountains & Tree Silhouettes -->
+<div class="absolute top-28 left-0 right-0 h-48 bg-contain bg-bottom bg-repeat-x opacity-30" style="background-image: radial-gradient(circle at 50% 100%, #15803d 40%, transparent 45%); background-size: 140px 100px;"></div>
+<!-- Castle Turret Graphic on Right -->
+<div class="absolute top-4 right-1 w-24 h-32 opacity-85 z-0">
+<svg class="w-full h-full drop-shadow-md" fill="none" viewBox="0 0 100 120">
+<path d="M20 90 L80 90 L80 50 L20 50 Z" fill="#b0c4de" stroke="#4a5568" stroke-width="3"></path>
+<path d="M15 50 L85 50 L85 40 L15 40 Z" fill="#94a3b8" stroke="#4a5568" stroke-width="2"></path>
+<path d="M50 5 L15 40 L85 40 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3"></path>
+<circle cx="50" cy="65" fill="#1e293b" r="8"></circle>
+<path d="M50 5 L50 -5 M50 -5 L65 0 L50 5" fill="#ef4444" stroke="#ef4444" stroke-width="3"></path>
+</svg>
+</div>
+<!-- Leaves Garland Framing Top Edge -->
+<div class="absolute -top-3 -left-4 w-36 h-28 pointer-events-none">
+<svg class="w-full h-full fill-emerald-600 drop-shadow" viewBox="0 0 120 100">
+<ellipse cx="30" cy="30" rx="30" ry="18" transform="rotate(-20 30 30)"></ellipse>
+<ellipse cx="65" cy="22" fill="#4ade80" rx="25" ry="15" transform="rotate(15 65 22)"></ellipse>
+<ellipse cx="85" cy="40" rx="22" ry="14" transform="rotate(45 85 40)"></ellipse>
+</svg>
+</div>
+<div class="absolute -top-3 -right-4 w-36 h-28 pointer-events-none">
+<svg class="w-full h-full fill-emerald-600 drop-shadow" viewBox="0 0 120 100">
+<ellipse cx="90" cy="30" rx="30" ry="18" transform="rotate(20 90 30)"></ellipse>
+<ellipse cx="55" cy="22" fill="#4ade80" rx="25" ry="15" transform="rotate(-15 55 22)"></ellipse>
+<ellipse cx="35" cy="40" rx="22" ry="14" transform="rotate(-45 35 40)"></ellipse>
+</svg>
+</div>
+<!-- Ground Path & Forest Grass Floor -->
+<div class="absolute bottom-0 inset-x-0 h-64 bg-gradient-to-t from-[#205e1e] via-[#3a932b] to-transparent"></div>
+</div>
+<!-- BEGIN: TopBar -->
+<header class="relative z-20 px-3 pt-3 flex items-center justify-between" data-purpose="game-top-navigation">
+<!-- Back Button -->
+<button class="w-12 h-12 rounded-2xl bg-gradient-to-b from-amber-400 to-amber-600 border-4 border-[#592c0a] shadow-gold-badge active:translate-y-1 transition-transform flex items-center justify-center cursor-pointer group" onclick="handleReset()" title="Restart Question">
+<svg class="w-7 h-7 text-white drop-shadow-md group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+</button>
+<!-- Center AlgeCard Logo -->
+<div class="flex-1 flex justify-center px-1">
+<img alt="AlgeCard Adventure" class="h-16 object-contain drop-shadow-[0_6px_8px_rgba(0,0,0,0.5)] transform hover:scale-105 transition-transform cursor-pointer" onclick="toggleFlowView()" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYbIlyozfhJE5XazkNiqjPGNFK6DxkL1nr8nBxthSiBJT7KMTgpdoEMPVFiRhxX8u43XK8YPqKMKODx05PXibV3fP_ylTBcfg1UYlRoA_XuGoSalv_65Qp5fg3oeaLueHf87lioOe8VaHYMMl7OMD3448NFPNvFKimz_c8cF5DfbWF1yuUq3LicpDAXMIl2HVNH_Kq4O-IK8blCuNai3qmMk6hdSqZa8gYthU0JsAdg9VzJ1p-OBpUIjnwBB3Au5tlRQ">
+</div>
+<!-- Mission Info Badge -->
+<div class="rounded-2xl wood-banner px-3 py-1 flex items-center space-x-1.5 shadow-gold-badge text-right border-2 border-[#542804]">
+<div class="bg-amber-100 rounded-md p-1 border border-amber-800 shadow-inner">
+<span class="text-base leading-none">📖</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="text-[13px] font-bold text-white uppercase tracking-wider game-text-shadow leading-tight">Mission 1</span>
+<span class="text-[11px] font-semibold text-amber-200 -mt-0.5 whitespace-nowrap">True or False?</span>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- Mode Switcher Pill Bar -->
+<div class="relative z-20 px-4 mt-2 flex justify-between items-center text-xs text-white">
+<span class="bg-black/35 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/20 font-sans font-bold flex items-center gap-1.5" id="modeStatusPill">
+<span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping" id="statusDot"></span>
+<span id="statusLabel" class="">Tap True / False to play</span>
+</span>
+<button class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-bold px-3 py-1 rounded-full border-2 border-amber-800 shadow-md transition-all text-[11px]" id="viewModeBtn" onclick="toggleFlowView()">Complete Overview Flow</button>
+</div>
+<!-- Score HUD Strip (Section 6 & 9 Alignment) -->
+<div class="relative z-20 px-4 mt-1.5 flex items-center justify-between">
+<div class="bg-amber-950/60 backdrop-blur-xs border border-amber-400/30 px-3 py-0.5 rounded-full flex items-center gap-2 text-xs text-amber-200 font-bold">
+<span class="">⭐ Score: <span class="text-amber-300 font-black text-sm" id="hudScore">800</span> pts</span>
+<span class="text-white/40">|</span>
+<span class="">🔥 Streak: <span class="text-emerald-300 font-black" id="hudStreak">2</span></span>
+</div>
+<button class="text-[11px] text-white/80 hover:text-white underline font-body font-semibold" onclick="handleReset()">
+    Reset State
+  </button>
+</div>
+<!-- MAIN GAME CANVAS -->
+<main class="relative z-10 px-3.5 mt-2 flex flex-col space-y-4">
+<!-- ========================================== -->
+<!-- SECTION A: QUESTION PROMPT BOARD           -->
+<!-- ========================================== -->
+<!-- BEGIN: QuestionBoard -->
+<section class="relative rounded-3xl wood-board p-4 pt-7 shadow-wood-3d transition-all duration-300" id="questionSection">
+<!-- Hanging Leaves on Board Corners -->
+<div class="absolute -top-3 left-4 flex gap-1 z-10">
+<span class="text-2xl drop-shadow transform -rotate-12">🌿</span>
+</div>
+<div class="absolute -top-3 right-4 flex gap-1 z-10">
+<span class="text-2xl drop-shadow transform rotate-12">🌿</span>
+</div>
+<!-- Question Counter Badge -->
+<div class="absolute -top-4 inset-x-0 mx-auto w-fit px-5 py-1.5 rounded-full bg-gradient-to-b from-[#873a0e] to-[#4e1d03] border-[3px] border-[#ffd875] shadow-lg flex items-center justify-center">
+<span class="text-white text-sm font-bold tracking-wide drop-shadow">Question 1 of 5</span>
+</div>
+<!-- Mascots Decorating Board Flanks -->
+<!-- Mascot 1: Cheerful Green Cricket on left -->
+<div class="absolute -left-6 -top-5 w-20 h-24 pointer-events-none drop-shadow-xl z-20 hidden xs:block">
+<svg class="w-full h-full" viewBox="0 0 100 120">
+<ellipse cx="50" cy="65" fill="#52c41a" rx="32" ry="25" stroke="#237804" stroke-width="4"></ellipse>
+<circle cx="50" cy="40" fill="#73d13d" r="28" stroke="#237804" stroke-width="4"></circle>
+<!-- Antennae -->
+<path d="M40 18 Q30 2 15 8 M60 18 Q70 2 85 8" fill="none" stroke="#135200" stroke-linecap="round" stroke-width="3"></path>
+<!-- Big Cute Eyes -->
+<ellipse cx="40" cy="35" fill="#ffffff" rx="7" ry="10"></ellipse>
+<ellipse cx="60" cy="35" fill="#ffffff" rx="7" ry="10"></ellipse>
+<circle cx="41" cy="35" fill="#092b00" r="4"></circle>
+<circle cx="61" cy="35" fill="#092b00" r="4"></circle>
+<circle cx="43" cy="32" fill="#fff" r="1.5"></circle>
+<circle cx="63" cy="32" fill="#fff" r="1.5"></circle>
+<!-- Happy Smile -->
+<path d="M43 49 Q50 56 57 49" fill="#ff7875" stroke="#092b00" stroke-linecap="round" stroke-width="3"></path>
+<!-- Cheeks -->
+<ellipse cx="32" cy="45" fill="#ff7875" opacity="0.6" rx="4" ry="2.5"></ellipse>
+<ellipse cx="68" cy="45" fill="#ff7875" opacity="0.6" rx="4" ry="2.5"></ellipse>
+</svg>
+</div>
+<!-- Mascot 2: Scholar Orange Cricket with Book & Question Mark on right -->
+<div class="absolute -right-5 -top-5 w-20 h-24 pointer-events-none drop-shadow-xl z-20 hidden xs:block">
+<svg class="w-full h-full" viewBox="0 0 100 120">
+<!-- Question Bubble -->
+<g transform="translate(60, -2)">
+<circle cx="15" cy="15" fill="#ffffff" r="14" stroke="#0284c7" stroke-width="3"></circle>
+<text fill="#0284c7" font-family="Fredoka" font-size="19" font-weight="bold" text-anchor="middle" x="15" y="21">?</text>
+</g>
+<!-- Body -->
+<ellipse cx="45" cy="70" fill="#fa8c16" rx="30" ry="24" stroke="#873800" stroke-width="4"></ellipse>
+<circle cx="45" cy="44" fill="#ffa940" r="26" stroke="#873800" stroke-width="4"></circle>
+<!-- Antennae -->
+<path d="M38 22 Q30 5 15 12 M52 22 Q60 5 75 12" fill="none" stroke="#612500" stroke-linecap="round" stroke-width="3"></path>
+<!-- Eyes -->
+<ellipse cx="37" cy="40" fill="#ffffff" rx="6" ry="9"></ellipse>
+<ellipse cx="53" cy="40" fill="#ffffff" rx="6" ry="9"></ellipse>
+<circle cx="38" cy="40" fill="#391500" r="4"></circle>
+<circle cx="54" cy="40" fill="#391500" r="4"></circle>
+<!-- Little Book -->
+<rect fill="#0284c7" height="22" rx="4" stroke="#034b75" stroke-width="3" width="40" x="25" y="65"></rect>
+<line stroke="#fff" stroke-width="2" x1="45" x2="45" y1="65" y2="87"></line>
+</svg>
+</div>
+<!-- Question Text Inner Card -->
+<div class="bg-[#fffcf3] rounded-2xl border-2 border-[#d4b07b] p-4 text-center shadow-inner relative z-10">
+<p class="font-bold text-gray-800 text-lg sm:text-xl leading-relaxed font-body">
+            If <span class="inline-block bg-amber-100 border border-amber-300 rounded px-2 py-0.5 text-amber-900 font-game">x = 2</span>, then<br>
+            the value of <span class="inline-block bg-emerald-100 border border-emerald-300 rounded px-2.5 py-0.5 text-emerald-950 font-game text-xl tracking-wide mt-1">3x + 4 = 10</span>.
+          </p>
+</div>
+<!-- Interactive True / False Answer Buttons -->
+<div class="grid grid-cols-2 gap-4 mt-4 relative z-10" id="answerButtonsGrid">
+<!-- TRUE BUTTON -->
+<button class="group relative bg-gradient-to-b from-[#60d627] to-[#39a312] border-4 border-[#1f6305] rounded-2xl py-3 px-4 shadow-green-btn active:translate-y-1.5 active:shadow-none transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ring-4 ring-yellow-400" id="trueBtn" onclick="selectAnswer(true)" disabled="">
+<!-- White Checkmark Icon -->
+<div class="w-10 h-10 rounded-full bg-white/25 flex items-center justify-center border-2 border-white/50 shadow-inner group-hover:scale-110 transition-transform">
+<svg class="w-7 h-7 text-white stroke-[4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-white text-2xl font-bold tracking-wide game-text-shadow">TRUE</span>
+</button>
+<!-- FALSE BUTTON -->
+<button class="group relative bg-gradient-to-b from-[#f8514d] to-[#cb201d] border-4 border-[#7a1311] rounded-2xl py-3 px-4 shadow-red-btn active:translate-y-1.5 active:shadow-none transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" id="falseBtn" onclick="selectAnswer(false)" disabled="">
+<!-- White Cross Icon -->
+<div class="w-10 h-10 rounded-full bg-white/25 flex items-center justify-center border-2 border-white/50 shadow-inner group-hover:scale-110 transition-transform">
+<svg class="w-7 h-7 text-white stroke-[4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-white text-2xl font-bold tracking-wide game-text-shadow">FALSE</span>
+</button>
+</div>
+<!-- Stacked Subject Badges & Map Compass Footer within State A -->
+<div class="mt-4 pt-2 border-t border-[#dfc190]/60 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<!-- Math Badge -->
+<span class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-lg border-2 border-blue-900 shadow-sm flex items-center gap-1">
+<span class="">📐</span> MATH
+            </span>
+<!-- Science Badge -->
+<span class="bg-gradient-to-r from-rose-500 to-red-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-lg border-2 border-rose-900 shadow-sm flex items-center gap-1">
+<span class="">🔬</span> SCIENCE
+            </span>
+</div>
+<!-- Mini Compass Widget -->
+<div class="flex items-center space-x-1.5 bg-amber-100/90 border border-amber-300 rounded-full px-2.5 py-0.5 shadow-sm">
+<span class="text-sm">🧭</span>
+<span class="text-[11px] font-bold text-amber-900">Map Lv.1</span>
+</div>
+</div>
+</section>
+<!-- END: QuestionBoard -->
+<!-- Animated Adventure Transition Arrow 1 -->
+<div class="flex justify-center -my-1 floating-arrow transition-all duration-300" id="flowArrow1">
+
+</div>
+<!-- ========================================== -->
+<!-- SECTION B: IMMEDIATE 3-SECOND FEEDBACK     -->
+<!-- ========================================== -->
+<!-- BEGIN: FeedbackSection -->
+<section class="space-y-3" data-purpose="answer-feedback-display" id="feedbackContainer">
+<div class="grid grid-cols-1 gap-3.5" id="feedbackGrid">
+<!-- CARD 1: CORRECT ANSWER CARD -->
+<article class="relative rounded-3xl wood-board p-3.5 shadow-wood-3d overflow-hidden border-4 border-[#2b7713] transition-all" id="correctFeedbackCard">
+<!-- Top Ribbon Header -->
+<div class="-mx-3.5 -mt-3.5 green-ribbon py-2 px-4 text-center rounded-t-2xl mb-3 flex items-center justify-center space-x-2">
+<span class="text-white text-base font-bold tracking-wide game-text-shadow">✓ Correct Answer!</span>
+</div>
+<!-- Repeated Question Context Pill -->
+<div class="bg-[#fcf8ec] rounded-xl border border-[#d6b783] py-2 px-3 text-center mb-3">
+<p class="text-xs sm:text-sm font-bold text-gray-700 font-body">
+                If x = 2, then the value of <strong class="text-emerald-700 font-game">3x + 4 = 10</strong>.
+              </p>
+</div>
+<!-- Big Checkmark Stamp -->
+<div class="flex justify-center my-1">
+<div class="w-14 h-14 rounded-full bg-gradient-to-b from-emerald-400 to-emerald-600 border-4 border-emerald-800 shadow-md flex items-center justify-center">
+<svg class="w-9 h-9 text-white stroke-[4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+<!-- Affirmative Text -->
+<div class="text-center mt-2">
+<p class="text-emerald-800 font-black text-base font-game">Great! Your answer is correct.</p>
+<p class="text-gray-600 text-xs font-semibold mt-0.5 font-body flex items-center justify-center gap-1">
+<span class="">Proceed to explanation in</span>
+<span class="font-bold text-emerald-800 text-sm font-game" id="correctCountdownSec">1</span>s...
+</p>
+</div>
+<!-- 3-Second Green Progress Bar -->
+<div class="mt-3 bg-gray-200/90 rounded-full h-3.5 p-0.5 border border-emerald-700 overflow-hidden relative">
+<div class="h-full bg-gradient-to-r from-emerald-400 to-green-500 rounded-full w-0 bar-animating" id="correctProgressBar" style="width: 100%;"></div>
+</div>
+<!-- Quick Skip Button in interactive mode -->
+<div class="mt-2 text-center">
+<button class="text-[11px] text-emerald-800 hover:text-emerald-950 font-bold underline cursor-pointer" onclick="skipToExplanation()">
+    Skip countdown &amp; see explanation →
+  </button>
+</div>
+</article>
+<!-- CARD 2: INCORRECT ANSWER CARD -->
+<article class="relative rounded-3xl wood-board p-3.5 shadow-wood-3d overflow-hidden border-4 border-[#8e1f1c] transition-all hidden" id="incorrectFeedbackCard">
+<!-- Top Ribbon Header -->
+<div class="-mx-3.5 -mt-3.5 red-ribbon py-2 px-4 text-center rounded-t-2xl mb-3 flex items-center justify-center space-x-2">
+<span class="text-white text-base font-bold tracking-wide game-text-shadow">✕ Incorrect Answer!</span>
+</div>
+<!-- Repeated Question Context Pill -->
+<div class="bg-[#fcf8ec] rounded-xl border border-[#d6b783] py-2 px-3 text-center mb-3">
+<p class="text-xs sm:text-sm font-bold text-gray-700 font-body">
+                If x = 2, then the value of <strong class="text-red-700 font-game">3x + 4 = 10</strong>.
+              </p>
+</div>
+<!-- Big Cross Stamp -->
+<div class="flex justify-center my-1">
+<div class="w-14 h-14 rounded-full bg-gradient-to-b from-rose-400 to-rose-600 border-4 border-rose-900 shadow-md flex items-center justify-center">
+<svg class="w-9 h-9 text-white stroke-[4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+<!-- Supportive Reassurance Text -->
+<div class="text-center mt-2">
+<p class="text-rose-900 font-black text-base font-game">Your answer is not correct.</p>
+<p class="text-gray-600 text-xs font-semibold mt-0.5 font-body flex items-center justify-center gap-1">
+<span class="">Proceed to explanation in</span>
+<span class="font-bold text-rose-800 text-sm font-game" id="incorrectCountdownSec">3</span>s...
+</p>
+</div>
+<!-- 3-Second Red Progress Bar -->
+<div class="mt-3 bg-gray-200/90 rounded-full h-3.5 p-0.5 border border-rose-800 overflow-hidden relative">
+<div class="h-full bg-gradient-to-r from-rose-400 to-red-600 rounded-full w-0" id="incorrectProgressBar"></div>
+</div>
+<!-- Quick Skip Button in interactive mode -->
+<div class="mt-2 text-center">
+<button class="text-[11px] text-rose-800 hover:text-rose-950 font-bold underline cursor-pointer" onclick="skipToExplanation()">
+    Skip countdown &amp; see explanation →
+  </button>
+</div>
+</article>
+</div>
+</section>
+<!-- END: FeedbackSection -->
+<!-- Second Golden Adventure Arrow -->
+<div class="flex justify-center -my-1 floating-arrow transition-all duration-300" id="flowArrow2">
+<div class="w-10 h-10 rounded-full bg-gradient-to-b from-amber-300 to-amber-500 border-2 border-amber-800 shadow-md flex items-center justify-center text-amber-950 font-black text-xl">
+          ▼
+        </div>
+</div>
+<!-- ========================================== -->
+<!-- SECTION C: EXPLANATION PARCHMENT BOARD     -->
+<!-- ========================================== -->
+<!-- BEGIN: ExplanationBoard -->
+<section class="relative rounded-3xl wood-board p-4 pt-8 shadow-wood-3d transition-all duration-300" id="explanationSection">
+<!-- Top Wooden Signboard: Explanation Header -->
+<div class="absolute -top-5 inset-x-0 mx-auto w-fit px-5 py-1.5 rounded-full wood-banner border-[3px] border-[#552703] shadow-lg flex items-center space-x-2">
+<span class="text-lg">📖</span>
+<span class="text-white text-base font-bold tracking-wide game-text-shadow">Explanation</span>
+</div>
+<!-- Sticky Note Tip pinned to the right -->
+<div class="absolute -top-5 right-2 sm:right-3 w-40 bg-sky-100 border-2 border-sky-400 rounded-lg p-2 shadow-lg transform rotate-2 z-20">
+<div class="w-3 h-3 rounded-full bg-sky-600 mx-auto -mt-3.5 border border-white shadow"></div>
+<div class="flex items-start space-x-1.5 mt-0.5">
+<span class="text-base leading-none">💡</span>
+<p class="text-[10px] leading-tight font-bold text-sky-950 font-body">
+              Substitute the variable value into the algebraic form.
+            </p>
+</div>
+</div>
+<!-- Problem Restatement Text -->
+<div class="mt-2 text-left bg-amber-50/70 p-2.5 rounded-xl border border-amber-200">
+<p class="text-xs font-bold text-amber-950 font-body">
+            Let's check the statement:<br>
+<span class="font-game text-sm text-gray-800">If x = 2, then the value of <strong>3x + 4 = 10</strong>.</span>
+</p>
+</div>
+<!-- Step-by-Step Mathematical Proof Box -->
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-3 mt-3">
+<!-- Left column: 3 Steps -->
+<div class="sm:col-span-7 bg-white/95 rounded-2xl border-2 border-[#d9ba88] p-3 shadow-inner text-left">
+<div class="flex items-center space-x-1 text-emerald-800 font-bold text-xs mb-2">
+<span class="text-emerald-600 text-sm">✔</span>
+<span class="">Step-by-step:</span>
+</div>
+<ol class="space-y-1.5 text-xs font-bold text-gray-800 font-body">
+<li class="flex items-start space-x-1.5">
+<span class="text-amber-800 font-game">1.</span>
+<span class="">Substitute <mark class="bg-amber-100 text-amber-950 px-1 rounded font-game">x = 2</mark> into <strong class="font-game">3x + 4</strong>.</span>
+</li>
+<li class="flex items-start space-x-1.5">
+<span class="text-amber-800 font-game">2.</span>
+<span class=""><span class="font-game">3(2) + 4</span> = <span class="text-blue-700 font-game">6 + 4</span></span>
+</li>
+<li class="flex items-start space-x-1.5">
+<span class="text-amber-800 font-game">3.</span>
+<span class=""><span class="font-game">6 + 4</span> = <span class="text-emerald-700 font-game text-sm">10</span></span>
+</li>
+</ol>
+</div>
+<!-- Right column: Conclusive Result Box -->
+<div class="sm:col-span-5 bg-emerald-50/90 rounded-2xl border-2 border-emerald-400 p-3 flex flex-col justify-between text-left">
+<div>
+<span class="text-[11px] font-bold text-emerald-900 uppercase tracking-wider block">Result:</span>
+<div class="flex items-center space-x-2 mt-1">
+<span class="font-game font-black text-emerald-950 text-base">3x + 4 = 10</span>
+<span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold shadow">✓</span>
+</div>
+</div>
+<p class="text-xs font-black text-emerald-900 mt-2 font-game">
+              So, this statement is <span class="underline decoration-2 decoration-emerald-600 text-emerald-800">TRUE</span>.
+            </p>
+</div>
+</div>
+<!-- Cute Teacher Cricket Mascot on bottom right -->
+<div class="flex items-center justify-between mt-4">
+<!-- Mascot graphic -->
+<div class="flex items-center space-x-2">
+<div class="w-12 h-12 bg-amber-200 border-2 border-amber-600 rounded-full flex items-center justify-center text-2xl shadow">
+              🦗
+            </div>
+<div class="text-left text-[11px] font-bold text-amber-950 leading-tight">
+              Prof. Hopper:<br>
+<span class="text-amber-800 font-medium">"Substitution unlocked!"</span>
+</div>
+</div>
+<!-- Big Next Question Button -->
+<button class="flex-1 max-w-[210px] ml-2 py-3 px-4 rounded-2xl bg-gradient-to-b from-amber-400 via-orange-500 to-amber-600 border-4 border-[#78350f] shadow-orange-btn active:translate-y-1 transition-all flex items-center justify-center space-x-1 text-white font-black text-lg tracking-wide game-text-shadow cursor-pointer hover:brightness-105" onclick="handleNextQuestion()">
+<span class="">Next Question</span>
+<svg class="w-5 h-5 ml-1 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</section>
+<!-- END: ExplanationBoard -->
+</main>
+<!-- Interactive Transition Toast to Screen 06 -->
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4" id="resultsToast">
+<div class="w-full max-w-sm rounded-3xl wood-board p-5 text-center shadow-wood-3d toast-anim border-4 border-amber-500 relative">
+<div class="w-16 h-16 bg-gradient-to-b from-amber-300 to-amber-500 rounded-2xl border-4 border-amber-800 shadow-md flex items-center justify-center mx-auto mb-3 text-3xl">
+      🏆
+    </div>
+<h3 class="text-2xl font-black text-amber-950 font-game game-text-white-shadow">Mission Stage Complete!</h3>
+<p class="text-xs text-gray-700 font-body font-bold mt-1">Advancing to Screen 06 (Adventure Results):</p>
+<div class="bg-amber-100/90 rounded-2xl border border-amber-300 p-3 my-3 text-left space-y-1.5 font-body text-xs">
+<div class="flex justify-between items-center text-gray-800">
+<span class="">Question Score:</span>
+<span class="font-bold text-emerald-700 font-game text-sm" id="toastQuestionScore">+200 pts</span>
+</div>
+<div class="flex justify-between items-center text-gray-800">
+<span class="">Streak Bonus:</span>
+<span class="font-bold text-amber-700 font-game text-sm" id="toastStreakBonus">+50 pts</span>
+</div>
+<div class="border-t border-amber-200 pt-1.5 flex justify-between items-center text-amber-950 font-black">
+<span class="">Total Adventure Score:</span>
+<span class="text-emerald-700 font-game text-base" id="toastTotalScore">1,050 pts</span>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-xl bg-gradient-to-b from-emerald-500 to-emerald-700 border-2 border-emerald-900 shadow-green-btn text-white font-bold font-game tracking-wide text-base hover:brightness-105 active:translate-y-0.5" onclick="closeResultsToast()">
+      Continue Adventure
+    </button>
+</div>
+</div>
+</div>
+<!-- BEGIN: Interactive Logic Scripts -->
+<script data-purpose="quiz-state-manager">
+    // State variables
+    let isFullFlowOverview = false; // Start in Interactive Play Mode
+    let countdownTimeout = null;
+    let countdownTickInterval = null;
+    let remainingSeconds = 3;
+    let score = 800;
+    let streak = 2;
+    let answerLocked = false;
+    let lastUserChoice = null;
+
+    // Elements
+    const feedbackGrid = document.getElementById('feedbackGrid');
+    const correctCard = document.getElementById('correctFeedbackCard');
+    const incorrectCard = document.getElementById('incorrectFeedbackCard');
+    const explanationSection = document.getElementById('explanationSection');
+    const flowArrow1 = document.getElementById('flowArrow1');
+    const flowArrow2 = document.getElementById('flowArrow2');
+    const viewModeBtn = document.getElementById('viewModeBtn');
+    const statusLabel = document.getElementById('statusLabel');
+    const statusDot = document.getElementById('statusDot');
+    const trueBtn = document.getElementById('trueBtn');
+    const falseBtn = document.getElementById('falseBtn');
+    const correctProgressBar = document.getElementById('correctProgressBar');
+    const incorrectProgressBar = document.getElementById('incorrectProgressBar');
+    const correctCountdownSec = document.getElementById('correctCountdownSec');
+    const incorrectCountdownSec = document.getElementById('incorrectCountdownSec');
+
+    function toggleFlowView() {
+      isFullFlowOverview = !isFullFlowOverview;
+      updateViewState();
+    }
+
+    function updateViewState() {
+      clearInterval(countdownTickInterval);
+      clearTimeout(countdownTimeout);
+
+      if (isFullFlowOverview) {
+        viewModeBtn.textContent = "Interactive Play Mode";
+        viewModeBtn.classList.replace("bg-amber-500", "bg-emerald-600");
+        statusLabel.textContent = "Overview Flow Mode";
+        statusDot.classList.remove("animate-ping");
+
+        // Unlock buttons preview
+        trueBtn.disabled = false;
+        falseBtn.disabled = false;
+
+        // Show all cards connected by arrows (like 05 True or False.png)
+        correctCard.classList.remove('hidden');
+        incorrectCard.classList.remove('hidden');
+        explanationSection.classList.remove('hidden');
+        flowArrow1.classList.remove('hidden');
+        flowArrow2.classList.remove('hidden');
+
+        feedbackGrid.classList.remove('grid-cols-1');
+        feedbackGrid.classList.add('md:grid-cols-2');
+
+        // Static visual fill for overview representation
+        correctProgressBar.style.width = '75%';
+        incorrectProgressBar.style.width = '65%';
+        correctCountdownSec.textContent = '3';
+        incorrectCountdownSec.textContent = '3';
+      } else {
+        viewModeBtn.textContent = "Complete Overview Flow";
+        viewModeBtn.classList.replace("bg-emerald-600", "bg-amber-500");
+        statusLabel.textContent = answerLocked ? "Explanation Unlocked" : "Tap True / False to play";
+        statusDot.classList.add("animate-ping");
+
+        feedbackGrid.classList.remove('md:grid-cols-2');
+        feedbackGrid.classList.add('grid-cols-1');
+
+        if (!answerLocked) {
+          // State A: Only Question Visible
+          correctCard.classList.add('hidden');
+          incorrectCard.classList.add('hidden');
+          explanationSection.classList.add('hidden');
+          flowArrow1.classList.add('hidden');
+          flowArrow2.classList.add('hidden');
+          trueBtn.disabled = false;
+          falseBtn.disabled = false;
+          trueBtn.classList.remove('ring-4', 'ring-yellow-400');
+          falseBtn.classList.remove('ring-4', 'ring-yellow-400');
+        } else {
+          // If already answered, show selected feedback and explanation
+          showStateBasedOnAnswer(lastUserChoice, false);
+        }
+      }
+    }
+
+    // Interactive answering function
+    function selectAnswer(userSaidTrue) {
+      if (answerLocked) return;
+
+      lastUserChoice = userSaidTrue;
+      answerLocked = true;
+
+      // Lock buttons immediately
+      trueBtn.disabled = true;
+      falseBtn.disabled = true;
+
+      if (userSaidTrue) {
+        trueBtn.classList.add('ring-4', 'ring-yellow-400');
+      } else {
+        falseBtn.classList.add('ring-4', 'ring-yellow-400');
+      }
+
+      showStateBasedOnAnswer(userSaidTrue, true);
+    }
+
+    function showStateBasedOnAnswer(userSaidTrue, animateProgress) {
+      const isCorrect = (userSaidTrue === true);
+
+      // Show Arrow 1
+      flowArrow1.classList.remove('hidden');
+
+      const activeCard = isCorrect ? correctCard : incorrectCard;
+      const inactiveCard = isCorrect ? incorrectCard : correctCard;
+      const activeBar = isCorrect ? correctProgressBar : incorrectProgressBar;
+      const countdownSecEl = isCorrect ? correctCountdownSec : incorrectCountdownSec;
+
+      activeCard.classList.remove('hidden');
+      inactiveCard.classList.add('hidden');
+
+      if (animateProgress) {
+        remainingSeconds = 3;
+        countdownSecEl.textContent = '3';
+        activeBar.style.width = '0%';
+        activeBar.classList.remove('bar-animating');
+
+        // Force browser reflow
+        void activeBar.offsetWidth;
+
+        activeBar.classList.add('bar-animating');
+        activeBar.style.width = '100%';
+
+        // Smooth scroll toward feedback card
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Numeric countdown
+        countdownTickInterval = setInterval(() => {
+          remainingSeconds--;
+          if (remainingSeconds >= 0) {
+            countdownSecEl.textContent = remainingSeconds;
+          }
+        }, 1000);
+
+        // After 3 seconds transition to State C
+        countdownTimeout = setTimeout(() => {
+          clearInterval(countdownTickInterval);
+          revealExplanation();
+        }, 3000);
+      } else {
+        revealExplanation();
+      }
+    }
+
+    function skipToExplanation() {
+      clearInterval(countdownTickInterval);
+      clearTimeout(countdownTimeout);
+      correctProgressBar.style.width = '100%';
+      incorrectProgressBar.style.width = '100%';
+      correctCountdownSec.textContent = '0';
+      incorrectCountdownSec.textContent = '0';
+      revealExplanation();
+    }
+
+    function revealExplanation() {
+      flowArrow2.classList.remove('hidden');
+      explanationSection.classList.remove('hidden');
+      explanationSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function handleReset() {
+      clearTimeout(countdownTimeout);
+      clearInterval(countdownTickInterval);
+      answerLocked = false;
+      lastUserChoice = null;
+      isFullFlowOverview = false;
+      updateViewState();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleNextQuestion() {
+      // Calculate score and show preview to Screen 06
+      const earned = lastUserChoice === true ? 200 : 50;
+      const bonus = streak >= 2 ? 50 : 0;
+      score += (earned + bonus);
+      streak = (lastUserChoice === true) ? streak + 1 : 0;
+
+      document.getElementById('hudScore').textContent = score;
+      document.getElementById('hudStreak').textContent = streak;
+
+      document.getElementById('toastQuestionScore').textContent = `+${earned} pts`;
+      document.getElementById('toastStreakBonus').textContent = `+${bonus} pts`;
+      document.getElementById('toastTotalScore').textContent = `${score.toLocaleString()} pts`;
+
+      document.getElementById('resultsToast').classList.remove('hidden');
+    }
+
+    function closeResultsToast() {
+      document.getElementById('resultsToast').classList.add('hidden');
+      handleReset();
+    }
+
+    // Initialize in interactive play mode
+    updateViewState();
+  </script>
+<!-- END: Interactive Logic Scripts -->
+
+
+</body></html>

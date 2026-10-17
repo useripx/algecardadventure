@@ -1,0 +1,353 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>AlgeCard Adventure - Select Level</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for playful game typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&amp;family=Nunito:wght@700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Fredoka', 'Nunito', sans-serif;
+      user-select: none;
+      margin: 0;
+      padding: 0;
+      background-color: #0c1a0e;
+    }
+    /* Chunky game strokes & shadows */
+    .stroke-white-thick {
+      -webkit-text-stroke: 4px #ffffff;
+      paint-order: stroke fill;
+    }
+    .stroke-blue-dark {
+      -webkit-text-stroke: 4px #0b4f8a;
+      paint-order: stroke fill;
+    }
+    .stroke-brown-dark {
+      -webkit-text-stroke: 4px #4a2406;
+      paint-order: stroke fill;
+    }
+    .stroke-wood {
+      -webkit-text-stroke: 2.5px #3a1a05;
+      paint-order: stroke fill;
+    }
+    .game-shadow {
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+    }
+    .wood-board {
+      background: linear-gradient(180deg, #be7e42 0%, #8e4c19 100%);
+      box-shadow: inset 0 3px 0 #ebb171, inset 0 -4px 0 #54270a, 0 10px 25px rgba(0, 0, 0, 0.4);
+      border: 3.5px solid #3c1e08;
+    }
+    .wood-banner {
+      background: linear-gradient(180deg, #fbe8ba 0%, #eab866 50%, #c88f34 100%);
+      box-shadow: inset 0 2px 0 #ffffff, inset 0 -3px 0 #8c5717, 0 5px 12px rgba(0, 0, 0, 0.25);
+      border: 3px solid #572d0c;
+    }
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+      50% { transform: translateY(-6px) rotate(var(--rot, 0deg)); }
+    }
+    .floating-card {
+      animation: floatCard 3.5s ease-in-out infinite;
+    }
+    .floating-card-delayed {
+      animation: floatCard 4s ease-in-out infinite 1.2s;
+    }
+  </style>
+</head>
+<body class="bg-[#0b170e] flex justify-center items-center min-h-screen sm:py-4">
+<!-- Mobile Frame Root -->
+<div class="relative w-full max-w-[420px] h-[100dvh] max-h-[920px] mx-auto overflow-hidden bg-[#73c0fc] flex flex-col justify-between shadow-2xl sm:rounded-[36px] border-0 sm:border-[6px] sm:border-[#38200f]">
+<!-- 1. Background Scenic Layers -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+<!-- Sky Gradient -->
+<div class="absolute inset-0 bg-gradient-to-b from-[#40a9ff] via-[#7ecbfd] to-[#bce5ff]"></div>
+<!-- Clouds -->
+<div class="absolute -top-6 -left-8 w-44 h-24 bg-white/75 rounded-full blur-[1px]"></div>
+<div class="absolute top-2 left-20 w-36 h-18 bg-white/85 rounded-full"></div>
+<div class="absolute -top-6 -right-6 w-48 h-24 bg-white/75 rounded-full blur-[1px]"></div>
+<div class="absolute top-6 right-10 w-32 h-16 bg-white/90 rounded-full"></div>
+<!-- Floating Math Operator Cards -->
+<div class="absolute top-7 left-3 w-10 h-12 bg-gradient-to-br from-[#ff6b6b] to-[#e03131] rounded-xl border-2 border-white shadow-lg flex items-center justify-center -rotate-12 floating-card" style="--rot: -12deg;">
+<span class="text-white text-2xl font-black drop-shadow">+</span>
+</div>
+
+<div class="absolute top-6 right-5 w-10 h-12 bg-gradient-to-br from-[#ffa94d] to-[#e8590c] rounded-xl border-2 border-white shadow-lg flex items-center justify-center rotate-12 floating-card" style="--rot: 12deg;">
+<span class="text-white text-xl font-black drop-shadow">÷</span>
+</div>
+<!-- Rolling Green Hills (Pure CSS / SVGs) -->
+<div class="absolute inset-x-0 top-36 bottom-0">
+<svg class="w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 420 600">
+<!-- Back Hill -->
+<path d="M-20,130 Q120,60 260,110 T440,95 L440,600 L-20,600 Z" fill="#88cb54" opacity="0.9"></path>
+<!-- Mid Hill -->
+<path d="M-20,190 Q90,120 220,170 T440,150 L440,600 L-20,600 Z" fill="#6bbe39"></path>
+<!-- Front Lush Hill -->
+<path d="M-20,260 Q140,200 280,240 T440,220 L440,600 L-20,600 Z" fill="#58ab2a"></path>
+</svg>
+</div>
+</div>
+<!-- 2. Top Game Emblem Header (Fully Visible & Centered) -->
+<header class="relative z-20 pt-5 px-3 flex flex-col items-center"><div class="relative w-full max-w-[290px] flex items-center justify-center pt-1 drop-shadow-md">
+  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1iAX2ZL1JqwqE-T_sbnP9I-L0AWHPHH3nMxouMAApPrUtsgE_Vc_51TH1L64LOJt6Ra4qrbzVX3t0r947ZzB8ix4NMNNjzqQ8EV7ENFjceopWWrXP4GnufYJoX82VvtNu4sPn1nPDCX6Y9YnRy2SqjkUbg6-CpcZA1BNHxb-zWw4ukTpnQmCD0yZH08ULRxbPeLXA7VYHmZu4Tv_zYDCnSgqvwO4NMPz7HybR_PfVW2TbffMxgjgWBK_hTMkvMKFXkg" alt="AlgeCard Adventure" class="w-full h-auto object-contain pointer-events-none select-none drop-shadow-lg">
+</div></header>
+<!-- 3. Center Main Board (Two Cricket Mascots + Select Level Board) -->
+<main class="relative z-20 px-3.5 my-auto flex flex-col justify-center w-full max-w-[400px] mx-auto">
+<!-- Mascots Row directly sitting on top of the wooden board -->
+<div class="relative z-10 flex justify-between items-end px-5 -mb-3 pointer-events-none">
+<!-- Green Cricket (Left Mascot) -->
+<div class="relative w-20 h-20 flex items-end">
+<svg class="w-18 h-18 filter drop-shadow-md" viewBox="0 0 100 100">
+<!-- Antennae -->
+<path d="M46,28 Q30,5 20,10" fill="none" stroke="#1b5e20" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="20" cy="10" fill="#22c55e" r="3"></circle>
+<path d="M54,28 Q62,5 50,3" fill="none" stroke="#1b5e20" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="50" cy="3" fill="#22c55e" r="3"></circle>
+<!-- Legs -->
+<path d="M25,75 Q10,50 8,66 M72,75 Q85,55 90,70" fill="none" stroke="#1b5e20" stroke-linecap="round" stroke-width="4"></path>
+<!-- Body -->
+<ellipse cx="50" cy="65" fill="#4ade80" rx="26" ry="22" stroke="#166534" stroke-width="3.5"></ellipse>
+<ellipse cx="50" cy="67" fill="#bbf7d0" rx="19" ry="14"></ellipse>
+<!-- Head -->
+<circle cx="50" cy="37" fill="#4ade80" r="18" stroke="#166534" stroke-width="3.5"></circle>
+<!-- Big Eyes -->
+<ellipse cx="43" cy="35" fill="#0f172a" rx="5" ry="7"></ellipse>
+<circle cx="41" cy="33" fill="#ffffff" r="2.2"></circle>
+<ellipse cx="57" cy="35" fill="#0f172a" rx="5" ry="7"></ellipse>
+<circle cx="55" cy="33" fill="#ffffff" r="2.2"></circle>
+<!-- Smile -->
+<path d="M46,44 Q50,48 54,44" fill="none" stroke="#166534" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Cheeks -->
+<circle cx="37" cy="42" fill="#f472b6" opacity="0.65" r="3"></circle>
+<circle cx="63" cy="42" fill="#f472b6" opacity="0.65" r="3"></circle>
+</svg>
+<!-- Mascot holding tiny math card -->
+<div class="absolute -bottom-1 right-0 w-7 h-9 bg-gradient-to-br from-[#38bdf8] to-[#0284c7] rounded-lg border-2 border-white shadow-md flex items-center justify-center rotate-6">
+<span class="text-white font-black text-xs">✕</span>
+</div>
+</div>
+<!-- Orange/Coral Cricket (Right Mascot) -->
+<div class="relative w-20 h-20 flex items-end justify-end">
+<svg class="w-18 h-18 filter drop-shadow-md transform -scale-x-100" viewBox="0 0 100 100">
+<!-- Antennae -->
+<path d="M46,28 Q30,5 20,10" fill="none" stroke="#9a3412" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="20" cy="10" fill="#fb923c" r="3"></circle>
+<path d="M54,28 Q62,5 50,3" fill="none" stroke="#9a3412" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="50" cy="3" fill="#fb923c" r="3"></circle>
+<!-- Legs -->
+<path d="M25,75 Q10,50 8,66 M72,75 Q85,55 90,70" fill="none" stroke="#9a3412" stroke-linecap="round" stroke-width="4"></path>
+<!-- Body -->
+<ellipse cx="50" cy="65" fill="#fb923c" rx="26" ry="22" stroke="#9a3412" stroke-width="3.5"></ellipse>
+<ellipse cx="50" cy="67" fill="#fed7aa" rx="19" ry="14"></ellipse>
+<!-- Head -->
+<circle cx="50" cy="37" fill="#fb923c" r="18" stroke="#9a3412" stroke-width="3.5"></circle>
+<!-- Big Eyes -->
+<ellipse cx="43" cy="35" fill="#0f172a" rx="5" ry="7"></ellipse>
+<circle cx="41" cy="33" fill="#ffffff" r="2.2"></circle>
+<ellipse cx="57" cy="35" fill="#0f172a" rx="5" ry="7"></ellipse>
+<circle cx="55" cy="33" fill="#ffffff" r="2.2"></circle>
+<!-- Smile -->
+<path d="M46,44 Q50,48 54,44" fill="none" stroke="#9a3412" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Cheeks -->
+<circle cx="37" cy="42" fill="#f43f5e" opacity="0.65" r="3"></circle>
+<circle cx="63" cy="42" fill="#f43f5e" opacity="0.65" r="3"></circle>
+</svg>
+<!-- Mascot holding tiny plus card -->
+<div class="absolute -bottom-1 left-0 w-7 h-9 bg-gradient-to-br from-[#f87171] to-[#dc2626] rounded-lg border-2 border-white shadow-md flex items-center justify-center -rotate-6">
+<span class="text-white font-black text-xs">＋</span>
+</div>
+</div>
+</div>
+<!-- Main Wooden Plaque Container -->
+<div class="wood-board rounded-[26px] p-3 pt-5 pb-4 relative shadow-2xl">
+<!-- 4 Golden Rivet Corner Bolts -->
+<div class="absolute top-2 left-2 w-3.5 h-3.5 rounded-full bg-[#fde047] border-2 border-[#78350f] shadow-inner"></div>
+<div class="absolute top-2 right-2 w-3.5 h-3.5 rounded-full bg-[#fde047] border-2 border-[#78350f] shadow-inner"></div>
+<div class="absolute bottom-2 left-2 w-3.5 h-3.5 rounded-full bg-[#fde047] border-2 border-[#78350f] shadow-inner"></div>
+<div class="absolute bottom-2 right-2 w-3.5 h-3.5 rounded-full bg-[#fde047] border-2 border-[#78350f] shadow-inner"></div>
+<!-- "Select Level" Wooden Header Plaque -->
+<div class="absolute -top-5 left-1/2 -translate-x-1/2 wood-banner px-6 py-1 rounded-2xl shadow-lg border-2 border-[#451a03] flex items-center justify-center whitespace-nowrap z-20">
+<h2 class="text-lg sm:text-xl font-black text-[#3d1a04] stroke-white-thick tracking-wide select-none">
+            Select Level
+          </h2>
+</div>
+<!-- Level Buttons List -->
+<div class="flex flex-col space-y-2.5 mt-2">
+<!-- EASY LEVEL BUTTON -->
+<button class="w-full text-left bg-gradient-to-r from-[#38bdf8] via-[#0ea5e9] to-[#0284c7] rounded-2xl p-2.5 sm:p-3 border-[2.5px] border-white shadow-[0_4px_0_#0369a1,0_8px_12px_rgba(0,0,0,0.25)] active:translate-y-1 active:shadow-[0_1px_0_#0369a1] transition-all flex items-center justify-between group" onclick="launchLevel('Easy')">
+<div class="flex items-center space-x-3 min-w-0">
+<!-- Book Icon Box -->
+<div class="w-13 h-13 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-b from-[#f0f9ff] to-[#bae6fd] border-2 border-white shadow-sm flex flex-col items-center justify-center shrink-0 p-1">
+<span class="text-2xl drop-shadow">📖</span>
+<span class="text-[#f59e0b] text-[10px] font-black leading-none mt-0.5">★</span>
+</div>
+<!-- Text details -->
+<div class="flex flex-col min-w-0">
+<div class="flex items-center space-x-1.5">
+<span class="text-lg sm:text-xl font-black text-white stroke-wood tracking-wide drop-shadow">EASY</span>
+
+</div>
+
+
+</div>
+</div>
+<!-- Play Action Button Pill -->
+<div class="shrink-0 ml-2">
+<div class="bg-gradient-to-b from-[#fef08a] to-[#facc15] px-3.5 py-1.5 rounded-xl border-2 border-[#854d0e] shadow-[0_2.5px_0_#854d0e] flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="text-xs font-black text-[#451a03] tracking-wider uppercase">PLAY ▶</span>
+</div>
+</div>
+</button>
+<!-- MEDIUM LEVEL BUTTON -->
+<button class="w-full text-left bg-gradient-to-r from-[#22c55e] via-[#16a34a] to-[#15803d] rounded-2xl p-2.5 sm:p-3 border-[2.5px] border-white shadow-[0_4px_0_#14532d,0_8px_12px_rgba(0,0,0,0.25)] active:translate-y-1 active:shadow-[0_1px_0_#14532d] transition-all flex items-center justify-between group" onclick="launchLevel('Medium')">
+<div class="flex items-center space-x-3 min-w-0">
+<!-- Book Icon Box -->
+<div class="w-13 h-13 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-b from-[#f0fdf4] to-[#bbf7d0] border-2 border-white shadow-sm flex flex-col items-center justify-center shrink-0 p-1">
+<span class="text-2xl drop-shadow">📚</span>
+<div class="flex space-x-0.5 mt-0.5">
+<span class="text-[#f59e0b] text-[10px] font-black leading-none">★</span>
+<span class="text-[#f59e0b] text-[10px] font-black leading-none">★</span>
+</div>
+</div>
+<!-- Text details -->
+<div class="flex flex-col min-w-0">
+<div class="flex items-center space-x-1.5">
+<span class="text-lg sm:text-xl font-black text-white stroke-wood tracking-wide drop-shadow">MEDIUM</span>
+
+</div>
+
+
+</div>
+</div>
+<!-- Play Action Button Pill -->
+<div class="shrink-0 ml-2">
+<div class="bg-gradient-to-b from-[#fef08a] to-[#facc15] px-3.5 py-1.5 rounded-xl border-2 border-[#854d0e] shadow-[0_2.5px_0_#854d0e] flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="text-xs font-black text-[#451a03] tracking-wider uppercase">PLAY ▶</span>
+</div>
+</div>
+</button>
+<!-- HARD LEVEL BUTTON -->
+<button class="w-full text-left bg-gradient-to-r from-[#f97316] via-[#ea580c] to-[#c2410c] rounded-2xl p-2.5 sm:p-3 border-[2.5px] border-white shadow-[0_4px_0_#7c2d12,0_8px_12px_rgba(0,0,0,0.25)] active:translate-y-1 active:shadow-[0_1px_0_#7c2d12] transition-all flex items-center justify-between group" onclick="launchLevel('Hard')">
+<div class="flex items-center space-x-3 min-w-0">
+<!-- Book Icon Box -->
+<div class="w-13 h-13 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-b from-[#fff7ed] to-[#fed7aa] border-2 border-white shadow-sm flex flex-col items-center justify-center shrink-0 p-1">
+<span class="text-2xl drop-shadow">📕</span>
+<div class="flex space-x-0.5 mt-0.5">
+<span class="text-[#f59e0b] text-[10px] font-black leading-none">★</span>
+<span class="text-[#f59e0b] text-[10px] font-black leading-none">★</span>
+<span class="text-[#f59e0b] text-[10px] font-black leading-none">★</span>
+</div>
+</div>
+<!-- Text details -->
+<div class="flex flex-col min-w-0">
+<div class="flex items-center space-x-1.5">
+<span class="text-lg sm:text-xl font-black text-white stroke-wood tracking-wide drop-shadow">HARD</span>
+
+</div>
+
+
+</div>
+</div>
+<!-- Play Action Button Pill -->
+<div class="shrink-0 ml-2">
+<div class="bg-gradient-to-b from-[#fef08a] to-[#facc15] px-3.5 py-1.5 rounded-xl border-2 border-[#854d0e] shadow-[0_2.5px_0_#854d0e] flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="text-xs font-black text-[#451a03] tracking-wider uppercase">PLAY ▶</span>
+</div>
+</div>
+</button>
+</div>
+</div>
+</main>
+<!-- 4. Bottom Props & Adventure Foreground -->
+<footer class="relative z-20 px-3 pb-3 pt-0 flex items-end justify-between pointer-events-none w-full">
+<!-- Books on Bottom Left -->
+<div class="relative w-36 h-18 pointer-events-auto">
+<!-- Science Book (Red, Bottom) -->
+<div class="absolute bottom-0 left-0 w-32 h-7 bg-gradient-to-r from-[#b91c1c] via-[#dc2626] to-[#991b1b] rounded-md border-2 border-[#450a0a] shadow-lg flex items-center px-2.5 transform -rotate-1">
+<div class="w-1 h-full bg-[#fecaca]/40 mr-1.5 rounded-sm"></div>
+<span class="text-white text-[10px] font-black tracking-widest uppercase drop-shadow">SCIENCE</span>
+</div>
+<!-- Math Book (Blue, Top) -->
+<div class="absolute bottom-4 left-2 w-28 h-7 bg-gradient-to-r from-[#1d4ed8] via-[#2563eb] to-[#1e40af] rounded-md border-2 border-[#172554] shadow-md flex items-center px-2 transform rotate-2">
+<div class="w-1 h-full bg-[#bfdbfe]/50 mr-1.5 rounded-sm"></div>
+<span class="text-white text-[10px] font-black tracking-widest uppercase drop-shadow">MATH</span>
+</div>
+<!-- Leaves -->
+<div class="absolute -bottom-1 -left-2 text-xl drop-shadow">🌿</div>
+</div>
+<!-- Center Dirt Stepping Path -->
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-28 h-10 bg-[#e4caa0] rounded-t-full opacity-80 border-t-2 border-[#8a6840]/30 -z-10 flex items-center justify-center space-x-1">
+<div class="w-3 h-2 bg-[#bda073] rounded-full"></div>
+<div class="w-4 h-2.5 bg-[#a88a5d] rounded-full"></div>
+<div class="w-2.5 h-1.5 bg-[#8b704b] rounded-full"></div>
+</div>
+<!-- Vintage Map, Compass & Backpack on Bottom Right -->
+<div class="relative w-36 h-18 flex justify-end items-end pointer-events-auto">
+<!-- Folded Treasure Map -->
+<div class="absolute bottom-0 right-14 w-18 h-12 bg-[#fde68a] rounded-sm border-2 border-[#854d0e] shadow-md transform -rotate-12 p-1 overflow-hidden flex flex-col justify-between">
+<div class="w-full border-b border-dashed border-[#b45309]/60"></div>
+<div class="text-[9px] text-[#92400e] font-mono leading-none">⛰️ ─ ✕</div>
+</div>
+<!-- Gold Pocket Compass -->
+<div class="absolute bottom-0 right-10 w-9 h-9 rounded-full bg-gradient-to-b from-[#fde047] via-[#eab308] to-[#854d0e] border-2 border-[#422006] shadow-lg flex items-center justify-center z-10">
+<div class="w-6.5 h-6.5 rounded-full bg-white border border-[#854d0e] flex items-center justify-center relative">
+<div class="w-0.5 h-full bg-[#cbd5e1] absolute"></div>
+<div class="h-0.5 w-full bg-[#cbd5e1] absolute"></div>
+<div class="w-1 h-5 bg-gradient-to-b from-[#ef4444] to-[#3b82f6] rounded-full transform -rotate-45"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-[#1e293b] absolute"></div>
+</div>
+</div>
+<!-- Leather Satchel Backpack -->
+<div class="relative w-14 h-16 bg-gradient-to-b from-[#9a5b06] to-[#6b3a0f] rounded-t-2xl rounded-b-lg border-2 border-[#3c1e08] shadow-xl flex flex-col items-center p-1 z-0">
+<div class="w-full flex justify-between px-1.5 pt-0.5">
+<div class="w-1.5 h-8 bg-[#3d1904] rounded-xs"></div>
+<div class="w-1.5 h-8 bg-[#3d1904] rounded-xs"></div>
+</div>
+<div class="absolute bottom-2 inset-x-2 flex justify-between">
+<div class="w-2.5 h-2.5 bg-[#facc15] border border-[#78350f] rounded-xs"></div>
+<div class="w-2.5 h-2.5 bg-[#facc15] border border-[#78350f] rounded-xs"></div>
+</div>
+</div>
+</div>
+</footer>
+<!-- Interactive Toast Modal for selection feedback -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-[#1e293b]/95 text-white px-5 py-3 rounded-2xl shadow-2xl border-2 border-[#38bdf8] items-center space-x-3 pointer-events-none transition-all duration-300 flex" id="quest-toast">
+<span class="text-2xl">⚔️</span>
+<div>
+<p class="font-black text-sm text-[#38bdf8]" id="toast-title">Hard Level Selected!</p>
+<p class="text-xs text-gray-200" id="toast-desc">Preparing adventure cards...</p>
+</div>
+</div>
+</div>
+<script>
+    function launchLevel(levelName) {
+      const toast = document.getElementById('quest-toast');
+      const title = document.getElementById('toast-title');
+      const desc = document.getElementById('toast-desc');
+
+      title.textContent = `${levelName} Level Selected!`;
+      desc.textContent = `Preparing adventure cards...`;
+      
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 1500);
+    }
+  </script>
+
+
+
+
+
+
+</body></html>

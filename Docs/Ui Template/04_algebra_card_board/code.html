@@ -1,0 +1,768 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>AlgeCard Adventure - Algebra Card Board</title>
+<!-- Tailwind CSS CDN with forms and container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            wood: {
+              light: '#fdf6e2',
+              DEFAULT: '#b46b28',
+              dark: '#68360d',
+              border: '#452003',
+              glow: '#ffbe3b'
+            },
+            jungle: {
+              light: '#72c416',
+              DEFAULT: '#469c0d',
+              dark: '#215c04'
+            }
+          },
+          fontFamily: {
+            game: ['"Fredoka"', '"Nunito"', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            'game-card': '0 4px 0 #b3c2d4, 0 6px 12px rgba(0,0,0,0.15)',
+            'game-card-active': '0 2px 0 #8fa6c2, 0 3px 6px rgba(0,0,0,0.2)',
+            'wood-plaque': 'inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -4px 0 rgba(0,0,0,0.35), 0 6px 16px rgba(0,0,0,0.45)',
+            'badge-gold': 'inset 0 3px 0 rgba(255,255,255,0.6), inset 0 -4px 0 rgba(180,90,0,0.5), 0 5px 12px rgba(0,0,0,0.3)',
+            'dpad-btn': 'inset 0 2px 0 rgba(255,245,180,0.6), inset 0 -2px 0 rgba(80,30,0,0.8), 0 3px 6px rgba(0,0,0,0.4)'
+          }
+        }
+      }
+    };
+  </script>
+<!-- BEGIN: Custom Game Stylesheets -->
+<style data-purpose="typography">
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800;900&family=Nunito:wght@700;800;900&display=swap');
+    
+    body {
+      font-family: 'Fredoka', 'Nunito', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      scroll-behavior: smooth;
+    }
+    
+    .text-stroke-brown {
+      -webkit-text-stroke: 1.5px #4a2100;
+      text-shadow: 0 2px 0 #4a2100;
+    }
+    
+    .text-stroke-blue {
+      -webkit-text-stroke: 1.5px #024a7a;
+      text-shadow: 0 2px 0 #024a7a;
+    }
+
+    .text-shadow-game {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+<style data-purpose="textures-and-skeuomorphism">
+    /* Deep cartoon wooden plank frame */
+    .wood-frame {
+      background: linear-gradient(180deg, #e49f55 0%, #a85f1c 50%, #763b06 100%);
+      border: 3px solid #3d1b03;
+      box-shadow: inset 0 2px 3px rgba(255, 230, 160, 0.5), inset 0 -3px 4px rgba(40, 15, 0, 0.8), 0 5px 10px rgba(0, 0, 0, 0.35);
+      transition: all 0.25s ease-in-out;
+    }
+
+    .wood-inner-parchment {
+      background: radial-gradient(circle at 50% 30%, #fffbe9 0%, #f7ebc6 70%, #ebd498 100%);
+      border: 2px solid #a37233;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Active & Inactive Stage Styles */
+    .stage-card.is-active {
+      border-color: #ffd043 !important;
+      box-shadow: 0 0 14px rgba(255, 208, 67, 0.75), inset 0 2px 3px rgba(255, 240, 190, 0.7), inset 0 -3px 4px rgba(40, 15, 0, 0.8), 0 6px 12px rgba(0, 0, 0, 0.4);
+      transform: scale(1.01);
+    }
+
+    .stage-card.is-locked {
+      opacity: 0.65;
+      filter: saturate(0.85);
+    }
+
+    /* Mathematical tactile game cards */
+    .game-num-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 70%, #d8e5f8 100%);
+      border: 2px solid #5a7b9e;
+      box-shadow: inset 0 2px 0 #ffffff, 0 3px 0 #3b5573, 0 3px 5px rgba(0, 0, 0, 0.2);
+      transition: all 0.12s ease-in-out;
+    }
+    .game-num-card:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 1px 0 #ffffff, 0 1px 0 #3b5573, 0 2px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .game-op-card {
+      background: linear-gradient(180deg, #ffecc2 0%, #fcd17b 65%, #ea9c27 100%);
+      border: 2px solid #945209;
+      box-shadow: inset 0 2px 0 #fff7dd, 0 3px 0 #6c3a03, 0 3px 5px rgba(0, 0, 0, 0.2);
+      transition: all 0.12s ease-in-out;
+    }
+    .game-op-card:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 1px 0 #fff7dd, 0 1px 0 #6c3a03;
+    }
+
+    .slot-placeholder {
+      background: rgba(225, 210, 175, 0.35);
+      border: 2px dashed #93b5d3;
+      transition: all 0.2s ease-in-out;
+    }
+    .slot-placeholder.is-target {
+      border-color: #f59e0b;
+      background: rgba(254, 240, 138, 0.45);
+      animation: pulse-border 1.5s infinite;
+    }
+    @keyframes pulse-border {
+      0%, 100% { border-color: #f59e0b; box-shadow: 0 0 0 rgba(245, 158, 11, 0); }
+      50% { border-color: #d97706; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6); }
+    }
+
+    /* Yellow directional wooden pointers */
+    .step-arrow-down {
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 13px solid #ffbe10;
+      filter: drop-shadow(0 3px 0 #8c5700) drop-shadow(0 4px 3px rgba(0,0,0,0.3));
+      transition: filter 0.2s;
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: rgba(180, 107, 40, 0.6);
+      border-radius: 9999px;
+    }
+
+    /* Floating Adventure Compass D-Pad Styles */
+    .dpad-dial {
+      background: radial-gradient(circle, #5a2c07 0%, #341501 70%, #1f0b00 100%);
+      border: 3px solid #f8c857;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 235, 160, 0.4), inset 0 -3px 4px rgba(0,0,0,0.8);
+    }
+    .dpad-key {
+      background: linear-gradient(180deg, #ffc947 0%, #e68d18 60%, #994c03 100%);
+      border: 1.5px solid #4a1f00;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 2px 3px rgba(0,0,0,0.5);
+      transition: all 0.08s ease;
+    }
+    .dpad-key:active, .dpad-key.is-pressed {
+      transform: scale(0.92) translateY(1px);
+      box-shadow: inset 0 2px 3px rgba(0,0,0,0.6);
+      filter: brightness(0.9);
+    }
+  </style>
+<style data-purpose="background-layers">
+    /* Fantasy forest landscape backdrop */
+    .bg-fantasy-forest {
+      background: 
+        radial-gradient(ellipse at 80% 8%, rgba(255, 248, 190, 0.8) 0%, rgba(135, 206, 250, 0) 50%),
+        linear-gradient(180deg, #4da4e6 0%, #7fc2ea 18%, #9de079 38%, #57b327 55%, #246d0a 82%, #144903 100%);
+      background-attachment: fixed;
+    }
+
+    /* Leaf vine border overlay */
+    .leaf-accent {
+      filter: drop-shadow(1px 2px 1px rgba(0, 30, 0, 0.4));
+    }
+  </style>
+<!-- END: Custom Game Stylesheets -->
+<link data-snapdom="injected-import" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800;900&amp;family=Nunito:wght@700;800;900&amp;display=swap" rel="stylesheet"></head>
+<body class="bg-fantasy-forest min-h-screen text-slate-900 flex justify-center items-start overflow-x-hidden p-0 sm:p-2">
+<!-- Mobile screen container frame simulating iOS Portrait game app (1024x1536 ratio responsive) -->
+<div class="relative w-full max-w-[480px] bg-emerald-950/20 shadow-2xl overflow-hidden flex flex-col justify-between min-h-screen border-x-2 border-emerald-900/30">
+<!-- BEGIN: TopHeader -->
+<header class="relative z-30 pt-3 px-3 pb-2 flex items-center justify-between gap-2" data-purpose="top-navigation-bar">
+<!-- Back Button -->
+<button aria-label="Go Back" class="relative shrink-0 w-11 h-11 rounded-2xl bg-gradient-to-b from-amber-400 via-orange-500 to-amber-700 border-2 border-amber-900 shadow-[0_4px_0_#622401,0_6px_8px_rgba(0,0,0,0.4)] active:translate-y-1 active:shadow-[0_1px_0_#622401] flex items-center justify-center transition-transform" onclick="history.back()" type="button">
+<svg class="w-6 h-6 text-white drop-shadow-[0_2px_1px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m15 18-6-6 6-6"></path>
+</svg>
+</button>
+<!-- Center Logo Plaque: AlgeCard Adventure -->
+<div class="flex-1 flex flex-col items-center"><div class="flex items-center justify-center max-w-[170px] h-12"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsrU9L05hw6uD7NwqudNBukrcZA0UhXC9pTSKkJMndt3mnmRmP3YHHsbKL-ctjZxWoZxXogHiRenq6XrrfqU1efBrpNw3v7EfseWZDaM9-GG--VFi1dv9Xdr4pkDwoihMKFGr8LjgofR-qVEfDABSUhw2jFUfJ4cg8iqZF7OE5APXeuOQB7jBc6gBKkrlipYolX9hs0ber6eFlQLO8zztMWVVFrd5WQBM-l1Gbu5NHLX1bVuPpMnDJtOSLbgg0HmEB9A" alt="AlgeCard Adventure Logo" class="h-full w-auto object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform"></div></div>
+<!-- Right Mission Plaque -->
+<div class="shrink-0 bg-gradient-to-b from-amber-200 via-amber-100 to-amber-300 border-2 border-amber-900 rounded-xl px-2.5 py-1 shadow-[0_3px_0_#592802] flex items-center gap-2">
+<div class="text-right">
+<div class="text-xs font-black text-amber-950 leading-tight tracking-tight">Mission Card</div>
+<div class="text-[9px] font-bold text-amber-800 leading-none">Easy · Variables</div>
+</div>
+<div class="w-6 h-6 rounded bg-amber-500/30 flex items-center justify-center text-sm">
+          📖
+        </div>
+</div>
+</header>
+<!-- END: TopHeader -->
+<!-- BEGIN: MainGameBoardArea -->
+<main class="flex-1 px-2.5 py-1 flex flex-col gap-2 relative z-10 overflow-y-auto overflow-x-auto scroll-container max-h-[calc(100vh-175px)] cursor-grab active:cursor-grabbing" data-purpose="algebra-quest-board" id="main-scroll-board">
+<!-- Question Plaque Banner -->
+<section class="wood-frame rounded-2xl p-2 relative shrink-0 min-w-[340px]" data-purpose="mission-question-card">
+<!-- Leaf decorative badges -->
+<span class="absolute -top-2 -left-1 text-base leaf-accent">🌿</span>
+<span class="absolute -bottom-2 -right-1 text-base leaf-accent">🍃</span>
+<!-- Header Pill -->
+<div class="inline-block px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700 text-amber-100 text-[11px] font-black border border-amber-950 shadow-sm mb-1">
+          Questions from the Mission Card
+        </div>
+<div class="wood-inner-parchment rounded-xl p-2 flex items-center gap-2.5">
+<!-- Friendly Mascot Illustration Avatar -->
+<div class="relative shrink-0 w-12 h-12 flex flex-col items-center justify-center">
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-lime-300 via-emerald-400 to-green-600 border-2 border-amber-900 shadow-md flex items-center justify-center text-2xl relative">
+              🦗
+              <span class="absolute -top-1 -right-1 text-xs">💡</span>
+</div>
+<span class="text-[9px] font-extrabold text-amber-950 bg-amber-200/90 rounded px-1 -mt-1 border border-amber-800">
+              Prof. Bug
+            </span>
+</div>
+<!-- Question description -->
+<p class="text-[12px] leading-snug font-bold text-amber-950">
+            If <span class="font-black text-blue-900 bg-amber-200/70 px-1 py-0.5 rounded">3x + 5 = 20</span>, find the value of <strong class="text-orange-900 font-black">x</strong>. Tap cards from the deck to fill the empty slot.
+          </p>
+</div>
+</section>
+<!-- Central Gameplay Grid: Solving Columns (Left) + Card Decks (Right) -->
+<div class="grid grid-cols-12 gap-2 items-start min-w-[340px]" data-purpose="cards-interactive-workspace">
+<!-- LEFT COLUMN: The 4 Solving Stages in chronological order -->
+<div class="col-span-8 flex flex-col gap-1.5" data-purpose="equation-steps-stages">
+<!-- STAGE 1: Card Board: Arrange the Equations -->
+<section class="wood-frame stage-card rounded-2xl p-2 relative opacity-90" data-purpose="stage-arrange-equations" data-stage="1" id="stage-1">
+<div class="flex items-center justify-between mb-0.5 gap-2 w-full">
+<div class="flex items-center gap-1">
+<span class="text-xs">📖</span>
+<span class="text-[10.5px] font-black text-amber-100 drop-shadow-[0_1px_2px_#381401]">
+                Card Board: Arrange the Equations
+              </span>
+</div>
+<span class="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-emerald-500 text-white shrink-0" id="badge-status-1">DONE ✓</span>
+</div>
+<p class="text-[9.5px] font-bold text-amber-100/90 leading-tight mb-1 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+              Arrange cards to form the initial equation.
+            </p>
+<!-- Cards Slot Rail -->
+<div class="wood-inner-parchment rounded-xl p-1.5 flex items-center justify-between gap-1 overflow-x-hidden gap-2 w-full">
+<div class="flex items-center gap-1 w-full justify-center">
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">3</button>
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-indigo-900 text-xs" type="button">x</button>
+<button class="game-op-card w-6 h-8 rounded-md flex items-center justify-center font-black text-amber-950 text-sm" type="button">+</button>
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">5</button>
+<button class="game-op-card w-6 h-8 rounded-md flex items-center justify-center font-black text-amber-950 text-xs" type="button">=</button>
+<button class="game-num-card w-7 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">20</button>
+<!-- Interactive slot -->
+<div class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black cursor-pointer shadow-md transform scale-105 transition-all" data-stage="1" id="slot-stage-1" title="Tap a card from the deck to place here" data-filled="true"><span class="font-black text-slate-800 text-xs">1</span></div>
+</div>
+</div>
+</section>
+<!-- Step Directional Arrow -->
+<div class="flex justify-center -my-0.5 relative z-20">
+<div class="step-arrow-down" id="arrow-1"></div>
+</div>
+<!-- STAGE 2: Card Board: Step 1 -->
+<section class="wood-frame stage-card rounded-2xl p-2 relative opacity-90" data-purpose="stage-step-1" data-stage="2" id="stage-2">
+<div class="flex items-center justify-between mb-0.5 gap-2 w-full">
+<div class="flex items-center gap-1">
+<span class="text-xs">💡</span>
+<span class="text-[10.5px] font-black text-amber-100 drop-shadow-[0_1px_2px_#381401]">
+                Card Board: Step 1
+              </span>
+</div>
+<span class="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-emerald-500 text-white shrink-0" id="badge-status-2">DONE ✓</span>
+</div>
+<p class="text-[9.5px] font-bold text-amber-100/90 leading-tight mb-1 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+              Move the cards to subtract 5 from both sides.
+            </p>
+<div class="wood-inner-parchment rounded-xl p-1.5 flex items-center justify-between gap-1 overflow-x-hidden gap-2 w-full">
+<div class="flex items-center gap-1 w-full justify-center">
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">3</button>
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-indigo-900 text-xs" type="button">x</button>
+<button class="game-op-card w-6 h-8 rounded-md flex items-center justify-center font-black text-amber-950 text-xs" type="button">=</button>
+<button class="game-num-card w-7 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">20</button>
+<button class="game-op-card w-6 h-8 rounded-md flex items-center justify-center font-black text-amber-950 text-xs font-mono" type="button">-</button>
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">5</button>
+<!-- Interactive slot -->
+<div class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black cursor-pointer shadow-md transform scale-105 transition-all" data-stage="2" id="slot-stage-2" title="Tap a card from the deck to place here" data-filled="true"><span class="font-black text-slate-800 text-xs">8</span></div>
+</div>
+</div>
+</section>
+<!-- Step Directional Arrow -->
+<div class="flex justify-center -my-0.5 relative z-20">
+<div class="step-arrow-down" id="arrow-2"></div>
+</div>
+<!-- STAGE 3: Card Board: Step 2 -->
+<section class="wood-frame stage-card rounded-2xl p-2 relative opacity-90" data-purpose="stage-step-2" data-stage="3" id="stage-3">
+<div class="flex items-center justify-between mb-0.5 gap-2 w-full">
+<div class="flex items-center gap-1">
+<span class="text-xs">🔍</span>
+<span class="text-[10.5px] font-black text-amber-100 drop-shadow-[0_1px_2px_#381401]">
+                Card Board: Step 2
+              </span>
+</div>
+<span class="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-emerald-500 text-white shrink-0" id="badge-status-3">DONE ✓</span>
+</div>
+<p class="text-[9.5px] font-bold text-amber-100/90 leading-tight mb-1 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+              Move the cards to divide both sides by 3.
+            </p>
+<div class="wood-inner-parchment rounded-xl p-1.5 flex items-center justify-center gap-1 overflow-x-hidden">
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">3</button>
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-indigo-900 text-xs" type="button">x</button>
+<button class="game-op-card w-6 h-8 rounded-md flex items-center justify-center font-black text-amber-950 text-xs" type="button">=</button>
+<button class="game-num-card w-7 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">15</button>
+<button class="game-op-card w-6 h-8 rounded-md flex items-center justify-center font-black text-amber-950 text-xs" type="button">/</button>
+<button class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black text-slate-800 text-xs" type="button">3</button>
+<!-- Interactive slot -->
+<div class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black cursor-pointer shadow-md transform scale-105 transition-all" data-stage="3" id="slot-stage-3" title="Tap a card from the deck to place here" data-filled="true"><span class="font-black text-slate-800 text-xs">b</span></div>
+</div>
+</section>
+<!-- Step Directional Arrow -->
+<div class="flex justify-center -my-0.5 relative z-20">
+<div class="step-arrow-down" id="arrow-3"></div>
+</div>
+<!-- STAGE 4: Card Arrangement Results -->
+<section class="wood-frame stage-card rounded-2xl p-2 relative is-active" data-purpose="stage-final-results" data-stage="4" id="stage-4">
+<div class="flex items-center justify-between mb-0.5 gap-2 w-full">
+<div class="flex items-center gap-1">
+<span class="text-xs">⭐</span>
+<span class="text-[10.5px] font-black text-amber-100 drop-shadow-[0_1px_2px_#381401]">
+                Card Arrangement Results
+              </span>
+</div>
+<span class="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-amber-400 text-amber-950 animate-pulse shrink-0" id="badge-status-4">ACTIVE</span>
+</div>
+<p class="text-[9.5px] font-bold text-amber-100/90 leading-tight mb-1 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+              The final result after the variables are resolved.
+            </p>
+<div class="wood-inner-parchment rounded-xl p-1.5 flex items-center justify-center gap-1 overflow-x-hidden">
+<button class="game-num-card w-7 h-8 rounded-md flex items-center justify-center font-black text-indigo-900 text-xs ring-2 ring-amber-400" type="button">x</button>
+<button class="game-op-card w-7 h-8 rounded-md flex items-center justify-center font-black text-amber-950 text-xs" type="button">=</button>
+<button class="game-num-card w-7 h-8 rounded-md flex items-center justify-center font-black text-emerald-800 text-sm ring-2 ring-emerald-400 font-extrabold" type="button">5</button>
+<!-- Interactive slots in stage 4 -->
+<div class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black cursor-pointer shadow-md transform scale-105 transition-all" data-stage="4" id="slot-stage-4-a" data-filled="true"><span class="font-black text-slate-800 text-xs">b</span></div>
+<div class="game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black cursor-pointer shadow-md transform scale-105 transition-all" data-stage="4" id="slot-stage-4-b" data-filled="true"><span class="font-black text-slate-800 text-xs">9</span></div>
+</div>
+</section>
+</div>
+<!-- RIGHT COLUMN: Deck of Cards (Sticky & within Thumb Reach) -->
+<div class="col-span-4 sticky top-0 flex flex-col gap-1.5" data-purpose="deck-card-inventory">
+<!-- Deck Container Plaque -->
+<div class="wood-frame rounded-2xl p-1.5 flex flex-col gap-1.5 shadow-lg">
+<div class="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 py-0.5 px-1 rounded-lg text-center border border-amber-950 shadow-inner">
+<span class="text-[10px] font-black text-amber-100 uppercase tracking-tight">Deck of Cards</span>
+</div>
+<!-- Number Cards Section -->
+<div class="bg-sky-500/90 rounded-xl p-1 border border-sky-800 shadow-inner">
+<div class="text-[9.5px] font-extrabold text-white text-center pb-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.6)]">
+                Number Cards
+              </div>
+<div class="grid grid-cols-2 gap-1" data-purpose="deck-numbers">
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="0" type="button">0</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="1" type="button">1</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="2" type="button">2</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="3" type="button">3</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="4" type="button">4</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="5" type="button">5</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="6" type="button">6</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="7" type="button">7</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="8" type="button">8</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-slate-800 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="9" type="button">9</button>
+</div>
+</div>
+<!-- Variable Cards Section -->
+<div class="bg-emerald-600/90 rounded-xl p-1 border border-emerald-900 shadow-inner">
+<div class="text-[9.5px] font-extrabold text-white text-center pb-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.6)]">
+                Variable Card
+              </div>
+<div class="grid grid-cols-2 gap-1" data-purpose="deck-variables">
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-indigo-900 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="x" type="button">x</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-indigo-900 text-[10px] hover:scale-105 active:scale-95 transition-transform leading-none" data-val="and" type="button">and</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-indigo-900 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="a" type="button">a</button>
+<button class="deck-btn game-num-card h-7 rounded flex items-center justify-center font-black text-indigo-900 text-xs hover:scale-105 active:scale-95 transition-transform" data-val="b" type="button">b</button>
+</div>
+</div>
+<!-- Mini Quick Slots Palette / Operators -->
+<div class="bg-amber-100/80 rounded-xl p-1 border border-amber-400/80 flex flex-col gap-0.5">
+<div class="text-[8.5px] font-extrabold text-amber-900 text-center uppercase tracking-wider">
+                Operators
+              </div>
+<div class="grid grid-cols-2 gap-1">
+<button class="deck-btn game-op-card h-6 rounded flex items-center justify-center font-black text-amber-950 text-xs" data-type="op" data-val="+" type="button">+</button>
+<button class="deck-btn game-op-card h-6 rounded flex items-center justify-center font-black text-amber-950 text-xs" data-type="op" data-val="-" type="button">-</button>
+<button class="deck-btn game-op-card h-6 rounded flex items-center justify-center font-black text-amber-950 text-xs" data-type="op" data-val="×" type="button">×</button>
+<button class="deck-btn game-op-card h-6 rounded flex items-center justify-center font-black text-amber-950 text-xs" data-type="op" data-val="÷" type="button">÷</button>
+</div>
+</div>
+<!-- 3D Clear Button -->
+<button aria-label="Clear or erase placed cards" class="w-full py-1 px-1 rounded-xl bg-gradient-to-b from-amber-400 via-orange-500 to-amber-700 border-2 border-amber-900 shadow-[0_3px_0_#622401,0_4px_6px_rgba(0,0,0,0.35)] active:translate-y-1 active:shadow-[0_1px_0_#622401] flex items-center justify-center gap-1 transition-transform group" id="btn-clear-cards" type="button">
+<span class="text-xs drop-shadow-[0_1px_1px_rgba(0,0,0,0.6)] group-hover:rotate-12 transition-transform">🗑️</span>
+<span class="text-[9.5px] font-black text-white uppercase tracking-tight drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">CLEAR</span>
+</button><div class="relative mt-1 pt-1 border-t border-amber-800/40 flex flex-col items-center pointer-events-auto select-none" data-purpose="floating-dpad-controller" id="floating-dpad"><div class="dpad-dial w-20 h-20 rounded-full relative flex items-center justify-center shadow-xl p-1"><div class="absolute inset-1 rounded-full border border-amber-400/30 flex items-center justify-center pointer-events-none"><div class="w-full h-[1px] bg-amber-400/20 absolute"></div><div class="h-full w-[1px] bg-amber-400/20 absolute"></div></div><button aria-label="Pan Up" class="dpad-key absolute top-1 left-1/2 -translate-x-1/2 w-6 h-6 rounded flex items-center justify-center text-amber-950 font-black" data-direction="up" id="dpad-up" type="button"><svg class="w-3.5 h-3.5 drop-shadow-[0_1px_0_rgba(255,255,255,0.7)]" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M10 4.293l5.707 5.707-1.414 1.414L10 7.121 5.707 11.414 4.293 10l5.707-5.707z" fill-rule="evenodd"></path></svg></button><button aria-label="Pan Down" class="dpad-key absolute bottom-1 left-1/2 -translate-x-1/2 w-6 h-6 rounded flex items-center justify-center text-amber-950 font-black" data-direction="down" id="dpad-down" type="button"><svg class="w-3.5 h-3.5 drop-shadow-[0_1px_0_rgba(255,255,255,0.7)]" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M10 15.707l-5.707-5.707 1.414-1.414L10 12.879l4.293-4.293 1.414 1.414L10 15.707z" fill-rule="evenodd"></path></svg></button><button aria-label="Pan Left" class="dpad-key absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 rounded flex items-center justify-center text-amber-950 font-black" data-direction="left" id="dpad-left" type="button"><svg class="w-3.5 h-3.5 drop-shadow-[0_1px_0_rgba(255,255,255,0.7)]" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M4.293 10l5.707-5.707 1.414 1.414L7.121 10l4.293 4.293-1.414 1.414L4.293 10z" fill-rule="evenodd"></path></svg></button><button aria-label="Pan Right" class="dpad-key absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 rounded flex items-center justify-center text-amber-950 font-black" data-direction="right" id="dpad-right" type="button"><svg class="w-3.5 h-3.5 drop-shadow-[0_1px_0_rgba(255,255,255,0.7)]" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M15.707 10l-5.707 5.707-1.414-1.414L12.879 10 8.586 5.707 10 4.293l5.707 5.707z" fill-rule="evenodd"></path></svg></button><button aria-label="Reset Camera" class="w-5 h-5 rounded-full bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 border border-amber-950 shadow-[inset_0_1px_1px_#ffffff,0_2px_4px_rgba(0,0,0,0.5)] flex items-center justify-center active:scale-90 transition-transform" id="dpad-center" title="Tap to reset view" type="button"><span class="text-[9px] leading-none drop-shadow">🧭</span></button></div><span class="text-[8.5px] font-black uppercase text-amber-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] bg-amber-950/80 px-1.5 py-0.5 rounded-full mt-0.5 border border-amber-500/40 tracking-wider">NAV PAD</span></div>
+</div>
+</div>
+</div>
+</main>
+<!-- END: MainGameBoardArea -->
+<!-- BEGIN: Floating D-Pad Navigation Controller -->
+
+<!-- END: Floating D-Pad Navigation Controller -->
+<!-- BEGIN: BottomControlAndDecorations -->
+<footer class="relative z-30 pt-1.5 px-3 pb-2.5 bg-gradient-to-t from-emerald-950 via-emerald-900/90 to-transparent" data-purpose="bottom-action-bar">
+<!-- Status notification banner (brief feedback) -->
+<div class="text-center py-0.5 px-2 mb-1 rounded-lg bg-emerald-400 text-emerald-950 text-[10px] font-black shadow-sm hidden" id="feedback-bar">🎉 Quest Complete! x = 5 is correct!</div>
+<!-- Primary and Secondary Action Buttons row -->
+<div class="flex items-center justify-center gap-2 max-w-sm mx-auto mb-1.5">
+<!-- Continue Button (Primary Gold Plaque) -->
+<button class="flex-1 py-2 px-3 rounded-2xl bg-gradient-to-b from-yellow-300 via-amber-400 to-amber-600 border-2 border-amber-900 shadow-[0_4px_0_#693400,0_6px_10px_rgba(0,0,0,0.4)] active:translate-y-1 active:shadow-[0_1px_0_#693400] flex flex-col items-center justify-center transition-all group" id="btn-continue" type="button">
+<div class="flex items-center gap-1.5 text-amber-950 font-black text-sm drop-shadow-[0_1px_0_#fff0a0]">
+<span class="" id="continue-label">Complete Quest</span>
+<span class="text-base transition-transform group-hover:translate-x-1">❯</span>
+</div>
+<span class="text-[8.5px] font-bold text-amber-900/90 leading-none" id="continue-sub">Verify final equation</span>
+</button>
+<!-- More Details / Review Button (Secondary Cyan Plaque) -->
+<button class="flex-1 py-2 px-3 rounded-2xl bg-gradient-to-b from-cyan-300 via-sky-500 to-blue-700 border-2 border-blue-950 shadow-[0_4px_0_#012a4a,0_6px_10px_rgba(0,0,0,0.4)] active:translate-y-1 active:shadow-[0_1px_0_#012a4a] flex flex-col items-center justify-center transition-all group" id="btn-details" type="button">
+<div class="flex items-center gap-1.5 text-white font-black text-xs drop-shadow-[0_1px_1px_#022c4a]">
+<span class="">More Details</span>
+<span class="text-xs transition-transform group-hover:rotate-45">🔄</span>
+</div>
+<span class="text-[8.5px] font-bold text-sky-100/90 leading-none">Go back to previous step</span>
+</button>
+</div>
+<!-- Adventure Explorer Accessory Decoration Footer Elements -->
+<div class="flex items-end justify-between px-1 pt-1 border-t border-amber-200/20 text-xs">
+<!-- Left: Stack of Adventure Textbooks -->
+<div class="flex items-center gap-1.5" data-purpose="decor-books">
+<div class="flex flex-col -space-y-1">
+<span class="px-2 py-0.5 rounded bg-blue-600 border border-blue-300 text-white font-black text-[9px] shadow-sm transform -rotate-3">
+              MATH
+            </span>
+<span class="px-2 py-0.5 rounded bg-rose-600 border border-rose-300 text-white font-black text-[9px] shadow-sm transform rotate-2">
+              SCIENCE
+            </span>
+</div>
+<span class="text-lg">🌿</span>
+</div>
+<!-- Center: Quick Hint Status Badge -->
+<div class="text-[10px] font-extrabold text-amber-200/90 drop-shadow flex items-center gap-1">
+<span class="" id="level-badge-text">Level 1-4</span>
+<span class="">•</span>
+<span class="text-emerald-300" id="stage-badge-indicator">Stage 4 of 4</span>
+</div>
+<!-- Right: Explorer Compass and Backpack Accent -->
+<div class="flex items-center gap-1" data-purpose="decor-compass">
+<span class="text-lg animate-spin" style="animation-duration: 18s;">🧭</span>
+<span class="text-lg">🎒</span>
+</div>
+</div>
+</footer>
+<!-- END: BottomControlAndDecorations -->
+</div>
+<!-- BEGIN: Card Interactivity, Auto-Scroll Progression & D-Pad Pan Navigation Script -->
+<script data-purpose="gameplay-interactivity">
+  document.addEventListener('DOMContentLoaded', () => {
+    let currentStage = 1;
+    const totalStages = 4;
+    const scrollContainer = document.getElementById('main-scroll-board');
+    const feedbackBar = document.getElementById('feedback-bar');
+    const continueLabel = document.getElementById('continue-label');
+    const continueSub = document.getElementById('continue-sub');
+    const stageBadgeIndicator = document.getElementById('stage-badge-indicator');
+
+    function showNotice(msg, isSuccess = true) {
+      if (!feedbackBar) return;
+      feedbackBar.textContent = msg;
+      feedbackBar.className = isSuccess 
+        ? "text-center py-0.5 px-2 mb-1 rounded-lg bg-emerald-400 text-emerald-950 text-[10px] font-black shadow-sm"
+        : "text-center py-0.5 px-2 mb-1 rounded-lg bg-amber-400 text-amber-950 text-[10px] font-black shadow-sm";
+      feedbackBar.classList.remove('hidden');
+      clearTimeout(window._noticeTimer);
+      window._noticeTimer = setTimeout(() => {
+        feedbackBar.classList.add('hidden');
+      }, 2500);
+    }
+
+    function scrollToActiveStage(stageNum) {
+      const stageEl = document.getElementById(`stage-${stageNum}`);
+      if (stageEl && scrollContainer) {
+        stageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function updateStageUI() {
+      for (let s = 1; s <= totalStages; s++) {
+        const stageEl = document.getElementById(`stage-${s}`);
+        const badgeEl = document.getElementById(`badge-status-${s}`);
+        const arrowEl = document.getElementById(`arrow-${s}`);
+
+        if (!stageEl) continue;
+
+        if (s < currentStage) {
+          // Completed
+          stageEl.classList.remove('is-active', 'is-locked');
+          stageEl.classList.add('opacity-90');
+          if (badgeEl) {
+            badgeEl.textContent = 'DONE ✓';
+            badgeEl.className = 'text-[9px] px-1.5 py-0.2 rounded-full font-black bg-emerald-500 text-white';
+          }
+          if (arrowEl) arrowEl.classList.remove('opacity-50');
+        } else if (s === currentStage) {
+          // Active
+          stageEl.classList.add('is-active');
+          stageEl.classList.remove('is-locked', 'opacity-90');
+          if (badgeEl) {
+            badgeEl.textContent = 'ACTIVE';
+            badgeEl.className = 'text-[9px] px-1.5 py-0.2 rounded-full font-black bg-amber-400 text-amber-950 animate-pulse';
+          }
+          if (arrowEl) arrowEl.classList.remove('opacity-50');
+        } else {
+          // Locked
+          stageEl.classList.remove('is-active');
+          stageEl.classList.add('is-locked');
+          if (badgeEl) {
+            badgeEl.textContent = 'LOCKED';
+            badgeEl.className = 'text-[9px] px-1.5 py-0.2 rounded-full font-black bg-stone-700/80 text-amber-200';
+          }
+          if (arrowEl) arrowEl.classList.add('opacity-50');
+        }
+
+        // Highlight placeholders belonging to current stage
+        const slotsInStage = stageEl.querySelectorAll('.slot-placeholder');
+        slotsInStage.forEach(slot => {
+          if (s === currentStage) {
+            slot.classList.add('is-target');
+          } else {
+            slot.classList.remove('is-target');
+          }
+        });
+      }
+
+      if (stageBadgeIndicator) {
+        stageBadgeIndicator.textContent = `Stage ${currentStage} of ${totalStages}`;
+      }
+
+      if (currentStage === totalStages) {
+        continueLabel.textContent = 'Complete Quest';
+        continueSub.textContent = 'Verify final equation';
+      } else {
+        continueLabel.textContent = 'Continue';
+        continueSub.textContent = 'Verify answers';
+      }
+
+      scrollToActiveStage(currentStage);
+    }
+
+    // Interactive card deck taps
+    const deckButtons = document.querySelectorAll('.deck-btn');
+    deckButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-val');
+        const isOp = btn.getAttribute('data-type') === 'op';
+
+        // Find active stage
+        const activeStageEl = document.getElementById(`stage-${currentStage}`);
+        if (!activeStageEl) return;
+
+        // Find first empty slot placeholder in the active stage
+        const emptySlots = activeStageEl.querySelectorAll('.slot-placeholder');
+        let filledOne = false;
+        for (let slot of emptySlots) {
+          if (!slot.getAttribute('data-filled')) {
+            // Fill slot
+            slot.innerHTML = `<span class="font-black ${isOp ? 'text-amber-950 text-xs' : 'text-slate-800 text-xs'}">${val}</span>`;
+            slot.className = isOp 
+              ? "game-op-card w-6 h-8 rounded-md flex items-center justify-center font-black cursor-pointer shadow-md transform scale-105 transition-all"
+              : "game-num-card w-6 h-8 rounded-md flex items-center justify-center font-black cursor-pointer shadow-md transform scale-105 transition-all";
+            slot.setAttribute('data-filled', 'true');
+            filledOne = true;
+
+            // Allow clicking placed card to remove it
+            slot.onclick = () => {
+              slot.innerHTML = '';
+              slot.className = "slot-placeholder is-target w-6 h-8 rounded-md flex items-center justify-center cursor-pointer transition-transform hover:scale-105";
+              slot.removeAttribute('data-filled');
+              slot.onclick = null;
+            };
+            break;
+          }
+        }
+
+        if (filledOne) {
+          showNotice(`Placed card [${val}]!`);
+        } else {
+          showNotice('Current slots are already filled. Press CLEAR or tap a card to edit.', false);
+        }
+      });
+    });
+
+    // Clear Button Handler
+    const clearBtn = document.getElementById('btn-clear-cards');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        const activeStageEl = document.getElementById(`stage-${currentStage}`);
+        if (!activeStageEl) return;
+        const slots = activeStageEl.querySelectorAll('[data-stage]');
+        slots.forEach(slot => {
+          if (slot.classList.contains('slot-placeholder') || slot.getAttribute('data-filled')) {
+            slot.innerHTML = '';
+            slot.className = "slot-placeholder is-target w-6 h-8 rounded-md flex items-center justify-center cursor-pointer transition-transform hover:scale-105";
+            slot.removeAttribute('data-filled');
+            slot.onclick = null;
+          }
+        });
+        showNotice('Active board cards cleared.');
+      });
+    }
+
+    // Continue / Next Step Button Handler
+    const continueBtn = document.getElementById('btn-continue');
+    if (continueBtn) {
+      continueBtn.addEventListener('click', () => {
+        if (currentStage < totalStages) {
+          currentStage++;
+          updateStageUI();
+          showNotice(`Step completed! Moving to Stage ${currentStage}`);
+        } else {
+          showNotice('🎉 Quest Complete! x = 5 is correct!');
+          setTimeout(() => {
+            alert('🎉 Quest Complete! You solved the equation with Professor Bug! x = 5');
+          }, 200);
+        }
+      });
+    }
+
+    // More Details / Back Button Handler
+    const detailsBtn = document.getElementById('btn-details');
+    if (detailsBtn) {
+      detailsBtn.addEventListener('click', () => {
+        if (currentStage > 1) {
+          currentStage--;
+          updateStageUI();
+          showNotice(`Returned to Stage ${currentStage}`);
+        } else {
+          showNotice('Already at the first stage!', false);
+        }
+      });
+    }
+
+    // Initialize UI on load
+    updateStageUI();
+
+    // ==========================================
+    // FLOATING D-PAD & PAN NAVIGATION CONTROLS
+    // ==========================================
+    const stepSize = 75;
+    let dpadHoldInterval = null;
+
+    function panViewport(dx, dy) {
+      if (!scrollContainer) return;
+      scrollContainer.scrollBy({
+        left: dx,
+        top: dy,
+        behavior: 'smooth'
+      });
+    }
+
+    const dpadButtons = document.querySelectorAll('.dpad-key');
+    dpadButtons.forEach(btn => {
+      const dir = btn.getAttribute('data-direction');
+
+      const triggerPan = () => {
+        switch (dir) {
+          case 'up': panViewport(0, -stepSize); break;
+          case 'down': panViewport(0, stepSize); break;
+          case 'left': panViewport(-stepSize, 0); break;
+          case 'right': panViewport(stepSize, 0); break;
+        }
+      };
+
+      const startHold = (e) => {
+        e.preventDefault();
+        triggerPan();
+        btn.classList.add('is-pressed');
+        clearInterval(dpadHoldInterval);
+        dpadHoldInterval = setInterval(triggerPan, 160);
+      };
+
+      const stopHold = () => {
+        btn.classList.remove('is-pressed');
+        clearInterval(dpadHoldInterval);
+      };
+
+      btn.addEventListener('mousedown', startHold);
+      btn.addEventListener('mouseup', stopHold);
+      btn.addEventListener('mouseleave', stopHold);
+      btn.addEventListener('touchstart', startHold, { passive: false });
+      btn.addEventListener('touchend', stopHold);
+      btn.addEventListener('touchcancel', stopHold);
+    });
+
+    // Center reset camera button
+    const dpadCenter = document.getElementById('dpad-center');
+    if (dpadCenter) {
+      dpadCenter.addEventListener('click', () => {
+        scrollToActiveStage(currentStage);
+        showNotice('Centered on active stage');
+      });
+    }
+
+    // Keyboard Arrow Keys mapping for D-pad navigation
+    window.addEventListener('keydown', (e) => {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+        if (e.key === 'ArrowUp') panViewport(0, -stepSize);
+        if (e.key === 'ArrowDown') panViewport(0, stepSize);
+        if (e.key === 'ArrowLeft') panViewport(-stepSize, 0);
+        if (e.key === 'ArrowRight') panViewport(stepSize, 0);
+      }
+    });
+
+    // Touch and Drag / Tap screen free panning on board
+    let isPanning = false;
+    let startX = 0;
+    let startY = 0;
+    let initialScrollLeft = 0;
+    let initialScrollTop = 0;
+
+    if (scrollContainer) {
+      scrollContainer.addEventListener('mousedown', (e) => {
+        // Only allow free pan if not clicking button or slot
+        if (e.target.closest('button') || e.target.closest('.slot-placeholder')) return;
+        isPanning = true;
+        startX = e.pageX - scrollContainer.offsetLeft;
+        startY = e.pageY - scrollContainer.offsetTop;
+        initialScrollLeft = scrollContainer.scrollLeft;
+        initialScrollTop = scrollContainer.scrollTop;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        e.preventDefault();
+        const x = e.pageX - scrollContainer.offsetLeft;
+        const y = e.pageY - scrollContainer.offsetTop;
+        const walkX = (x - startX) * 1.2;
+        const walkY = (y - startY) * 1.2;
+        scrollContainer.scrollLeft = initialScrollLeft - walkX;
+        scrollContainer.scrollTop = initialScrollTop - walkY;
+      });
+
+      window.addEventListener('mouseup', () => {
+        isPanning = false;
+      });
+    }
+  });
+</script>
+<!-- END: Card Interactivity, Auto-Scroll Progression & D-Pad Pan Navigation Script -->
+
+
+</body></html>

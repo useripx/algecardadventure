@@ -1,0 +1,670 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>AlgeCard Adventure - Mission Card</title>
+<!-- Tailwind CSS v3 with Forms & Container Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Fredoka & Baloo 2 for rich cartoon game UI -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800;900&amp;family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            baloo: ['"Baloo 2"', 'cursive', 'sans-serif'],
+            fredoka: ['"Fredoka"', 'sans-serif'],
+          },
+          colors: {
+            wood: {
+              light: '#f6d194',
+              base: '#c98a3b',
+              dark: '#7e4719',
+              border: '#4a250b',
+            },
+            parchment: '#fef7e4',
+          },
+          boxShadow: {
+            'game-btn': '0 5px 0 #b45309, 0 8px 12px rgba(0,0,0,0.3)',
+            'game-card': '0 10px 20px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.4)',
+            'modal-pop': '0 20px 45px rgba(0,0,0,0.55), 0 0 0 5px #facc15, 0 0 0 9px #854d0e',
+            'shuffle-pill': '0 4px 0 #92400e, 0 6px 12px rgba(0,0,0,0.35), inset 0 2px 0 rgba(255,255,255,0.6)',
+            'deck-stack': '0 8px 14px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.4)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Game Custom Styles -->
+<style data-purpose="game-visual-fx">
+    .card-text-stroke {
+      -webkit-text-stroke: 4px #072a4a;
+      paint-order: stroke fill;
+    }
+    .wood-plank-bg {
+      background: linear-gradient(180deg, #ca8a04 0%, #a16207 40%, #713f12 100%);
+      box-shadow: inset 0 3px 2px rgba(255, 255, 255, 0.4), inset 0 -4px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Floating subtle animation for mascots */
+    @keyframes gentleBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .animate-bob {
+      animation: gentleBob 3s ease-in-out infinite;
+    }
+    .animate-bob-delay {
+      animation: gentleBob 3.4s ease-in-out 0.6s infinite;
+    }
+
+    /* Deck Shuffling Riffle Vibrations (at bottom draw pile) */
+    @keyframes deckVibrate {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-4px, -3px) rotate(-4deg); }
+      40% { transform: translate(4px, 2px) rotate(4deg); }
+      60% { transform: translate(-3px, 1px) rotate(-2deg); }
+      80% { transform: translate(3px, -2px) rotate(3deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes cardRuffleLeft {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-14px, -12px) rotate(-16deg) scale(1.05); }
+    }
+    @keyframes cardRuffleRight {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(14px, -14px) rotate(16deg) scale(1.05); }
+    }
+
+    .shuffling-deck-active {
+      animation: deckVibrate 0.18s infinite ease-in-out !important;
+    }
+    .shuffling-card-left {
+      animation: cardRuffleLeft 0.22s infinite ease-in-out !important;
+    }
+    .shuffling-card-right {
+      animation: cardRuffleRight 0.25s infinite ease-in-out 0.05s !important;
+    }
+
+    /* Center Cards Initial Hidden / Down in Deck State */
+    .fanned-card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -37px;
+      margin-top: -62px;
+      transform-origin: 50% 120%;
+      transition: transform 0.65s cubic-bezier(0.2, 0.95, 0.2, 1.15), opacity 0.4s ease, filter 0.25s ease;
+      cursor: pointer;
+      will-change: transform, opacity;
+      /* Default initial state: tucked down at bottom deck, hidden */
+      transform: translate(0px, 240px) scale(0.4) rotate(0deg);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Fanned Card Positions once dealt */
+    .cards-dealt .fanned-card {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .cards-dealt .fanned-card.card-pos-0 { transform: translate(-124px, 14px) rotate(-14deg); z-index: 10; transition-delay: 0.05s; }
+    .cards-dealt .fanned-card.card-pos-1 { transform: translate(-62px, 2px) rotate(-7deg); z-index: 11; transition-delay: 0.15s; }
+    .cards-dealt .fanned-card.card-pos-2 { transform: translate(0px, -4px) rotate(0deg); z-index: 12; transition-delay: 0.25s; }
+    .cards-dealt .fanned-card.card-pos-3 { transform: translate(62px, 2px) rotate(7deg); z-index: 13; transition-delay: 0.35s; }
+    .cards-dealt .fanned-card.card-pos-4 { transform: translate(124px, 14px) rotate(14deg); z-index: 14; transition-delay: 0.45s; }
+
+    /* Interactive Hover / Active Lift after dealt */
+    .cards-dealt .fanned-card:hover {
+      transform: translateY(-24px) scale(1.1) !important;
+      z-index: 30 !important;
+      filter: drop-shadow(0 14px 18px rgba(0,0,0,0.55)) brightness(1.08);
+    }
+    .cards-dealt .fanned-card:active {
+      transform: translateY(-16px) scale(1.05) !important;
+    }
+
+    /* Button Pulse Animation when Idle */
+    @keyframes deckGlowPulse {
+      0%, 100% { filter: drop-shadow(0 4px 6px rgba(245, 158, 11, 0.45)); }
+      50% { filter: drop-shadow(0 6px 14px rgba(251, 191, 36, 0.85)); }
+    }
+    .deck-glow-pulse {
+      animation: deckGlowPulse 2.4s ease-in-out infinite;
+    }
+
+    /* Sparkles / Magic Effect during Shuffling */
+    @keyframes sparkleFade {
+      0% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.2) rotate(45deg); }
+      100% { opacity: 0; transform: scale(0.6) rotate(90deg); }
+    }
+    .shuffle-sparkle {
+      animation: sparkleFade 0.6s ease-out infinite;
+    }
+  </style>
+<!-- END: Game Custom Styles -->
+</head><body class="bg-slate-900 flex justify-center items-center min-h-screen p-0 m-0 overflow-hidden select-none font-fredoka"><svg aria-hidden="true" class="inline-defs-container" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
+<!-- BEGIN: Mobile Game Canvas Outer Frame -->
+<main class="relative w-full max-w-[430px] h-[100dvh] max-h-[920px] overflow-hidden bg-[#78c9fe] flex flex-col justify-between shadow-2xl" data-purpose="mobile-game-viewport">
+<!-- BEGIN: Fantasy Landscape Background -->
+<div class="absolute inset-0 pointer-events-none z-0" data-purpose="scenery-background">
+<svg class="w-full h-full object-cover" fill="none" preserveAspectRatio="xMidYMid slice" viewBox="0 0 430 920" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#38bdf8"></stop>
+<stop offset="35%" stop-color="#93c5fd"></stop>
+<stop offset="65%" stop-color="#bfdbfe"></stop>
+<stop offset="100%" stop-color="#fef08a"></stop>
+</linearGradient>
+</defs>
+<rect fill="url(#skyGrad)" height="920" width="430"></rect>
+<!-- Sun Beam Radial Effect -->
+<circle cx="215" cy="180" fill="white" filter="blur(40px)" opacity="0.2" r="280"></circle>
+<!-- Clouds -->
+<path d="M10 90 Q30 70 65 75 Q100 50 140 70 Q160 85 155 105 Q120 120 40 115 Z" fill="#ffffff" opacity="0.65"></path>
+<path d="M290 80 Q325 55 370 70 Q410 60 425 90 Q435 120 380 125 Q320 130 290 80 Z" fill="#ffffff" opacity="0.75"></path>
+<!-- Distant Castle on Mountain Top (Right) -->
+<g opacity="0.88" transform="translate(305, 50) scale(0.72)">
+<path d="M30 110 L120 110 L135 170 L15 170 Z" fill="#5b6f84"></path>
+<path d="M72 135 L76 220 L66 220 Z" fill="#bae6fd" opacity="0.8"></path>
+<rect fill="#dbeafe" height="52" stroke="#3b82f6" stroke-width="2" width="22" x="35" y="60"></rect>
+<path d="M32 60 L46 25 L60 60 Z" fill="#2563eb" stroke="#1e40af" stroke-width="2"></path>
+<rect fill="#dbeafe" height="57" stroke="#3b82f6" stroke-width="2" width="24" x="85" y="55"></rect>
+<path d="M82 55 L97 18 L112 55 Z" fill="#2563eb" stroke="#1e40af" stroke-width="2"></path>
+<rect fill="#eff6ff" height="70" stroke="#3b82f6" stroke-width="2" width="32" x="55" y="42"></rect>
+<path d="M52 42 L71 0 L90 42 Z" fill="#1d4ed8" stroke="#1e3a8a" stroke-width="2.5"></path>
+<circle cx="71" cy="62" fill="#f59e0b" r="5"></circle>
+</g>
+<!-- Distant Green Hills & Rolling Adventure Valleys -->
+<path d="M-20 280 Q70 190 190 250 Q310 180 450 260 L450 420 L-20 420 Z" fill="#22c55e" opacity="0.45"></path>
+<path d="M-10 320 Q120 240 230 300 Q360 250 450 330 L450 460 L-10 460 Z" fill="#16a34a" opacity="0.55"></path>
+<path d="M-10 360 Q100 310 215 350 Q340 310 440 370 L440 500 L-10 500 Z" fill="#15803d" opacity="0.75"></path>
+<path d="M-10 440 Q130 390 260 430 Q370 390 440 450 L440 680 L-10 680 Z" fill="#166534" opacity="0.3"></path>
+</svg>
+</div>
+<!-- END: Fantasy Landscape Background -->
+<!-- BEGIN: Top Navigation & Game Header -->
+<header class="relative z-20 pt-3 px-3 flex flex-col gap-2" data-purpose="top-header">
+<div class="flex items-start justify-between">
+<!-- Orange 3D Back Navigation Button -->
+<button aria-label="Go Back" class="w-11 h-11 rounded-2xl bg-gradient-to-b from-amber-400 via-orange-500 to-amber-700 border-2 border-amber-200 shadow-game-btn flex items-center justify-center active:translate-y-1 active:shadow-none transition-transform" id="btn-back" type="button">
+<svg class="w-6 h-6 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24">
+<path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"></path>
+</svg>
+</button>
+<!-- Official Logo: https://lh3.googleusercontent.com/aida-public/AB6AXuCsT2cYMAceLJPWwBPbqHQCC5Bd1G_CG100hgL-rG1iIYLLqT8i0JedC9R7ge4hMeXhCvypnPKTc6g3M4YXBDaaUQF2qja8azNjA6lkJU5Y6Nq3x3YmWWqYw_v_BSkjThHIolDRvn4qgAFSjXLYhnYo_aHeZUIgc73Eab2a840ilLCAOxtz6fPwzfACa2Wf5Ab7d1pJd2xqErWNOhfBP4PvooKjJhR0LDEbdrgUAY5KbSqEax_wgJzVThoIj2-n7fzgvQ -->
+
+<!-- Top Right Mission Card Wood Plaque -->
+<div class="flex flex-col items-end" data-purpose="mission-info-badge">
+<div class="relative bg-gradient-to-b from-[#fbe3a9] via-[#f7cb7a] to-[#d6953f] border-2 border-[#6d390a] rounded-xl px-3 py-1 shadow-md flex items-center gap-1.5 min-w-[135px]">
+<span class="font-baloo font-black text-xs text-[#522502] uppercase tracking-wide leading-tight">
+          Mission Card
+        </span>
+<!-- Open Magic Book Icon -->
+<div class="w-6 h-5 -mr-1">
+<svg class="drop-shadow" fill="none" viewBox="0 0 24 24">
+<path d="M3 5.5C3 4.1 4.1 3 5.5 3H11V19H5.5C4.1 19 3 17.9 3 16.5V5.5Z" fill="#ffedd5" stroke="#7c2d12" stroke-width="1.5"></path>
+<path d="M21 5.5C21 4.1 19.9 3 18.5 3H13V19H18.5C19.9 19 21 17.9 21 16.5V5.5Z" fill="#ffedd5" stroke="#7c2d12" stroke-width="1.5"></path>
+<polygon fill="#fbbf24" points="12,2 14,7 19,7 15,10 17,15 12,12 7,15 9,10 5,7 10,7" stroke="#b45309" stroke-width="1"></polygon>
+</svg>
+</div>
+</div>
+<!-- Difficulty / Topic Pill -->
+<div class="bg-[#fef3c7] border border-[#a16207] rounded-full px-2 py-0.5 -mt-1 mr-1 shadow-sm">
+<span class="text-[9px] font-bold text-amber-900 block leading-tight">Easy - Variables &amp; Algebra</span>
+</div>
+</div>
+</div>
+</header>
+<!-- END: Top Navigation & Game Header -->
+<!-- BEGIN: Mascots & Instruction Banner -->
+<section class="relative z-10 px-2 mt-1" data-purpose="characters-and-instruction">
+<div class="relative flex items-center justify-between">
+<!-- Left Mascot: Cheerful Green Cricket -->
+<div class="w-20 h-24 -mr-4 flex-shrink-0 z-20 animate-bob" data-purpose="mascot-green-cricket">
+<svg class="w-full h-full drop-shadow-md" fill="none" viewBox="0 0 100 120">
+<path d="M50 40 Q25 10 10 15" stroke="#166534" stroke-linecap="round" stroke-width="3"></path>
+<path d="M60 40 Q75 10 88 18" stroke="#166534" stroke-linecap="round" stroke-width="3"></path>
+<ellipse cx="50" cy="78" fill="#4ade80" rx="26" ry="30" stroke="#15803d" stroke-width="3.5"></ellipse>
+<ellipse cx="50" cy="80" fill="#bbf7d0" rx="18" ry="22"></ellipse>
+<ellipse cx="52" cy="48" fill="#4ade80" rx="24" ry="22" stroke="#15803d" stroke-width="3.5"></ellipse>
+<ellipse cx="43" cy="44" fill="#1e293b" rx="7" ry="9"></ellipse>
+<circle cx="41" cy="41" fill="#ffffff" r="3"></circle>
+<ellipse cx="61" cy="44" fill="#1e293b" rx="7" ry="9"></ellipse>
+<circle cx="59" cy="41" fill="#ffffff" r="3"></circle>
+<circle cx="35" cy="53" fill="#f87171" opacity="0.6" r="4.5"></circle>
+<circle cx="69" cy="53" fill="#f87171" opacity="0.6" r="4.5"></circle>
+<path d="M48 54 Q53 62 58 54" fill="#b91c1c" stroke="#14532d" stroke-linecap="round" stroke-width="3"></path>
+<path d="M30 75 Q15 65 18 50" stroke="#15803d" stroke-linecap="round" stroke-width="5"></path>
+<circle cx="18" cy="50" fill="#4ade80" r="5" stroke="#15803d" stroke-width="2"></circle>
+<path d="M12 40 L6 36 M15 32 L12 25" stroke="#facc15" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+</div>
+<!-- Center Instruction Speech Bubble / Parchment Box -->
+<div class="flex-1 mx-1 bg-[#fff8e7] border-2 border-[#d97706] rounded-2xl p-2.5 text-center shadow-md relative z-10" data-purpose="instruction-banner">
+<p class="font-baloo font-bold text-xs leading-tight text-amber-950" id="dialogue-main-text">Select one of the mission cards.<br><span class="text-[10px] font-fredoka font-medium text-amber-800">The question cards are determined randomly.</span></p>
+</div>
+<!-- Right Mascot: Cheerful Brown/Orange Cricket -->
+<div class="w-20 h-24 -ml-4 flex-shrink-0 z-20 animate-bob-delay" data-purpose="mascot-orange-cricket">
+<svg class="w-full h-full drop-shadow-md" fill="none" viewBox="0 0 100 120">
+<path d="M45 40 Q25 15 15 22" stroke="#7c2d12" stroke-linecap="round" stroke-width="3"></path>
+<path d="M55 40 Q80 12 90 25" stroke="#7c2d12" stroke-linecap="round" stroke-width="3"></path>
+<ellipse cx="50" cy="78" fill="#fb923c" rx="26" ry="30" stroke="#9a3412" stroke-width="3.5"></ellipse>
+<ellipse cx="50" cy="80" fill="#fed7aa" rx="18" ry="22"></ellipse>
+<ellipse cx="48" cy="48" fill="#fb923c" rx="24" ry="22" stroke="#9a3412" stroke-width="3.5"></ellipse>
+<ellipse cx="40" cy="44" fill="#1e293b" rx="7" ry="9"></ellipse>
+<circle cx="38" cy="41" fill="#ffffff" r="3"></circle>
+<ellipse cx="58" cy="44" fill="#1e293b" rx="7" ry="9"></ellipse>
+<circle cx="56" cy="41" fill="#ffffff" r="3"></circle>
+<circle cx="32" cy="53" fill="#f87171" opacity="0.6" r="4.5"></circle>
+<circle cx="66" cy="53" fill="#f87171" opacity="0.6" r="4.5"></circle>
+<path d="M44 54 Q50 62 56 54" fill="#b91c1c" stroke="#7c2d12" stroke-linecap="round" stroke-width="3"></path>
+<path d="M68 75 Q85 62 82 46" stroke="#9a3412" stroke-linecap="round" stroke-width="5"></path>
+<circle cx="82" cy="46" fill="#fb923c" r="5" stroke="#9a3412" stroke-width="2"></circle>
+<path d="M88 38 L95 34 M85 30 L88 22" stroke="#facc15" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+</div>
+</div>
+</section>
+<!-- END: Mascots & Instruction Banner -->
+<!-- BEGIN: Main Center Play Area (Empty Initially, Cards Deal Here) -->
+<section class="relative z-10 flex-1 flex flex-col items-center justify-center my-auto pb-4" data-purpose="mission-cards-center-area">
+<!-- Dynamic Dealing & Shuffling Notification / Countdown Pill -->
+<div class="relative flex items-center justify-center select-none mb-3 z-10 w-full px-4 animate-bob" data-purpose="prominent-game-logo"><img alt="AlgeCard Adventure" class="w-auto object-contain drop-shadow-xl filter transition-transform hover:scale-105 h-24" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsT2cYMAceLJPWwBPbqHQCC5Bd1G_CG100hgL-rG1iIYLLqT8i0JedC9R7ge4hMeXhCvypnPKTc6g3M4YXBDaaUQF2qja8azNjA6lkJU5Y6Nq3x3YmWWqYw_v_BSkjThHIolDRvn4qgAFSjXLYhnYo_aHeZUIgc73Eab2a840ilLCAOxtz6fPwzfACa2Wf5Ab7d1pJd2xqErWNOhfBP4PvooKjJhR0LDEbdrgUAY5KbSqEax_wgJzVThoIj2-n7fzgvQ"></div><div class="h-7 mb-2 flex items-center justify-center">
+<div class="font-baloo font-bold text-xs text-amber-950 bg-amber-100/95 border border-amber-300 rounded-full px-4 py-1 shadow-md transition-all duration-300 transform flex items-center gap-1.5 opacity-0 -translate-y-1" id="shuffle-status-pill">
+<span class="text-sm" id="shuffle-status-emoji">✨</span>
+<span id="shuffle-status-text" class="">Dealing 5 mission cards!</span>
+</div>
+</div>
+<!-- Center Card Fan Stage (Initial state: cards hidden / not shown until deal) -->
+<div class="relative w-full max-w-[360px] h-[210px] flex items-center justify-center cards-dealt" id="cards-hand-container">
+<!-- Card 1 (-14deg) -->
+<button class="mission-card-item fanned-card card-pos-0 group w-[74px] h-[124px] rounded-xl overflow-hidden bg-gradient-to-b from-[#186498] via-[#09416b] to-[#04243d] border-[3px] border-[#f59e0b] shadow-game-card focus:outline-none" data-card-index="1" title="Select Card 1" type="button">
+<div class="absolute inset-[3px] rounded-lg border border-yellow-300/60 pointer-events-none"></div>
+<div class="absolute top-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute top-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<svg class="w-11 h-11 text-amber-400 opacity-90 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 50 50">
+<circle cx="25" cy="25" r="16" stroke="currentColor" stroke-dasharray="3 3" stroke-width="2.5"></circle>
+<polygon fill="currentColor" opacity="0.65" points="25,5 28,21 35,25 28,29 25,45 22,29 15,25 22,21"></polygon>
+</svg>
+<span class="absolute font-baloo font-black text-2xl text-white card-text-stroke drop-shadow-md">?</span>
+</div>
+</button>
+<!-- Card 2 (-7deg) -->
+<button class="mission-card-item fanned-card card-pos-1 group w-[74px] h-[124px] rounded-xl overflow-hidden bg-gradient-to-b from-[#186498] via-[#09416b] to-[#04243d] border-[3px] border-[#f59e0b] shadow-game-card focus:outline-none" data-card-index="2" title="Select Card 2" type="button">
+<div class="absolute inset-[3px] rounded-lg border border-yellow-300/60 pointer-events-none"></div>
+<div class="absolute top-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute top-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<svg class="w-11 h-11 text-amber-400 opacity-90 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 50 50">
+<circle cx="25" cy="25" r="16" stroke="currentColor" stroke-dasharray="3 3" stroke-width="2.5"></circle>
+<polygon fill="currentColor" opacity="0.65" points="25,5 28,21 35,25 28,29 25,45 22,29 15,25 22,21"></polygon>
+</svg>
+<span class="absolute font-baloo font-black text-2xl text-white card-text-stroke drop-shadow-md">?</span>
+</div>
+</button>
+<!-- Card 3 (Center 0deg) -->
+<button class="mission-card-item fanned-card card-pos-2 group w-[74px] h-[124px] rounded-xl overflow-hidden bg-gradient-to-b from-[#186498] via-[#09416b] to-[#04243d] border-[3px] border-[#f59e0b] shadow-game-card focus:outline-none" data-card-index="3" title="Select Card 3" type="button">
+<div class="absolute inset-[3px] rounded-lg border border-yellow-300/60 pointer-events-none"></div>
+<div class="absolute top-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute top-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<svg class="w-11 h-11 text-amber-400 opacity-90 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 50 50">
+<circle cx="25" cy="25" r="16" stroke="currentColor" stroke-dasharray="3 3" stroke-width="2.5"></circle>
+<polygon fill="currentColor" opacity="0.65" points="25,5 28,21 35,25 28,29 25,45 22,29 15,25 22,21"></polygon>
+</svg>
+<span class="absolute font-baloo font-black text-2xl text-white card-text-stroke drop-shadow-md">?</span>
+</div>
+</button>
+<!-- Card 4 (+7deg) -->
+<button class="mission-card-item fanned-card card-pos-3 group w-[74px] h-[124px] rounded-xl overflow-hidden bg-gradient-to-b from-[#186498] via-[#09416b] to-[#04243d] border-[3px] border-[#f59e0b] shadow-game-card focus:outline-none" data-card-index="4" title="Select Card 4" type="button">
+<div class="absolute inset-[3px] rounded-lg border border-yellow-300/60 pointer-events-none"></div>
+<div class="absolute top-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute top-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<svg class="w-11 h-11 text-amber-400 opacity-90 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 50 50">
+<circle cx="25" cy="25" r="16" stroke="currentColor" stroke-dasharray="3 3" stroke-width="2.5"></circle>
+<polygon fill="currentColor" opacity="0.65" points="25,5 28,21 35,25 28,29 25,45 22,29 15,25 22,21"></polygon>
+</svg>
+<span class="absolute font-baloo font-black text-2xl text-white card-text-stroke drop-shadow-md">?</span>
+</div>
+</button>
+<!-- Card 5 (+14deg) -->
+<button class="mission-card-item fanned-card card-pos-4 group w-[74px] h-[124px] rounded-xl overflow-hidden bg-gradient-to-b from-[#186498] via-[#09416b] to-[#04243d] border-[3px] border-[#f59e0b] shadow-game-card focus:outline-none" data-card-index="5" title="Select Card 5" type="button">
+<div class="absolute inset-[3px] rounded-lg border border-yellow-300/60 pointer-events-none"></div>
+<div class="absolute top-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute top-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<svg class="w-11 h-11 text-amber-400 opacity-90 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 50 50">
+<circle cx="25" cy="25" r="16" stroke="currentColor" stroke-dasharray="3 3" stroke-width="2.5"></circle>
+<polygon fill="currentColor" opacity="0.65" points="25,5 28,21 35,25 28,29 25,45 22,29 15,25 22,21"></polygon>
+</svg>
+<span class="absolute font-baloo font-black text-2xl text-white card-text-stroke drop-shadow-md">?</span>
+</div>
+</button>
+</div>
+</section>
+<!-- END: Main Center Play Area -->
+<!-- BEGIN: Bottom Shelf & Interactive Deck Button ("SHUFFLE HERE") -->
+<footer class="relative z-20 w-full bg-[#5c3614] border-t-4 border-[#3a1d08] px-3 pt-3 pb-5" data-purpose="bottom-decorative-shelf">
+<!-- Foliage Vines Over Table -->
+<div class="absolute -top-4 left-0 right-0 h-5 flex justify-between pointer-events-none px-2 z-20">
+<!-- Left Leaves -->
+<svg class="w-24 h-6 text-emerald-600 drop-shadow" fill="currentColor" viewBox="0 0 100 24">
+<path d="M5 24 Q20 5 45 12 Q30 20 20 24 Z"></path>
+<path d="M30 24 Q50 0 75 14 Q60 22 45 24 Z" fill="#15803d"></path>
+<circle cx="65" cy="18" fill="#84cc16" r="3"></circle>
+</svg>
+<!-- Right Leaves -->
+<svg class="w-24 h-6 text-emerald-600 drop-shadow transform scale-x-[-1]" fill="currentColor" viewBox="0 0 100 24">
+<path d="M5 24 Q20 5 45 12 Q30 20 20 24 Z"></path>
+<path d="M30 24 Q50 0 75 14 Q60 22 45 24 Z" fill="#15803d"></path>
+</svg>
+</div>
+<div class="flex items-center justify-between relative min-h-[78px]">
+<!-- Left Props: Stack of SCIENCE & MATH Books -->
+<div class="relative flex flex-col items-start -mt-2" data-purpose="books-stack-decoration">
+<!-- Science Book (Top) -->
+<div class="relative bg-gradient-to-r from-red-700 via-rose-600 to-red-800 border-2 border-red-950 rounded-md px-3 py-1 shadow-lg transform -rotate-1 min-w-[85px]">
+<span class="font-baloo font-extrabold text-[10px] tracking-wider text-rose-100 uppercase drop-shadow">Science</span>
+<div class="absolute left-1 top-0 bottom-0 w-1 bg-amber-300 opacity-60"></div>
+</div>
+<!-- Math Book (Bottom) -->
+<div class="relative bg-gradient-to-r from-blue-700 via-sky-600 to-blue-800 border-2 border-blue-950 rounded-md px-3 py-0.5 shadow-md transform rotate-2 -mt-1 ml-1 min-w-[75px]">
+<span class="font-baloo font-extrabold text-[10px] tracking-wider text-sky-100 uppercase drop-shadow">Math</span>
+<div class="absolute left-1 top-0 bottom-0 w-1 bg-amber-300 opacity-60"></div>
+</div>
+</div>
+<!-- Center: Prominent Stationary Adventure Deck ('Kartu Diam') & 'SHUFFLE HERE' Button -->
+<div class="relative flex flex-col items-center justify-center -mt-8" data-purpose="stationary-deck-container">
+<!-- Magic Sparkles when Shuffling -->
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 flex gap-6 pointer-events-none transition-opacity duration-300 z-30 opacity-0" id="shuffle-sparkles">
+<span class="text-yellow-300 text-base shuffle-sparkle">✨</span>
+<span class="text-amber-300 text-sm shuffle-sparkle" style="animation-delay: 0.15s">⭐</span>
+<span class="text-yellow-200 text-base shuffle-sparkle" style="animation-delay: 0.3s">✨</span>
+</div>
+<button class="relative flex flex-col items-center justify-center group focus:outline-none cursor-pointer active:scale-95 transition-transform deck-glow-pulse" id="btn-deck-shuffle" title="Tap to shuffle and deal cards up!" type="button">
+<!-- Deck Stack Container (Stationary Pile 'Kartu Diam') -->
+<div class="relative w-[68px] h-[90px] flex items-center justify-center" id="bottom-deck-graphic">
+<!-- Stack Layer 4 (Bottom-most thickness) -->
+<div class="absolute -bottom-2 w-[64px] h-[84px] rounded-lg bg-[#021220] border-2 border-stone-800 transform rotate-6 shadow-deck-stack opacity-75"></div>
+<!-- Stack Layer 3 -->
+<div class="absolute -bottom-1 w-[64px] h-[84px] rounded-lg bg-[#041c30] border-2 border-yellow-800 transform rotate-3 shadow-deck-stack opacity-85" id="deck-layer-3"></div>
+<!-- Stack Layer 2 -->
+<div class="absolute -bottom-0.5 w-[64px] h-[84px] rounded-lg bg-[#072a48] border-2 border-amber-600 transform -rotate-3 shadow-deck-stack opacity-95" id="deck-layer-2"></div>
+<!-- Stack Layer 1 (Top face-down Card of the stationary pile) -->
+<div class="relative w-[64px] h-[84px] rounded-lg bg-gradient-to-b from-[#186498] via-[#09416b] to-[#04243d] border-2 border-[#f59e0b] shadow-xl flex items-center justify-center overflow-hidden group-hover:border-yellow-300" id="deck-layer-1">
+<!-- Corner Dots -->
+<div class="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+<div class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 left-1 w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+<div class="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+<!-- Deck Center Star Emblem -->
+<svg class="w-9 h-9 text-amber-400 opacity-90" fill="none" viewBox="0 0 50 50">
+<circle cx="25" cy="25" r="14" stroke="currentColor" stroke-dasharray="2 2" stroke-width="2"></circle>
+<polygon fill="currentColor" opacity="0.75" points="25,7 27,22 34,25 27,28 25,43 23,28 16,25 23,22"></polygon>
+</svg>
+<span class="absolute font-baloo font-black text-lg text-white card-text-stroke">?</span>
+</div>
+</div>
+<!-- Clean, Shiny Golden Button Badge: "SHUFFLE HERE" -->
+<div class="relative -mt-3.5 z-10 px-3.5 py-1.5 rounded-full bg-gradient-to-b from-[#fde047] via-[#f59e0b] to-[#b45309] border-2 border-[#fef08a] shadow-shuffle-pill flex items-center justify-center gap-1.5 min-w-[125px] group-hover:scale-105 transition-transform" id="deck-label-pill">
+<span class="material-symbols-outlined text-white text-[16px] drop-shadow-[0_1px_2px_#78350f] transition-transform duration-500" id="shuffle-icon-bottom">shuffle</span>
+<span class="font-baloo font-black text-[11px] text-white tracking-wider uppercase drop-shadow-[0_1.5px_2px_#78350f] whitespace-nowrap leading-none pt-0.5" id="shuffle-btn-text">SHUFFLE AGAIN</span>
+</div>
+</button>
+</div>
+<!-- Right Props: Antique Map & Golden Compass -->
+<div class="relative flex items-center justify-end -mt-2" data-purpose="map-and-compass-decoration">
+<!-- Rolled Map Parchment -->
+<div class="w-16 h-10 bg-[#fde68a] border-2 border-[#b45309] rounded-sm transform rotate-6 shadow-md relative overflow-hidden flex items-center justify-center">
+<svg class="w-10 h-6 text-[#92400e] opacity-40" fill="none" stroke="currentColor" viewBox="0 0 40 20">
+<path d="M2 15 Q10 2 20 10 T38 5" stroke-dasharray="2 2" stroke-width="1.5"></path>
+<path d="M12 4 L16 10 L10 12 Z"></path>
+</svg>
+</div>
+<!-- Golden Pocket Compass -->
+<div class="absolute -right-1 w-11 h-11 rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-amber-600 border-2 border-amber-900 shadow-xl flex items-center justify-center">
+<div class="w-9 h-9 rounded-full bg-amber-100 border border-amber-800 flex items-center justify-center relative shadow-inner">
+<div class="w-1 h-7 bg-red-600 rounded-sm transform rotate-45 shadow-sm"></div>
+<div class="absolute w-2 h-2 rounded-full bg-amber-900"></div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: Bottom Shelf & Interactive Deck Button -->
+<!-- BEGIN: Revealed Mission Card Modal (Interactive State) -->
+<div class="absolute inset-0 z-50 bg-black/60 backdrop-blur-[3px] flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none" data-purpose="revealed-mission-overlay" id="mission-modal">
+<!-- Central Parchment Card -->
+<div class="relative w-full max-w-[340px] bg-gradient-to-b from-[#fefbf0] via-[#fffdf5] to-[#f7eed4] rounded-3xl border-4 border-[#3b82f6] shadow-modal-pop p-4 pt-7 flex flex-col items-center transform transition-transform duration-300 scale-90" id="modal-content">
+<!-- Ornate Golden Outer Frame Ring Effect -->
+<div class="absolute -inset-1.5 rounded-[26px] border-2 border-yellow-400 pointer-events-none"></div>
+<!-- Four Corner Gold Embellishments & Leaves -->
+<div class="absolute top-2 left-2 text-yellow-500 font-bold text-xs">✦</div>
+<div class="absolute top-2 right-2 text-emerald-600 font-bold text-sm">🍃</div>
+<div class="absolute bottom-2 left-2 text-yellow-500 font-bold text-xs">⭐</div>
+<div class="absolute bottom-2 right-2 text-emerald-600 font-bold text-sm">🍃</div>
+<!-- Top Mission Badge Tab (Mission 1) -->
+<div class="absolute -top-5 left-1/2 -translate-x-1/2">
+<div class="px-6 py-1 bg-gradient-to-r from-sky-500 via-blue-600 to-sky-500 border-2 border-white rounded-full shadow-md flex items-center justify-center">
+<span class="font-baloo font-extrabold text-xs text-white uppercase tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" id="modal-mission-badge">Mission 3</span>
+</div>
+</div>
+<!-- Mission Icon & Title Header -->
+<div class="flex items-center gap-2.5 mt-1 mb-2">
+<!-- Textbook Icon -->
+<div class="w-8 h-8 flex-shrink-0">
+<svg class="drop-shadow" fill="none" viewBox="0 0 40 40">
+<rect fill="#3b82f6" height="26" rx="4" stroke="#1d4ed8" stroke-width="2" width="28" x="6" y="8"></rect>
+<path d="M10 14 H30 M10 20 H26 M10 26 H22" stroke="#ffffff" stroke-linecap="round" stroke-width="2.5"></path>
+<rect fill="#ef4444" height="22" rx="2" stroke="#991b1b" stroke-width="1.5" width="6" x="2" y="10"></rect>
+</svg>
+</div>
+<div>
+<h2 class="font-baloo font-black text-lg text-slate-900 leading-tight" id="modal-mission-title">
+          Variables &amp; Simplification
+        </h2>
+</div>
+</div>
+<!-- Mission Subtitle / Task Instructions -->
+<p class="font-fredoka font-semibold text-xs text-center text-slate-700 mb-3 px-2 leading-relaxed" id="modal-mission-subtitle">
+      Simplify the following algebraic expressions.
+</p>
+<!-- Equation Display Box -->
+<div class="w-full bg-[#e8f6ff] border-2 border-[#93c5fd] rounded-2xl py-3.5 px-4 mb-4 text-center shadow-inner relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 w-12 h-12 bg-blue-200/50 rounded-full pointer-events-none"></div>
+<span class="font-baloo font-black text-2xl sm:text-3xl text-[#1e3a8a] tracking-wider drop-shadow-sm" id="modal-equation-display">7y - (2y + 4)</span>
+</div>
+<!-- Action Button: 'Continue >' -->
+<button class="w-full max-w-[210px] py-2.5 px-6 rounded-full bg-gradient-to-b from-[#fbb725] via-[#f59e0b] to-[#d97706] border-2 border-[#fff3bf] shadow-game-btn flex items-center justify-center gap-2 active:translate-y-1 active:shadow-none transition-transform" id="btn-continue" type="button">
+<span class="font-baloo font-black text-lg text-white drop-shadow-[0_2px_2px_#78350f] uppercase tracking-wide">
+        Continue
+      </span>
+<svg class="w-5 h-5 text-white drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path>
+</svg>
+</button>
+<!-- Close / Dismiss Mini Button -->
+<button aria-label="Close Mission Details" class="mt-3 text-xs font-bold text-slate-500 hover:text-slate-800 underline decoration-slate-400" id="btn-close-modal" type="button">
+      ✕ Back to Cards
+</button>
+</div>
+</div>
+<!-- END: Revealed Mission Card Modal -->
+</main>
+<!-- END: Mobile Game Canvas Outer Frame -->
+<!-- BEGIN: Interactive Logic Scripts -->
+<script data-purpose="mission-interactions">
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.mission-card-item');
+    const handContainer = document.getElementById('cards-hand-container');
+    const modal = document.getElementById('mission-modal');
+    const modalContent = document.getElementById('modal-content');
+    const btnClose = document.getElementById('btn-close-modal');
+    const btnContinue = document.getElementById('btn-continue');
+    const btnDeckShuffle = document.getElementById('btn-deck-shuffle');
+    const bottomDeckGraphic = document.getElementById('bottom-deck-graphic');
+    const deckLayer1 = document.getElementById('deck-layer-1');
+    const deckLayer2 = document.getElementById('deck-layer-2');
+    const shuffleBtnText = document.getElementById('shuffle-btn-text');
+    const shuffleIconBottom = document.getElementById('shuffle-icon-bottom');
+    const shuffleStatus = document.getElementById('shuffle-status-pill');
+    const shuffleStatusText = document.getElementById('shuffle-status-text');
+    const shuffleStatusEmoji = document.getElementById('shuffle-status-emoji');
+    const shuffleSparkles = document.getElementById('shuffle-sparkles');
+    const modalBadge = document.getElementById('modal-mission-badge');
+    const modalEquation = document.getElementById('modal-equation-display');
+    const dialogueMain = document.getElementById('dialogue-main-text');
+
+    // Preset equations matching mission curriculum
+    const sampleEquations = [
+      '3x + 5x - 2',
+      '4a + 2b - a + 3b',
+      '7y - (2y + 4)',
+      '2(x + 3) + 4x',
+      '5n + 12 - 3n + 1'
+    ];
+
+    let state = 'initial'; // 'initial' | 'shuffling' | 'dealt' | 'revealed'
+
+    // Trigger exact 3-second shuffle sequence then deal
+    function triggerCardShuffle() {
+      if (state === 'shuffling') return;
+      state = 'shuffling';
+
+      // If cards were already dealt previously, retract them down first
+      handContainer.classList.remove('cards-dealt');
+
+      // Update button & badge UI for active shuffling
+      btnDeckShuffle.disabled = true;
+      btnDeckShuffle.classList.remove('deck-glow-pulse');
+      shuffleBtnText.textContent = 'SHUFFLING...';
+      shuffleIconBottom.classList.add('animate-spin');
+      shuffleSparkles.classList.remove('opacity-0');
+      shuffleSparkles.classList.add('opacity-100');
+
+      // Start stationary deck riffle / vibrating animation
+      bottomDeckGraphic.classList.add('shuffling-deck-active');
+      deckLayer1.classList.add('shuffling-card-left');
+      deckLayer2.classList.add('shuffling-card-right');
+
+      // Display Status countdown pill
+      shuffleStatusEmoji.textContent = '🔀';
+      shuffleStatusText.textContent = 'Shuffling deck (3s)...';
+      shuffleStatus.classList.remove('opacity-0', '-translate-y-1');
+      shuffleStatus.classList.add('opacity-100', 'translate-y-0');
+
+      // 1s countdown tick
+      setTimeout(() => {
+        if (state === 'shuffling') {
+          shuffleStatusText.textContent = 'Shuffling deck (2s)...';
+        }
+      }, 1000);
+
+      // 2s countdown tick
+      setTimeout(() => {
+        if (state === 'shuffling') {
+          shuffleStatusText.textContent = 'Shuffling deck (1s)...';
+        }
+      }, 2000);
+
+      // Exactly at 3.0 Seconds: Stop shuffle and deal cards up!
+      setTimeout(() => {
+        // Stop bottom deck riffle
+        bottomDeckGraphic.classList.remove('shuffling-deck-active');
+        deckLayer1.classList.remove('shuffling-card-left');
+        deckLayer2.classList.remove('shuffling-card-right');
+        shuffleSparkles.classList.remove('opacity-100');
+        shuffleSparkles.classList.add('opacity-0');
+        shuffleIconBottom.classList.remove('animate-spin');
+
+        // Status update to Dealing
+        shuffleStatusEmoji.textContent = '✨';
+        shuffleStatusText.textContent = 'Dealing 5 mission cards!';
+
+        // Deal cards upwards into center fan
+        handContainer.classList.add('cards-dealt');
+
+        // Update Instruction banner
+        dialogueMain.innerHTML = 'Select one of the mission cards.<br><span class="text-[10px] font-fredoka font-medium text-amber-800">The question cards are determined randomly.</span>';
+
+        // Ready button state for SHUFFLE AGAIN
+        setTimeout(() => {
+          shuffleBtnText.textContent = 'SHUFFLE AGAIN';
+          btnDeckShuffle.disabled = false;
+          btnDeckShuffle.classList.add('deck-glow-pulse');
+
+          shuffleStatus.classList.remove('opacity-100', 'translate-y-0');
+          shuffleStatus.classList.add('opacity-0', '-translate-y-1');
+          state = 'dealt';
+        }, 800);
+      }, 3000);
+    }
+
+    function openMission(cardIndex) {
+      if (state === 'shuffling') return;
+      state = 'revealed';
+      const index = Math.max(1, Math.min(cardIndex || 1, 5));
+      modalBadge.textContent = `Mission ${index}`;
+      modalEquation.textContent = sampleEquations[index - 1] || '3x + 5x - 2';
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100', 'pointer-events-auto');
+      modalContent.classList.remove('scale-90');
+      modalContent.classList.add('scale-100');
+    }
+
+    function closeMission() {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.classList.remove('opacity-100', 'pointer-events-auto');
+      modalContent.classList.add('scale-90');
+      modalContent.classList.remove('scale-100');
+      state = 'dealt';
+    }
+
+    // Attach click listeners to all 5 cards
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const cardIdx = card.getAttribute('data-card-index');
+        openMission(cardIdx);
+      });
+    });
+
+    // Tap on bottom deck or SHUFFLE HERE button to trigger sequence
+    btnDeckShuffle.addEventListener('click', triggerCardShuffle);
+
+    // Modal dismiss actions
+    btnClose.addEventListener('click', closeMission);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeMission();
+      }
+    });
+
+    // Continue action button
+    btnContinue.addEventListener('click', () => {
+      alert('Starting math adventure with equation: ' + modalEquation.textContent.trim() + '!');
+      closeMission();
+    });
+  });
+</script>
+<!-- END: Interactive Logic Scripts -->
+
+
+</body></html>

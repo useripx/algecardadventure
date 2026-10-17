@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html lang="en" style=""><head></head><body class="bg-slate-900 flex justify-center items-center min-h-screen p-0 sm:p-4 overflow-x-hidden"><svg aria-hidden="true" class="inline-defs-container" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>AlgeCard Adventure - Score Results</title>
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- FontAwesome Icons CDN -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts: Fredoka & Baloo 2 for Cartoon Game UI Styling -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800;900&amp;family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Canvas Confetti CDN -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<!-- Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            game: ['"Baloo 2"', 'Fredoka', 'system-ui', 'sans-serif'],
+            ui: ['Fredoka', '"Baloo 2"', 'sans-serif'],
+          },
+          colors: {
+            parchment: {
+              DEFAULT: '#FFF5DC',
+              light: '#FFFAED',
+              dark: '#E7CF9B',
+              border: '#8B4513'
+            },
+            gameWood: {
+              light: '#9E5822',
+              DEFAULT: '#723B10',
+              dark: '#4A2308'
+            }
+          },
+          boxShadow: {
+            'game-btn-blue': '0 7px 0 #1860A8, 0 10px 15px rgba(0,0,0,0.3)',
+            'game-btn-blue-active': '0 2px 0 #1860A8, 0 4px 6px rgba(0,0,0,0.3)',
+            'game-btn-gold': '0 7px 0 #9E6A00, 0 10px 15px rgba(0,0,0,0.3)',
+            'game-btn-gold-active': '0 2px 0 #9E6A00, 0 4px 6px rgba(0,0,0,0.3)',
+            'game-btn-red': '0 7px 0 #9E1F1F, 0 10px 15px rgba(0,0,0,0.3)',
+            'game-btn-red-active': '0 2px 0 #9E1F1F, 0 4px 6px rgba(0,0,0,0.3)',
+            'card-inset': 'inset 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.06)',
+            'wood-frame': '0 10px 25px rgba(27, 16, 5, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Game Styles -->
+<style data-purpose="custom-typography">
+    body {
+      font-family: 'Baloo 2', 'Fredoka', cursive, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .text-stroke-brown {
+      -webkit-text-stroke: 4px #5B2909;
+      paint-order: stroke fill;
+    }
+
+    .text-stroke-brown-sm {
+      -webkit-text-stroke: 2.5px #5B2909;
+      paint-order: stroke fill;
+    }
+    
+    .text-stroke-white {
+      -webkit-text-stroke: 2.5px #FFFFFF;
+      paint-order: stroke fill;
+    }
+
+    .text-stroke-darkred {
+      -webkit-text-stroke: 3px #6E0D0D;
+      paint-order: stroke fill;
+    }
+
+    .banner-text-shadow {
+      text-shadow: 0 3px 0 #542203, 0 5px 6px rgba(0,0,0,0.4);
+    }
+    
+    .score-glow {
+      filter: drop-shadow(0 4px 6px rgba(91, 41, 9, 0.35));
+    }
+  </style>
+<style data-purpose="animations">
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(1.5deg); }
+    }
+    
+    @keyframes bounceGently {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-5px) scale(1.02); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+
+    .anim-float {
+      animation: floatSlow 3.8s ease-in-out infinite;
+    }
+
+    .anim-bounce {
+      animation: bounceGently 2.4s ease-in-out infinite;
+    }
+
+    .anim-star-glow {
+      animation: pulseGlow 2.5s ease-in-out infinite;
+    }
+    
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 14px;
+      border-radius: 2px;
+      pointer-events: none;
+    }
+  </style>
+<!-- END: Custom Game Styles -->
+<!-- BEGIN: Mobile Screen Wrapper (iOS Aspect Ratio 390x844 approx) -->
+<div class="relative w-full max-w-[430px] h-[100dvh] max-h-[920px] overflow-hidden bg-sky-300 shadow-2xl flex flex-col justify-between sm:rounded-[44px] sm:border-[8px] sm:border-[#2C1808]" data-purpose="mobile-viewport">
+<!-- BEGIN: Forest & Fantasy Kingdom Background -->
+<div class="absolute inset-0 pointer-events-none z-0 overflow-hidden" data-purpose="background-scenery">
+<!-- Sky Gradient with Sun Rays -->
+<div class="absolute inset-0 bg-gradient-to-b from-[#40A9FF] via-[#7CD3FE] to-[#B6EDC8]"></div>
+<!-- Distant Kingdom Castle on Cliff (Right Top) -->
+<div class="absolute -right-2 top-8 opacity-90 scale-90 sm:scale-100">
+<svg fill="none" height="130" viewbox="0 0 150 130" width="150" xmlns="http://www.w3.org/2000/svg">
+<!-- Cliff Base -->
+<path d="M50 130C65 100 80 85 110 82C130 80 150 90 155 130Z" fill="#588D41"></path>
+<path d="M90 85C95 105 100 120 102 130H112C110 115 105 100 98 85Z" fill="#437230"></path>
+<!-- Waterfall stream -->
+<path d="M125 90V130C125 130 127 132 129 130V91L125 90Z" fill="#C5F3FF" opacity="0.9"></path>
+<!-- Castle Body -->
+<rect fill="#D3E5FF" height="42" rx="3" stroke="#5E83BA" stroke-width="2.5" width="55" x="75" y="45"></rect>
+<rect fill="#4B668D" height="22" rx="8" width="16" x="92" y="65"></rect>
+<!-- Towers -->
+<rect fill="#E8F1FF" height="45" rx="3" stroke="#5E83BA" stroke-width="2.5" width="18" x="68" y="25"></rect>
+<polygon fill="#2E7BE8" points="65,25 77,5 89,25" stroke="#1D4E96" stroke-width="2"></polygon>
+<rect fill="#E8F1FF" height="40" rx="3" stroke="#5E83BA" stroke-width="2.5" width="16" x="120" y="30"></rect>
+<polygon fill="#2E7BE8" points="117,30 128,12 139,30" stroke="#1D4E96" stroke-width="2"></polygon>
+<polygon fill="#2E7BE8" points="90,45 102,20 114,45" stroke="#1D4E96" stroke-width="2"></polygon>
+<!-- Flag -->
+<polygon fill="#FF4D4D" points="128,12 142,16 128,20"></polygon>
+</svg>
+</div>
+<!-- Clouds & Ambient Foliage Behind -->
+<div class="absolute -top-6 -left-10 w-44 h-44 rounded-full bg-white/40 blur-xl"></div>
+<div class="absolute top-10 right-4 w-32 h-32 rounded-full bg-white/30 blur-lg"></div>
+<!-- Festive Confetti Sprinkles -->
+<div class="confetti-piece bg-red-500 top-12 left-10 rotate-12"></div>
+<div class="confetti-piece bg-amber-400 top-20 left-24 -rotate-45"></div>
+<div class="confetti-piece bg-blue-500 top-8 left-44 rotate-45"></div>
+<div class="confetti-piece bg-pink-500 top-16 right-28 rotate-12"></div>
+<div class="confetti-piece bg-yellow-300 top-10 right-10 -rotate-12"></div>
+<div class="confetti-piece bg-emerald-400 top-32 left-8 rotate-45"></div>
+<div class="confetti-piece bg-amber-500 top-36 right-8 rotate-12"></div>
+</div>
+<!-- END: Forest & Fantasy Kingdom Background -->
+<!-- BEGIN: Scrollable/Compact Game Play Screen Content -->
+<div class="relative z-10 flex flex-col h-full justify-between px-3 pt-2 pb-2 overflow-y-auto">
+<!-- BEGIN: Header Section (Logo & Wooden Banner) -->
+<header class="flex flex-col items-center shrink-0" data-purpose="screen-header">
+<!-- Game Official Logo -->
+<div class="w-full max-w-[280px] -mb-1 flex justify-center cursor-pointer transition-transform active:scale-95"><img alt="AlgeCard Adventure Logo" class="w-full max-w-[280px] max-h-24 h-auto object-contain drop-shadow-md filter" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv-2yulYbBxMDdJ-u6tfnchVvtSeVOKqoZbWSxU8Wv3VYsBcJ2PJsVpxfwlu4kv5Aao4EaYJ02S1MjCvEneAIwQWnWJERZahgLiobAL0HXFSG0xx1xOFhxTze5zIlZxYx4HLcBBbdeAQiLzUpBg1Pj4QO77XcRsVbK-dQiVwSb_uz6OJhOc55ZUul_3KnKbJFUeE5qbMvHcjuQe3pllyAvuhp83boRooQP6uua-4O7z3XaTQGnCnPt9E5FSpJ6CRDzRw"/></div>
+<!-- Wooden Title Plaque: Happy Adventure Results -->
+<div class="relative flex flex-col items-center mt-0.5">
+<!-- Top Title: Happy -->
+<div class="relative z-10 -mb-2">
+<span class="text-3xl sm:text-4xl font-extrabold text-white text-stroke-brown banner-text-shadow tracking-wider">
+              Happy
+            </span>
+</div>
+<!-- Carved Wooden Signboard: Adventure Results -->
+<div class="relative bg-gradient-to-b from-[#FFDC73] via-[#E5B338] to-[#B07616] border-[3.5px] border-[#5D2C04] px-5 py-1 rounded-2xl shadow-[0_6px_0_#431C00,0_9px_12px_rgba(0,0,0,0.35)] flex items-center justify-center">
+<!-- Decorative Wooden Screws / Nails -->
+<span class="w-2.5 h-2.5 rounded-full bg-[#522502] border border-[#FFE7A3] inline-block mr-2 shadow-inner"></span>
+<h1 class="text-xl sm:text-2xl font-black text-[#4B1E00] tracking-wide uppercase drop-shadow-[0_1px_0_#FFF3B3]">
+              Adventure Results
+            </h1>
+<span class="w-2.5 h-2.5 rounded-full bg-[#522502] border border-[#FFE7A3] inline-block ml-2 shadow-inner"></span>
+<!-- Side Leaf Accent Left -->
+<div class="absolute -left-3 -top-2 w-6 h-6 bg-emerald-500 rounded-full border-2 border-[#1E4D1A] -rotate-45 -z-10 shadow-sm"></div>
+<!-- Side Leaf Accent Right -->
+<div class="absolute -right-3 -top-2 w-6 h-6 bg-emerald-500 rounded-full border-2 border-[#1E4D1A] rotate-45 -z-10 shadow-sm"></div>
+</div>
+</div>
+</header>
+<!-- END: Header Section -->
+<!-- BEGIN: Central Parchment Board -->
+<main class="relative mt-2 mb-1 w-full flex-grow flex flex-col justify-between" data-purpose="results-parchment-board">
+<!-- Wood Carved Frame Outer Border -->
+<div class="relative w-full bg-[#E5B670] p-2.5 sm:p-3 rounded-[32px] border-[5px] border-[#68330B] shadow-[0_12px_0_#381A03,0_16px_25px_rgba(0,0,0,0.5)] flex flex-col justify-between overflow-hidden">
+<!-- Inner Cream Parchment Card Area -->
+<div class="relative bg-gradient-to-b from-[#FFFDF2] to-[#FFF3CE] border-[3px] border-[#D1A763] rounded-[24px] p-3 pt-3 flex flex-col items-center justify-between shadow-[inset_0_4px_12px_rgba(189,141,60,0.25)]">
+<!-- Background Golden Radiance Burst -->
+<div class="absolute top-2 w-64 h-64 bg-amber-200/40 rounded-full blur-2xl pointer-events-none -z-0"></div>
+<!-- Top Laurel Leaves & Big Golden 3D Star -->
+<div class="relative z-10 flex flex-col items-center">
+<!-- Star & Laurels Wrapper -->
+<div class="relative flex items-center justify-center -mt-1">
+<!-- Left Laurel Leaves -->
+<div class="flex items-center -mr-2 space-x-0.5 transform -rotate-12">
+<div class="w-4 h-7 bg-gradient-to-t from-emerald-700 to-green-400 rounded-full border-2 border-[#194C16] -rotate-45 shadow-sm"></div>
+<div class="w-5 h-8 bg-gradient-to-t from-emerald-600 to-green-300 rounded-full border-2 border-[#194C16] -rotate-15 -translate-y-2"></div>
+</div>
+<!-- 3D Gleaming Star Icon -->
+<div class="relative anim-star-glow cursor-pointer transition-transform hover:scale-110">
+<svg class="filter drop-shadow-[0_6px_0_#9E6A00] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)]" fill="none" height="74" viewbox="0 0 100 100" width="74" xmlns="http://www.w3.org/2000/svg">
+<!-- Outer Golden Border -->
+<polygon fill="#F8B800" points="50,5 64,36 98,38 72,61 80,95 50,76 20,95 28,61 2,38 36,36" stroke="#7A4B00" stroke-width="4"></polygon>
+<!-- Star Inner Gradient Body -->
+<polygon fill="url(#starGrad)" points="50,10 62,37 92,39 69,59 76,89 50,72 24,89 31,59 8,39 38,37"></polygon>
+<!-- Highlight Shimmer -->
+<polygon fill="#FFF8C7" opacity="0.8" points="50,15 58,37 78,39 63,53 50,42"></polygon>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="starGrad" x1="50" x2="50" y1="10" y2="89">
+<stop stop-color="#FFF37A"></stop>
+<stop offset="0.5" stop-color="#FFC814"></stop>
+<stop offset="1" stop-color="#E28900"></stop>
+</lineargradient>
+</defs>
+</svg>
+<!-- Star Sparkle Highlights -->
+<div class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white rounded-full blur-[0.5px]"></div>
+<div class="absolute top-5 left-2 w-1.5 h-1.5 bg-white rounded-full"></div>
+</div>
+<!-- Right Laurel Leaves -->
+<div class="flex items-center -ml-2 space-x-0.5 transform rotate-12">
+<div class="w-5 h-8 bg-gradient-to-t from-emerald-600 to-green-300 rounded-full border-2 border-[#194C16] rotate-15 -translate-y-2"></div>
+<div class="w-4 h-7 bg-gradient-to-t from-emerald-700 to-green-400 rounded-full border-2 border-[#194C16] rotate-45 shadow-sm"></div>
+</div>
+</div>
+<!-- Ribbon: "Your Score" -->
+<div class="relative -mt-2 z-20">
+<div class="bg-gradient-to-b from-[#FF4343] to-[#C91A1A] border-[3px] border-[#680C0C] px-7 py-0.5 rounded-full shadow-[0_5px_0_#5B0505,0_8px_12px_rgba(0,0,0,0.3)]">
+<span class="text-white font-extrabold text-xl sm:text-2xl tracking-wider text-stroke-darkred drop-shadow-md">
+                    Your Score
+                  </span>
+</div>
+<!-- Ribbon Tails -->
+<div class="absolute -left-2 top-3 w-3 h-5 bg-[#8D1111] -z-10 rounded-sm -rotate-45"></div>
+<div class="absolute -right-2 top-3 w-3 h-5 bg-[#8D1111] -z-10 rounded-sm rotate-45"></div>
+</div>
+</div>
+<!-- Score Big Numbers & Flanking Cricket Mascots -->
+<div class="relative w-full flex items-center justify-between my-0.5">
+<!-- LEFT MASCOT: Happy Green Cricket (SVG Mascot) -->
+<div class="w-20 h-28 sm:w-24 sm:h-32 relative anim-bounce flex items-center justify-center shrink-0 -ml-2" data-purpose="mascot-green-cricket">
+<svg fill="none" height="100%" viewbox="0 0 130 160" width="100%" xmlns="http://www.w3.org/2000/svg">
+<!-- Antennae -->
+<path d="M55 45C55 20 40 5 25 15" stroke="#1F6914" stroke-linecap="round" stroke-width="4"></path>
+<path d="M68 45C72 20 85 5 95 15" stroke="#1F6914" stroke-linecap="round" stroke-width="4"></path>
+<!-- Antenna Tips -->
+<circle cx="25" cy="15" fill="#69C92B" r="4" stroke="#1F6914" stroke-width="2"></circle>
+<circle cx="95" cy="15" fill="#69C92B" r="4" stroke="#1F6914" stroke-width="2"></circle>
+<!-- Hind Leg Left -->
+<path d="M38 100L15 80L10 130" stroke="#1F6914" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"></path>
+<path d="M15 80L25 125" stroke="#66C426" stroke-linecap="round" stroke-width="6"></path>
+<!-- Hind Leg Right -->
+<path d="M92 100L115 80L120 130" stroke="#1F6914" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"></path>
+<path d="M115 80L105 125" stroke="#66C426" stroke-linecap="round" stroke-width="6"></path>
+<!-- Body & Belly -->
+<ellipse cx="65" cy="108" fill="#64C428" rx="28" ry="34" stroke="#1C6611" stroke-width="4"></ellipse>
+<!-- Abdomen Segment stripes -->
+<path d="M48 102C55 106 75 106 82 102" stroke="#469915" stroke-linecap="round" stroke-width="3"></path>
+<path d="M50 114C56 118 74 118 80 114" stroke="#469915" stroke-linecap="round" stroke-width="3"></path>
+<path d="M53 126C58 129 72 129 77 126" stroke="#469915" stroke-linecap="round" stroke-width="3"></path>
+<!-- Cheerful Arms in the air -->
+<path d="M42 85L20 65" stroke="#1C6611" stroke-linecap="round" stroke-width="5"></path>
+<circle cx="18" cy="63" fill="#71D52F" r="5" stroke="#1C6611" stroke-width="3"></circle>
+<path d="M88 85L110 65" stroke="#1C6611" stroke-linecap="round" stroke-width="5"></path>
+<circle cx="112" cy="63" fill="#71D52F" r="5" stroke="#1C6611" stroke-width="3"></circle>
+<!-- Head -->
+<ellipse cx="65" cy="58" fill="#74D833" rx="26" ry="24" stroke="#1C6611" stroke-width="4"></ellipse>
+<!-- Cheeks -->
+<circle cx="48" cy="66" fill="#FFA5A5" opacity="0.8" r="4"></circle>
+<circle cx="82" cy="66" fill="#FFA5A5" opacity="0.8" r="4"></circle>
+<!-- Big Cute Cartoon Eyes -->
+<ellipse cx="53" cy="52" fill="#201104" rx="7" ry="10"></ellipse>
+<ellipse cx="77" cy="52" fill="#201104" rx="7" ry="10"></ellipse>
+<circle cx="51" cy="49" fill="white" r="3.5"></circle>
+<circle cx="75" cy="49" fill="white" r="3.5"></circle>
+<circle cx="54" cy="55" fill="white" r="1.5"></circle>
+<circle cx="78" cy="55" fill="white" r="1.5"></circle>
+<!-- Open Happy Smile -->
+<path d="M54 65C58 74 72 74 76 65" fill="#800F0F" stroke="#1C6611" stroke-width="3"></path>
+<!-- Tongue -->
+<path d="M59 70C63 68 67 68 71 70C69 73 61 73 59 70Z" fill="#FF7E7E"></path>
+</svg>
+<!-- Mascot Sparkles -->
+<i class="fa-solid fa-sparkles text-amber-400 absolute top-1 left-2 text-xs"></i>
+</div>
+<!-- CENTER: Big 80 Score Display -->
+<div class="flex flex-col items-center justify-center flex-grow py-1">
+<div class="score-glow text-6xl sm:text-7xl font-black text-[#FFD83D] text-stroke-brown tracking-tight transition-transform duration-300" id="scoreDisplay">
+                  80
+                </div>
+<div class="text-base sm:text-lg font-black text-[#5B2909] tracking-wide -mt-2">
+                  out of <span class="" id="maxScoreDisplay">100</span>
+</div>
+</div>
+<!-- RIGHT MASCOT: Orange Cricket Winking Cheerfully -->
+<div class="w-20 h-28 sm:w-24 sm:h-32 relative anim-float flex items-center justify-center shrink-0 -mr-2" data-purpose="mascot-orange-cricket">
+<svg fill="none" height="100%" viewbox="0 0 130 160" width="100%" xmlns="http://www.w3.org/2000/svg">
+<!-- Antennae -->
+<path d="M55 45C55 20 40 5 25 15" stroke="#943F07" stroke-linecap="round" stroke-width="4"></path>
+<path d="M68 45C72 20 85 5 95 15" stroke="#943F07" stroke-linecap="round" stroke-width="4"></path>
+<circle cx="25" cy="15" fill="#FFA938" r="4" stroke="#943F07" stroke-width="2"></circle>
+<circle cx="95" cy="15" fill="#FFA938" r="4" stroke="#943F07" stroke-width="2"></circle>
+<!-- Hind Leg Left -->
+<path d="M38 100L15 80L10 130" stroke="#943F07" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"></path>
+<path d="M15 80L25 125" stroke="#F58B1F" stroke-linecap="round" stroke-width="6"></path>
+<!-- Hind Leg Right -->
+<path d="M92 100L115 80L120 130" stroke="#943F07" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"></path>
+<path d="M115 80L105 125" stroke="#F58B1F" stroke-linecap="round" stroke-width="6"></path>
+<!-- Body -->
+<ellipse cx="65" cy="108" fill="#F89020" rx="28" ry="34" stroke="#943F07" stroke-width="4"></ellipse>
+<!-- Body segments -->
+<path d="M48 102C55 106 75 106 82 102" stroke="#B85800" stroke-linecap="round" stroke-width="3"></path>
+<path d="M50 114C56 118 74 118 80 114" stroke="#B85800" stroke-linecap="round" stroke-width="3"></path>
+<!-- Celebrating Arms -->
+<path d="M42 85L20 68" stroke="#943F07" stroke-linecap="round" stroke-width="5"></path>
+<circle cx="18" cy="66" fill="#FFA938" r="5" stroke="#943F07" stroke-width="3"></circle>
+<path d="M88 85L110 68" stroke="#943F07" stroke-linecap="round" stroke-width="5"></path>
+<circle cx="112" cy="66" fill="#FFA938" r="5" stroke="#943F07" stroke-width="3"></circle>
+<!-- Head -->
+<ellipse cx="65" cy="58" fill="#FFA533" rx="26" ry="24" stroke="#943F07" stroke-width="4"></ellipse>
+<!-- Cheeks -->
+<circle cx="48" cy="66" fill="#FF7070" opacity="0.8" r="4"></circle>
+<circle cx="82" cy="66" fill="#FF7070" opacity="0.8" r="4"></circle>
+<!-- Left Eye Open -->
+<ellipse cx="53" cy="52" fill="#201104" rx="7" ry="10"></ellipse>
+<circle cx="51" cy="49" fill="white" r="3.5"></circle>
+<circle cx="54" cy="55" fill="white" r="1.5"></circle>
+<!-- Right Eye Winking! -->
+<path d="M72 54C75 49 81 49 84 54" stroke="#201104" stroke-linecap="round" stroke-width="4"></path>
+<!-- Open Smile -->
+<path d="M54 65C58 74 72 74 76 65" fill="#75150A" stroke="#943F07" stroke-width="3"></path>
+<path d="M59 70C63 68 67 68 71 70C69 73 61 73 59 70Z" fill="#FFA6A6"></path>
+</svg>
+</div>
+</div>
+<!-- BEGIN: Performance Statistics (3 Cards Grid) -->
+<section class="w-full grid grid-cols-3 gap-2 my-1" data-purpose="performance-stats-grid">
+<!-- Card 1: Correct Answer -->
+<div class="bg-[#D9F9DF] border-2 border-[#94DC9E] rounded-2xl p-1.5 flex flex-col items-center justify-between text-center shadow-[0_3px_0_#98D2A1] transition-transform active:scale-95 cursor-default">
+<!-- Checkmark Badge -->
+<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white shadow-md -mt-3.5">
+<i class="fa-solid fa-check text-sm font-black"></i>
+</div>
+<span class="text-[11px] sm:text-xs font-extrabold text-[#19612C] leading-tight mt-1">
+                  Correct Answer
+                </span>
+<span class="text-2xl sm:text-3xl font-black text-[#133E1D] leading-none my-0.5" id="statCorrectCount">
+                  4
+                </span>
+<span class="text-[10px] sm:text-[11px] font-bold text-[#357546]">
+                  out of <span class="" id="statCorrectTotal">5</span>
+</span>
+</div>
+<!-- Card 2: Wrong Answer -->
+<div class="bg-[#FFE3E3] border-2 border-[#FFAFAF] rounded-2xl p-1.5 flex flex-col items-center justify-between text-center shadow-[0_3px_0_#EAA1A1] transition-transform active:scale-95 cursor-default">
+<!-- Cross Badge -->
+<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-500 border-2 border-white flex items-center justify-center text-white shadow-md -mt-3.5">
+<i class="fa-solid fa-xmark text-sm font-black"></i>
+</div>
+<span class="text-[11px] sm:text-xs font-extrabold text-[#7B1919] leading-tight mt-1">
+                  Wrong Answer
+                </span>
+<span class="text-2xl sm:text-3xl font-black text-[#4E1010] leading-none my-0.5" id="statWrongCount">
+                  1
+                </span>
+<span class="text-[10px] sm:text-[11px] font-bold text-[#8A3A3A]">
+                  out of <span class="" id="statWrongTotal">5</span>
+</span>
+</div>
+<!-- Card 3: Time Spent -->
+<div class="bg-[#E1F2FF] border-2 border-[#A8D7FF] rounded-2xl p-1.5 flex flex-col items-center justify-between text-center shadow-[0_3px_0_#A0C9EB] transition-transform active:scale-95 cursor-default">
+<!-- Stopwatch Badge -->
+<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-400 border-2 border-white flex items-center justify-center text-[#5C3202] shadow-md -mt-3.5">
+<i class="fa-solid fa-stopwatch text-sm"></i>
+</div>
+<span class="text-[11px] sm:text-xs font-extrabold text-[#114E7E] leading-tight mt-1">
+                  Time
+                </span>
+<span class="text-xl sm:text-2xl font-black text-[#0A3050] leading-none my-1 tracking-tight" id="statTimeDisplay">
+                  02:35
+                </span>
+<span class="text-[10px] sm:text-[11px] font-bold text-[#3B729E]">
+                  Completed
+                </span>
+</div>
+</section>
+<!-- END: Performance Statistics -->
+<!-- BEGIN: Encouraging Feedback Box -->
+<div class="w-full bg-[#FFFBEA] border-2 border-[#F1DC9B] rounded-2xl py-2 px-3 mt-1.5 flex items-center space-x-3 shadow-[inset_0_2px_4px_rgba(209,179,99,0.2)]" data-purpose="encouragement-banner">
+<!-- Smiling Lightbulb Mascot -->
+<div class="relative shrink-0">
+<svg class="filter drop-shadow-sm" fill="none" height="44" viewbox="0 0 60 60" width="44" xmlns="http://www.w3.org/2000/svg">
+<!-- Rays -->
+<line stroke="#FFAE00" stroke-linecap="round" stroke-width="4" x1="30" x2="30" y1="2" y2="8"></line>
+<line stroke="#FFAE00" stroke-linecap="round" stroke-width="4" x1="8" x2="13" y1="16" y2="20"></line>
+<line stroke="#FFAE00" stroke-linecap="round" stroke-width="4" x1="52" x2="47" y1="16" y2="20"></line>
+<!-- Bulb Body -->
+<path d="M18 24C18 17.3726 23.3726 12 30 12C36.6274 12 42 17.3726 42 24C42 28.5 39.5 32.5 37 35V39H23V35C20.5 32.5 18 28.5 18 24Z" fill="#FFDC33" stroke="#5D3A0A" stroke-width="3"></path>
+<!-- Bulb Screw Base -->
+<rect fill="#3D86F2" height="4" rx="1" stroke="#214A8A" stroke-width="2" width="14" x="23" y="39"></rect>
+<path d="M25 43H35L33 48H27L25 43Z" fill="#1C5AB8" stroke="#103672" stroke-width="2"></path>
+<!-- Happy Cute Face -->
+<ellipse cx="25" cy="24" fill="#331A00" rx="2" ry="3"></ellipse>
+<ellipse cx="35" cy="24" fill="#331A00" rx="2" ry="3"></ellipse>
+<path d="M26 29C28 32 32 32 34 29" stroke="#331A00" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Blush -->
+<circle cx="22" cy="28" fill="#FF7C7C" r="2"></circle>
+<circle cx="38" cy="28" fill="#FF7C7C" r="2"></circle>
+</svg>
+</div>
+<!-- Message Text -->
+<div class="flex flex-col text-left">
+<span class="text-base sm:text-lg font-black text-[#4B2202] leading-tight" id="feedbackHeadline">
+                  Very good!
+                </span>
+<span class="text-xs sm:text-sm font-bold text-[#6D3D14] leading-snug" id="feedbackSubtitle">
+                  Keep practicing to become better!
+                </span>
+</div>
+</div>
+<!-- END: Encouraging Feedback Box -->
+<!-- BEGIN: Action Navigation Buttons -->
+<div class="w-full flex items-center justify-between gap-3 mt-2" data-purpose="screen-action-buttons">
+<!-- Left Action: Continue Question (Chunky Blue 3D Button) -->
+<div class="flex-1 flex flex-col items-center">
+<button class="w-full h-12 sm:h-13 bg-gradient-to-b from-[#40A9FF] to-[#096DD9] border-[3px] border-[#084A96] text-white rounded-2xl shadow-game-btn-blue active:shadow-game-btn-blue-active active:translate-y-1 transition-all flex items-center justify-center space-x-1.5 px-2" id="btnContinueQuestion" type="button">
+<span class="text-sm sm:text-base font-black tracking-wide text-stroke-brown-sm uppercase drop-shadow-sm" id="continueBtnLabel">
+                    Continue Question
+                  </span>
+<i class="fa-solid fa-chevron-right text-sm font-black ml-1" id="continueBtnIcon"></i>
+</button>
+<span class="text-[10px] sm:text-[11px] font-black text-[#784013] mt-1.5 tracking-tight" id="continueBtnSub">
+                  To add more Points
+                </span>
+</div>
+<!-- Right Action: Exit (Chunky Red 3D Button) -->
+<div class="w-32 sm:w-36 flex flex-col items-center">
+<button class="w-full h-12 sm:h-13 bg-gradient-to-b from-[#FF5757] to-[#D91B1B] border-[3px] border-[#8A0C0C] text-white rounded-2xl shadow-game-btn-red active:shadow-game-btn-red-active active:translate-y-1 transition-all flex items-center justify-center space-x-2 px-3" id="btnExitGame" type="button">
+<i class="fa-solid fa-house text-base"></i>
+<span class="text-base sm:text-lg font-black tracking-wide uppercase drop-shadow-md">
+                    Exit
+                  </span>
+</button>
+<span class="text-[10px] sm:text-[11px] font-black text-[#784013] mt-1.5 tracking-tight">
+                  Back to Home
+                </span>
+</div>
+</div>
+<!-- END: Action Navigation Buttons -->
+</div>
+<!-- END: Inner Parchment Card -->
+<!-- Leaf Foliage Accents Clinging to Frame Corners -->
+<div class="absolute -top-3 -left-3 w-8 h-8 bg-emerald-600 rounded-full border-2 border-emerald-900 -rotate-45 pointer-events-none"></div>
+<div class="absolute -bottom-3 -left-3 w-8 h-8 bg-emerald-600 rounded-full border-2 border-emerald-900 rotate-45 pointer-events-none"></div>
+<div class="absolute -top-3 -right-3 w-8 h-8 bg-emerald-600 rounded-full border-2 border-emerald-900 rotate-45 pointer-events-none"></div>
+<div class="absolute -bottom-3 -right-3 w-8 h-8 bg-emerald-600 rounded-full border-2 border-emerald-900 -rotate-45 pointer-events-none"></div>
+</div>
+</main>
+<!-- END: Central Parchment Board -->
+<!-- BEGIN: Bottom Scenery Decor (Books, Treasure Chest, Compass, Map) -->
+<footer class="relative w-full h-16 sm:h-20 shrink-0 flex items-end justify-between px-1 pointer-events-none -mt-1 select-none" data-purpose="scenery-foreground-props">
+<!-- Left: Stack of Math & Science Adventure Hardcover Books -->
+<div class="relative z-10 w-28 sm:w-32 h-14 -mb-1">
+<!-- Science Book (Bottom) -->
+<div class="absolute bottom-0 left-0 w-26 h-7 bg-gradient-to-r from-red-600 to-amber-600 rounded-r-md border-2 border-[#541010] shadow-md flex items-center px-2">
+<span class="text-[9px] font-black tracking-widest text-amber-200 uppercase -rotate-1">SCIENCE</span>
+</div>
+<!-- Math Book (Top) -->
+<div class="absolute bottom-4 left-2 w-24 h-6 bg-gradient-to-r from-blue-700 to-cyan-500 rounded-r-md border-2 border-[#092B60] shadow-lg flex items-center px-2 rotate-2">
+<span class="text-[9px] font-black tracking-widest text-white uppercase">MATH</span>
+</div>
+<!-- Foliage Leaf under books -->
+<div class="absolute -bottom-1 -left-2 w-8 h-8 bg-emerald-700 rounded-full -rotate-45 -z-10"></div>
+</div>
+<!-- Center: Forest Ground Path & Stones -->
+<div class="flex-grow flex items-center justify-center space-x-2 pb-1 opacity-80">
+<div class="w-8 h-3.5 bg-amber-200/60 rounded-full border border-amber-800/40"></div>
+<div class="w-12 h-4.5 bg-amber-300/60 rounded-full border border-amber-800/40"></div>
+<div class="w-6 h-3 bg-amber-200/50 rounded-full border border-amber-800/40"></div>
+</div>
+<!-- Right: Treasure Chest, Parchment Map & Compass -->
+<div class="relative z-10 w-32 sm:w-36 h-16 flex items-end justify-end -mb-1">
+<!-- Rolled Parchment Map & Compass -->
+<div class="relative -mr-3 mb-1">
+<div class="w-14 h-9 bg-[#FDE9B4] border border-[#A4742E] rounded-md shadow-md rotate-6 flex items-center justify-center">
+<span class="text-[7px] text-amber-900/60 font-mono">〰⚲〰</span>
+</div>
+<!-- Golden Compass on map -->
+<div class="absolute -top-3 right-1 w-8 h-8 rounded-full bg-gradient-to-b from-yellow-300 to-amber-600 border-2 border-[#693D00] shadow-md flex items-center justify-center">
+<div class="w-5 h-5 rounded-full bg-blue-100 border border-blue-400 flex items-center justify-center relative">
+<!-- Compass Needle -->
+<div class="w-1 h-4 bg-gradient-to-t from-red-600 to-blue-600 rounded-full rotate-45"></div>
+</div>
+</div>
+</div>
+<!-- Treasure Chest Body -->
+<div class="w-16 h-12 bg-gradient-to-b from-[#B6621B] to-[#693108] border-2 border-[#381600] rounded-t-xl rounded-b-md shadow-xl relative overflow-hidden flex flex-col justify-between">
+<!-- Brass Metal Straps -->
+<div class="w-full h-2 bg-[#F9BC16] border-b border-[#734A00] flex justify-between px-2">
+<span class="w-1 h-1 bg-black rounded-full"></span>
+<span class="w-1 h-1 bg-black rounded-full"></span>
+</div>
+<!-- Brass Lock Latch -->
+<div class="self-center w-3 h-3 bg-[#FFDC40] border border-[#523300] rounded-sm flex items-center justify-center">
+<div class="w-1 h-1 bg-black rounded-full"></div>
+</div>
+<!-- Bottom Iron Rim -->
+<div class="w-full h-1.5 bg-[#422106]"></div>
+</div>
+</div>
+</footer>
+<!-- END: Bottom Scenery Decor -->
+</div>
+<!-- END: Mobile Screen Content Wrapper -->
+<!-- BEGIN: Interactive Question Tester & Debug Toolbar -->
+<div class="absolute top-2 right-2 z-50 flex items-center space-x-1.5" data-purpose="spec-simulation-toolbar">
+<!-- Answering Control: Add Correct Answer -->
+<button class="bg-emerald-600/90 hover:bg-emerald-600 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm transition-all border border-emerald-300/40 active:scale-95 flex items-center space-x-1 shadow-sm" id="btnSimulateCorrect" title="Simulate answering next question correctly">
+<i class="fa-solid fa-plus text-[9px]"></i><i class="fa-solid fa-check text-[10px]"></i>
+<span class="hidden sm:inline">Answer Correct</span>
+</button>
+<!-- Answering Control: Add Wrong Answer -->
+<button class="bg-rose-600/90 hover:bg-rose-600 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm transition-all border border-rose-300/40 active:scale-95 flex items-center space-x-1 shadow-sm" id="btnSimulateWrong" title="Simulate answering next question wrong">
+<i class="fa-solid fa-plus text-[9px]"></i><i class="fa-solid fa-xmark text-[10px]"></i>
+<span class="hidden sm:inline">Answer Wrong</span>
+</button>
+<!-- Quick Reset button -->
+<button class="bg-black/60 hover:bg-black/80 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm transition-all border border-white/20 active:scale-95 flex items-center space-x-1" id="btnResetSimulation" title="Reset score to initial state (4 of 5)">
+<i class="fa-solid fa-rotate-left text-amber-300 text-[10px]"></i>
+<span class="font-bold text-amber-300" id="modeLabel">5 / 10 Qs</span>
+</button>
+</div>
+<!-- END: Simulation Switcher -->
+<!-- BEGIN: Modal Dialog: Exit Confirmation -->
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200" data-purpose="exit-modal" id="exitConfirmModal">
+<div class="bg-[#FFF4D4] border-4 border-[#7A3E09] w-full max-w-xs rounded-3xl p-5 shadow-[0_15px_30px_rgba(0,0,0,0.5)] flex flex-col items-center text-center transform scale-90 transition-transform duration-200" id="exitModalCard">
+<!-- Mascot Warning Icon -->
+<div class="w-14 h-14 rounded-full bg-amber-400 border-3 border-[#7A3E09] flex items-center justify-center text-2xl text-[#5E2B00] mb-3 shadow-md">
+<i class="fa-solid fa-door-open"></i>
+</div>
+<h3 class="text-xl font-black text-[#5E2B00] mb-1">Exit Adventure?</h3>
+<p class="text-xs font-bold text-[#8C521E] mb-5 leading-relaxed">
+          Are you sure you want to exit? Your adventure progress will return to the Splash Screen.
+        </p>
+<!-- Actions -->
+<div class="flex items-center gap-3 w-full">
+<!-- Cancel Button -->
+<button class="flex-1 py-2.5 bg-gray-200 hover:bg-gray-300 border-2 border-gray-400 text-gray-700 font-black rounded-xl text-xs uppercase shadow-sm active:translate-y-0.5" id="btnCancelExit" type="button">
+            Cancel
+          </button>
+<!-- Confirm Exit Button -->
+<button class="flex-1 py-2.5 bg-gradient-to-b from-red-500 to-red-700 border-2 border-red-900 text-white font-black rounded-xl text-xs uppercase shadow-[0_4px_0_#5B0505] active:translate-y-0.5 active:shadow-none" id="btnConfirmExit" type="button">
+            Confirm Exit
+          </button>
+</div>
+</div>
+</div>
+<!-- END: Modal Dialog -->
+<!-- BEGIN: Toast Notification Component -->
+<div class="absolute top-16 left-1/2 -translate-x-1/2 z-50 bg-[#286090] text-white text-xs font-black px-4 py-2.5 rounded-full border-2 border-white shadow-xl opacity-0 pointer-events-none transition-all duration-300 flex items-center space-x-2" data-purpose="toast-feedback" id="gameToast">
+<i class="fa-solid fa-compass text-amber-300" id="toastIcon"></i>
+<span class="" id="toastMessage">Loading next Mission Card...</span>
+</div>
+<!-- END: Toast Notification -->
+</div>
+<!-- END: Mobile Screen Wrapper -->
+<!-- BEGIN: Game Logic Script -->
+<script data-purpose="gameplay-interactions">
+    document.addEventListener('DOMContentLoaded', () => {
+      // DOM Elements
+      const scoreDisplay = document.getElementById('scoreDisplay');
+      const maxScoreDisplay = document.getElementById('maxScoreDisplay');
+      const statCorrectCount = document.getElementById('statCorrectCount');
+      const statCorrectTotal = document.getElementById('statCorrectTotal');
+      const statWrongCount = document.getElementById('statWrongCount');
+      const statWrongTotal = document.getElementById('statWrongTotal');
+      const statTimeDisplay = document.getElementById('statTimeDisplay');
+      const feedbackHeadline = document.getElementById('feedbackHeadline');
+      const feedbackSubtitle = document.getElementById('feedbackSubtitle');
+      const continueBtnLabel = document.getElementById('continueBtnLabel');
+      const continueBtnSub = document.getElementById('continueBtnSub');
+      const continueBtnIcon = document.getElementById('continueBtnIcon');
+      const btnContinueQuestion = document.getElementById('btnContinueQuestion');
+      const btnExitGame = document.getElementById('btnExitGame');
+      const btnSimulateCorrect = document.getElementById('btnSimulateCorrect');
+      const btnSimulateWrong = document.getElementById('btnSimulateWrong');
+      const btnResetSimulation = document.getElementById('btnResetSimulation');
+      const modeLabel = document.getElementById('modeLabel');
+
+      // Modal Elements
+      const exitConfirmModal = document.getElementById('exitConfirmModal');
+      const exitModalCard = document.getElementById('exitModalCard');
+      const btnCancelExit = document.getElementById('btnCancelExit');
+      const btnConfirmExit = document.getElementById('btnConfirmExit');
+
+      // Toast Element
+      const gameToast = document.getElementById('gameToast');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      // Game State based on Sections 5, 6, 8, 9
+      const MAX_QUESTIONS = 10;
+      let state = {
+        correct: 4,
+        wrong: 1,
+        totalAnswered: 5,
+        totalSeconds: 155 // 02:35
+      };
+
+      // Confetti burst trigger
+      function triggerConfettiBurst() {
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 50,
+            spread: 60,
+            origin: { y: 0.45 },
+            colors: ['#FFD700', '#FF5757', '#40A9FF', '#52C41A', '#FF9800']
+          });
+        }
+      }
+
+      // Initial celebration
+      triggerConfettiBurst();
+
+      // Format seconds into MM:SS
+      function formatTime(secs) {
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+      }
+
+      // Calculate score & update all elements
+      function updateUI() {
+        // Cumulative scoring formula: (Correct Answers / Questions Answered) * 100
+        const calculatedScore = state.totalAnswered > 0 
+          ? Math.round((state.correct / state.totalAnswered) * 100) 
+          : 0;
+
+        scoreDisplay.textContent = calculatedScore;
+        statCorrectCount.textContent = state.correct;
+        statCorrectTotal.textContent = state.totalAnswered;
+        statWrongCount.textContent = state.wrong;
+        statWrongTotal.textContent = state.totalAnswered;
+        statTimeDisplay.textContent = formatTime(state.totalSeconds);
+        modeLabel.textContent = `${state.totalAnswered} / ${MAX_QUESTIONS} Qs`;
+
+        // Dynamic Encouragement Message based on score thresholds (Section 8)
+        if (calculatedScore >= 80) {
+          feedbackHeadline.textContent = "Very good!";
+          feedbackSubtitle.textContent = "Keep practicing to become even better!";
+        } else if (calculatedScore >= 60) {
+          feedbackHeadline.textContent = "Good effort!";
+          feedbackSubtitle.textContent = "You're getting closer to mastering algebra!";
+        } else {
+          feedbackHeadline.textContent = "Keep going!";
+          feedbackSubtitle.textContent = "Practice makes perfect in AlgeCard Adventure!";
+        }
+
+        // Button state check for question limit (Max 10 questions reached)
+        if (state.totalAnswered >= MAX_QUESTIONS) {
+          continueBtnLabel.textContent = "View Final Results";
+          continueBtnSub.textContent = "Adventure Finished";
+          continueBtnIcon.className = "fa-solid fa-trophy text-sm font-black ml-1 text-amber-200";
+          btnContinueQuestion.className = "w-full h-12 sm:h-13 bg-gradient-to-b from-[#F5B025] to-[#C97B00] border-[3px] border-[#7A4500] text-white rounded-2xl shadow-game-btn-gold active:shadow-game-btn-gold-active active:translate-y-1 transition-all flex items-center justify-center space-x-1.5 px-2";
+          btnSimulateCorrect.disabled = true;
+          btnSimulateWrong.disabled = true;
+          btnSimulateCorrect.classList.add('opacity-50', 'cursor-not-allowed');
+          btnSimulateWrong.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+          continueBtnLabel.textContent = "Continue Question";
+          continueBtnSub.textContent = "To add more Points";
+          continueBtnIcon.className = "fa-solid fa-chevron-right text-sm font-black ml-1";
+          btnContinueQuestion.className = "w-full h-12 sm:h-13 bg-gradient-to-b from-[#40A9FF] to-[#096DD9] border-[3px] border-[#084A96] text-white rounded-2xl shadow-game-btn-blue active:shadow-game-btn-blue-active active:translate-y-1 transition-all flex items-center justify-center space-x-1.5 px-2";
+          btnSimulateCorrect.disabled = false;
+          btnSimulateWrong.disabled = false;
+          btnSimulateCorrect.classList.remove('opacity-50', 'cursor-not-allowed');
+          btnSimulateWrong.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        // Visual score bump
+        scoreDisplay.classList.add('scale-110');
+        setTimeout(() => scoreDisplay.classList.remove('scale-110'), 250);
+      }
+
+      // Toast helper
+      let toastTimer = null;
+      function showToast(message, iconClass = "fa-compass") {
+        clearTimeout(toastTimer);
+        toastMessage.textContent = message;
+        toastIcon.className = `fa-solid ${iconClass} text-amber-300`;
+        gameToast.classList.remove('opacity-0', 'pointer-events-none');
+        gameToast.classList.add('opacity-100');
+        
+        toastTimer = setTimeout(() => {
+          gameToast.classList.add('opacity-0', 'pointer-events-none');
+          gameToast.classList.remove('opacity-100');
+        }, 2200);
+      }
+
+      // Open Modal
+      function openExitModal() {
+        exitConfirmModal.classList.remove('opacity-0', 'pointer-events-none');
+        exitConfirmModal.classList.add('opacity-100');
+        exitModalCard.classList.remove('scale-90');
+        exitModalCard.classList.add('scale-100');
+      }
+
+      // Close Modal
+      function closeExitModal() {
+        exitConfirmModal.classList.add('opacity-0', 'pointer-events-none');
+        exitConfirmModal.classList.remove('opacity-100');
+        exitModalCard.classList.add('scale-90');
+        exitModalCard.classList.remove('scale-100');
+      }
+
+      // Handler: Simulate Answering Next Question
+      function answerQuestion(isCorrect) {
+        if (state.totalAnswered >= MAX_QUESTIONS) {
+          showToast("Maximum 10 questions reached for this session!", "fa-circle-exclamation");
+          return;
+        }
+
+        state.totalAnswered += 1;
+        if (isCorrect) {
+          state.correct += 1;
+        } else {
+          state.wrong += 1;
+        }
+        state.totalSeconds += 25; // add realistic question time
+
+        updateUI();
+
+        if (isCorrect) {
+          triggerConfettiBurst();
+          showToast(`Question ${state.totalAnswered} Correct! (+1 Correct Answer)`, "fa-circle-check");
+        } else {
+          showToast(`Question ${state.totalAnswered} Missed! (+1 Wrong Answer)`, "fa-circle-xmark");
+        }
+      }
+
+      // Continue Question Button Action
+      btnContinueQuestion.addEventListener('click', () => {
+        if (state.totalAnswered < MAX_QUESTIONS) {
+          // Progress to next question simulation
+          answerQuestion(true);
+        } else {
+          triggerConfettiBurst();
+          showToast("Adventure Complete! All 10 Mission Cards finished!", "fa-award");
+        }
+      });
+
+      // Simulation Toolbar listeners
+      btnSimulateCorrect.addEventListener('click', () => answerQuestion(true));
+      btnSimulateWrong.addEventListener('click', () => answerQuestion(false));
+
+      // Reset Simulation back to base state (4 of 5)
+      btnResetSimulation.addEventListener('click', () => {
+        state = {
+          correct: 4,
+          wrong: 1,
+          totalAnswered: 5,
+          totalSeconds: 155
+        };
+        updateUI();
+        triggerConfettiBurst();
+        showToast("Reset to Question 5 of 10", "fa-rotate-left");
+      });
+
+      // Handle Exit Button Click
+      btnExitGame.addEventListener('click', openExitModal);
+      btnCancelExit.addEventListener('click', closeExitModal);
+
+      // Handle Confirm Exit
+      btnConfirmExit.addEventListener('click', () => {
+        closeExitModal();
+        showToast("Returning to Splash Screen...", "fa-house");
+        setTimeout(() => {
+          console.log("Navigating to Screen 01 - Splash Screen");
+        }, 900);
+      });
+
+      // Close modal on backdrop click
+      exitConfirmModal.addEventListener('click', (e) => {
+        if (e.target === exitConfirmModal) {
+          closeExitModal();
+        }
+      });
+    });
+  </script>
+<!-- END: Game Logic Script -->
+</body></html>
