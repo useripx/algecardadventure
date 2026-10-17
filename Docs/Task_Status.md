@@ -1,8 +1,8 @@
 # Task Status — AlgeCard Adventure
 
-> **Terakhir Diperbarui:** 17 Oktober 2026 22:45 WIB  
-> **Status Keseluruhan Proyek:** Phase 6 Selesai — Screen 03 Modal Alignment & Screen 04 URP Camera Fix Terverifikasi  
-> **Total Progres:** ~72% (Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, Screen 02, Screen 03, & Screen 04)  
+> **Terakhir Diperbarui:** 17 Oktober 2026 23:30 WIB  
+> **Status Keseluruhan Proyek:** Phase 6 Selesai — Scene 04 Rekonstruksi ID Unik (0 Duplicate) & Presisi Layout Scene 03 Terverifikasi  
+> **Total Progres:** ~73% (Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, Screen 02, Screen 03, & Screen 04)  
 
 ---
 
@@ -258,6 +258,26 @@
 - [x] Unit test EditMode `AlgebraBoardTests.cs` (6 test) terverifikasi **100% PASS** (**Pilar 6**).
 - [x] Keputusan arsitektur `DEC-25` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
 - [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
+---
+
+## 📋 Checklist Batch 12 (Rekonstruksi Scene 04 dengan 0 Duplicate ID & Presisi Layout Scene 03)
+
+- [x] **Penyelesaian Akar Masalah Scene 04 (`04_AlgebraCardBoard.unity`):**
+  - Mendiagnosis error log Editor `File has multiple objects with same identifiers` yang menyebabkan scene gagal dimuat (0 GameObject) dan memicu *"Display 1: No cameras rendering"*.
+  - Mengimplementasikan skrip `rebuild_scene_04_clean_ids.py` dengan alokator ID monotonik unik.
+  - Membangun ulang seluruh 551 objek YAML di `04_AlgebraCardBoard.unity` dengan **0 duplicate IDs (100% Unique)** dan referensi komponen/child yang 100% valid.
+  - Memverifikasi URP Camera lengkap dengan `UniversalAdditionalCameraData`, AudioListener, Canvas worldCamera, EventSystem `InputSystemUIInputModule`, SafeAreaFitter, dan AlgebraBoardController.
+- [x] **Penyempurnaan Presisi Layout Scene 03 (`03_MissionCard.unity`):**
+  - Menaikkan modal kartu `ModalDialogCard` dari `y = 70` ke `y = 110` (naik 40 px) untuk elevasi nyaman di layar potret ponsel `360x760`.
+  - Menurunkan posisi bintang level (`Star1`, `Star2`, `Star3`) ke `y = -360` (`x = 75, 130, 185`, size `48x48`), tepat di garis tengah pita oranye `DIFFICULTY LEVEL:`.
+  - Menurunkan posisi teks skor misi (`MissionPointsText`) ke `y = -424`, `x = 135` (size `160x44`), tepat di garis tengah pita biru `MISSION POINTS:`.
+  - Memasang sprite 9-sliced 3D emas resmi `btn_gold_capsule.png` (`guid: c3fece623c8c57b4a83bc5cbd04aec21`) pada `ContinueButton`.
+- [x] Kompilasi solusi: `dotnet build AlgeCardAdventure.Tests.csproj` menghasilkan **0 Warning, 0 Error**.
+- [x] Unit test EditMode `AlgebraBoardTests.cs` (6 test) terverifikasi **100% PASS** (**Pilar 6**).
+- [x] Keputusan arsitektur `DEC-26` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
+- [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
 
 
 
