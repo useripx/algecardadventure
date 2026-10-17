@@ -37,12 +37,21 @@ namespace AlgeCardAdventure.UI
 
         [Header("Modal Detail Misi")]
         [SerializeField] private GameObject missionDetailModal;
+        [SerializeField] private RectTransform modalCardTransform;
         [SerializeField] private Text missionNumberText;
         [SerializeField] private Text missionTitleText;
         [SerializeField] private Text missionInstructionText;
         [SerializeField] private Text equationPreviewText;
         [SerializeField] private Button continueButton;
         [SerializeField] private Button backToCardsButton;
+
+        [Header("Bintang & Poin Kesulitan")]
+        [SerializeField] private Image star1Image;
+        [SerializeField] private Image star2Image;
+        [SerializeField] private Image star3Image;
+        [SerializeField] private Sprite starGoldSprite;
+        [SerializeField] private Sprite starGreySprite;
+        [SerializeField] private Text missionPointsText;
 
         [Header("Elemen Efek Visual Tambahan")]
         [SerializeField] private Button deckPileButton;
@@ -82,6 +91,12 @@ namespace AlgeCardAdventure.UI
         public QuestionModel SelectedQuestion => _selectedQuestion;
         public bool IsShuffling => _isShuffling;
         public bool HasDealt => _hasDealt;
+        public Image Star1Image => star1Image;
+        public Image Star2Image => star2Image;
+        public Image Star3Image => star3Image;
+        public Sprite StarGoldSprite => starGoldSprite;
+        public Sprite StarGreySprite => starGreySprite;
+        public Text MissionPointsText => missionPointsText;
 
         private void Start()
         {
@@ -553,10 +568,63 @@ namespace AlgeCardAdventure.UI
                 }
             }
 
+            // Atur bintang kesulitan & poin misi dinamis sesuai ui_level soal (Easy=1, Normal/Medium=2, Hard=3)
+            int activeStars = 1;
+            int points = 100;
+            string level = _selectedQuestion.ui_level ?? (GameSession.Instance != null ? GameSession.Instance.CurrentLevel : "Easy");
+            if (string.Equals(level, "Normal", System.StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(level, "Medium", System.StringComparison.OrdinalIgnoreCase))
+            {
+                activeStars = 2;
+                points = 200;
+            }
+            else if (string.Equals(level, "Hard", System.StringComparison.OrdinalIgnoreCase))
+            {
+                activeStars = 3;
+                points = 300;
+            }
+
+            if (star1Image != null) star1Image.sprite = activeStars >= 1 ? starGoldSprite : starGreySprite;
+            if (star2Image != null) star2Image.sprite = activeStars >= 2 ? starGoldSprite : starGreySprite;
+            if (star3Image != null) star3Image.sprite = activeStars >= 3 ? starGoldSprite : starGreySprite;
+            if (missionPointsText != null) missionPointsText.text = points.ToString();
+
             if (missionDetailModal != null)
             {
                 missionDetailModal.SetActive(true);
+                StartCoroutine(AnimateCardFlipModalRoutine());
             }
+        }
+
+        /// <summary>
+        /// Menganimasikan efek buka balik kartu (card flip) pada sumbu Y dari 90 derajat ke 0 derajat.
+        /// </summary>
+        private IEnumerator AnimateCardFlipModalRoutine()
+        {
+            if (modalCardTransform == null) yield break;
+
+            modalCardTransform.localEulerAngles = new Vector3(0f, 90f, 0f);
+            modalCardTransform.localScale = new Vector3(0.85f, 0.85f, 1f);
+
+            float duration = 0.28f;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+
+                float rotY = Mathf.Lerp(90f, 0f, t);
+                float scale = Mathf.Lerp(0.85f, 1f, t);
+
+                modalCardTransform.localEulerAngles = new Vector3(0f, rotY, 0f);
+                modalCardTransform.localScale = new Vector3(scale, scale, 1f);
+
+                yield return null;
+            }
+
+            modalCardTransform.localEulerAngles = Vector3.zero;
+            modalCardTransform.localScale = Vector3.one;
         }
 
         /// <summary>

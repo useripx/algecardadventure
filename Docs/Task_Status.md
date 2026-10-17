@@ -178,4 +178,28 @@
 - [x] Changelog `changelog/17/10/2026/20/08.md` dibuat (**Pilar 5**).
 - [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
 
+---
+
+## 📋 Checklist Batch 9 (Phase 5 — Template Kartu Misi Resmi `card.png` & Bintang Level Dinamis)
+
+- [x] Ekstraksi aset muka kartu resmi dari `Docs/Ui Template/card.png/card.png` dengan *rounded corner mask* transparan menghasilkan `mission_card_front_clean.png` (902x1260 px).
+- [x] Pembersihan area slot bintang dan poin statis pada base template menjadi gradien mulus siap tumpuk.
+- [x] Ekstraksi aset bintang asli transparan beresolusi tinggi: `star_gold.png` (bintang emas) dan `star_grey.png` (bintang abu-abu redup).
+- [x] Pembaruan `MissionCardController.cs`:
+  - Serialized fields untuk `star1Image`, `star2Image`, `star3Image`, `starGoldSprite`, `starGreySprite`, `missionPointsText`, dan `modalCardTransform`.
+  - Logika dinamis penugasan bintang dan poin berdasarkan `selectedQuestion.ui_level`:
+    - **Easy**: 1 Bintang Kuning (100 pts)
+    - **Normal / Medium**: 2 Bintang Kuning (200 pts)
+    - **Hard**: 3 Bintang Kuning (300 pts)
+  - Animasi rotasi flip kartu sumbu Y (`0° → 90° → 0°`) murni C# coroutine (`Mathf.SmoothStep`).
+- [x] Pembaruan hierarki dan layout visual pada `Assets/AlgeCardAdventure/Scenes/03_MissionCard.unity`:
+  - `ModalDialogCard` (ID 1710) berukuran 720x1006 px dengan sprite `mission_card_front_clean.png`.
+  - Penataan rapi judul soal, narasi soal, kotak sorotan persamaan aljabar, badge nomor misi, tombol 3D emas *"START MISSION >"*, 3 objek bintang, angka poin, dan tombol *"✕ Back to Cards"*.
+- [x] Unit test baru `TC_MISSION_10` di `MissionCardTests.cs` memvalidasi sistem bintang dan poin dinamis sesuai level.
+- [x] Kompilasi `AlgeCardAdventure.Runtime.csproj` dan `AlgeCardAdventure.Tests.csproj`: **0 Warning, 0 Error**.
+- [x] Seluruh 40 unit tests EditMode terverifikasi **100% PASS** (**Pilar 6**).
+- [x] Keputusan arsitektur `DEC-23` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
+- [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
+
 

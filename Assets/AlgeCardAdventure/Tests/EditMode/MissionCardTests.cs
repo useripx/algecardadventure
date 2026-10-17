@@ -210,5 +210,51 @@ namespace AlgeCardAdventure.Tests
                 Object.DestroyImmediate(controllerGo);
             }
         }
+
+        [Test]
+        public void TC_MISSION_10_MissionCardController_DynamicStarsAndPoints_ReflectsLevel()
+        {
+            var controllerGo = new GameObject("TestMissionController");
+            var controller = controllerGo.AddComponent<MissionCardController>();
+
+            // Setup mock UI elements
+            var s1 = new GameObject("Star1").AddComponent<UnityEngine.UI.Image>();
+            var s2 = new GameObject("Star2").AddComponent<UnityEngine.UI.Image>();
+            var s3 = new GameObject("Star3").AddComponent<UnityEngine.UI.Image>();
+            var pts = new GameObject("Pts").AddComponent<UnityEngine.UI.Text>();
+
+            var goldSprite = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 4, 4), Vector2.zero);
+            var greySprite = Sprite.Create(Texture2D.blackTexture, new Rect(0, 0, 4, 4), Vector2.zero);
+
+            var fields = typeof(MissionCardController).GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            foreach (var f in fields)
+            {
+                if (f.Name == "star1Image") f.SetValue(controller, s1);
+                if (f.Name == "star2Image") f.SetValue(controller, s2);
+                if (f.Name == "star3Image") f.SetValue(controller, s3);
+                if (f.Name == "starGoldSprite") f.SetValue(controller, goldSprite);
+                if (f.Name == "starGreySprite") f.SetValue(controller, greySprite);
+                if (f.Name == "missionPointsText") f.SetValue(controller, pts);
+            }
+
+            try
+            {
+                // Test Easy
+                controller.LoadMissionDeck();
+                controller.OnCardSelected(0);
+                Assert.AreEqual(goldSprite, s1.sprite, "Star 1 harus gold pada Easy");
+                Assert.AreEqual(greySprite, s2.sprite, "Star 2 harus grey pada Easy");
+                Assert.AreEqual(greySprite, s3.sprite, "Star 3 harus grey pada Easy");
+                Assert.AreEqual("100", pts.text, "Poin harus 100 pada Easy");
+            }
+            finally
+            {
+                Object.DestroyImmediate(s1.gameObject);
+                Object.DestroyImmediate(s2.gameObject);
+                Object.DestroyImmediate(s3.gameObject);
+                Object.DestroyImmediate(pts.gameObject);
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
     }
 }
