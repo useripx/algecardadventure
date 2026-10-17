@@ -112,7 +112,7 @@ namespace AlgeCardAdventure.Tests
             {
                 controller.OnLevelSelected("Hard");
                 Assert.AreEqual("Hard", session.CurrentLevel);
-                Assert.AreEqual(10, session.TotalQuestionsInSession);
+                Assert.AreEqual(10, AlgeCardAdventure.Session.GameSession.MaxQuestionsPerSession);
                 Assert.AreEqual("03_MissionCard", navigatedScene);
             }
             finally
