@@ -158,4 +158,24 @@
 - [x] Keputusan arsitektur `DEC-21` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
 - [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
 
+---
+
+## 📋 Checklist Batch 8 (Phase 5 — Animasi Riffle Shuffle Natural Bergaya Rummy/Uno Game)
+
+- [x] Evaluasi feedback pengguna mengenai getaran acak kaku (*random jitter*) pada dek meja yang terasa tidak natural.
+- [x] Analisis mendalam teknik animasi `code.html` (baris 63–90): teknik *interleaved riffle shuffle* dua belahan kartu berosilasi berlawanan arah.
+- [x] Implementasi arsitektur dua sayap kartu kocok pada `BottomStationaryDeck`:
+  - `RiffleCardLeft` (ID 1660): ukuran 215x280 px, pivot (0.5, 0.2), rotasi awal +16°.
+  - `RiffleCardRight` (ID 1670): ukuran 215x280 px, pivot (0.5, 0.2), rotasi awal -16°.
+- [x] Algoritma osilasi harmonis sinusoidal murni C# (Zero Dependency):
+  - Fase split & arch: kartu membelah ke kiri (-55px) dan kanan (+55px) dengan kurva envelope halus.
+  - Gelombang kocok cepat: `Mathf.Sin(t * 16f)` dan rotasi berlawanan arah dengan beda fase 90° menyerupai gerakan pesulap/dealer kasino profesional.
+  - Hentakan penyatuan: kedua belahan menyatu kembali (*snap merge*) tepat pada detik ke-2.8 s.d. 3.0 tanpa jitter kasar.
+  - Seluruh deklarasi murni `UnityEngine` bawaan, 100% bebas risiko bug, stripping IL2CPP, maupun crash saat ekspor build Android APK.
+- [x] Kompilasi `AlgeCardAdventure.Runtime.csproj` dan `AlgeCardAdventure.Tests.csproj`: **0 Warning, 0 Error**.
+- [x] Seluruh 39 unit tests EditMode tetap terverifikasi **100% PASS** (**Pilar 6**).
+- [x] Keputusan arsitektur `DEC-22` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
+- [x] Changelog `changelog/17/10/2026/20/08.md` dibuat (**Pilar 5**).
+- [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
 

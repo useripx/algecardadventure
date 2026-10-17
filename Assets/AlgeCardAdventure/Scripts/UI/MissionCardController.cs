@@ -48,6 +48,9 @@ namespace AlgeCardAdventure.UI
         [SerializeField] private Button deckPileButton;
         [SerializeField] private RectTransform shuffleIconTransform;
         [SerializeField] private GameObject shuffleSparkles;
+        [SerializeField] private RectTransform riffleCardLeft;
+        [SerializeField] private RectTransform riffleCardRight;
+        [SerializeField] private GameObject stationaryTopCard;
 
         private List<QuestionModel> _currentBatch = new List<QuestionModel>();
         private QuestionModel _selectedQuestion;
@@ -125,6 +128,16 @@ namespace AlgeCardAdventure.UI
             if (shuffleSparkles != null)
             {
                 shuffleSparkles.SetActive(false);
+            }
+
+            if (riffleCardLeft != null)
+            {
+                riffleCardLeft.gameObject.SetActive(false);
+            }
+
+            if (riffleCardRight != null)
+            {
+                riffleCardRight.gameObject.SetActive(false);
             }
 
             if (shuffleButtonText != null)
@@ -308,11 +321,16 @@ namespace AlgeCardAdventure.UI
             if (shuffleStatusText != null) shuffleStatusText.text = "Shuffling deck (3s)...";
             if (shuffleSparkles != null) shuffleSparkles.SetActive(true);
 
+            // Sembunyikan kartu diam tengah, aktifkan dua belahan sayap kartu kocok
+            if (stationaryTopCard != null) stationaryTopCard.SetActive(false);
+            if (riffleCardLeft != null) riffleCardLeft.gameObject.SetActive(true);
+            if (riffleCardRight != null) riffleCardRight.gameObject.SetActive(true);
+
             AudioManager.Instance?.PlayCardFlip();
 
             Vector2 deckOriginalPos = bottomDeckTransform != null ? bottomDeckTransform.anchoredPosition : Vector2.zero;
             float shuffleElapsed = 0f;
-            float nextSfxTime = 0.7f;
+            float nextSfxTime = 0.55f;
 
             while (shuffleElapsed < 3.0f)
             {
@@ -324,12 +342,49 @@ namespace AlgeCardAdventure.UI
                     shuffleIconTransform.Rotate(0f, 0f, -540f * Time.deltaTime);
                 }
 
-                // Getaran riffle shuffle pada dek meja
+                // Envelope kurva pembelahan: membelah halus di awal (0-0.4s) dan menyatu merapat di akhir (2.6-3.0s)
+                float envelope = 1f;
+                if (shuffleElapsed < 0.4f)
+                {
+                    envelope = Mathf.SmoothStep(0f, 1f, shuffleElapsed / 0.4f);
+                }
+                else if (shuffleElapsed > 2.6f)
+                {
+                    envelope = Mathf.SmoothStep(1f, 0f, (shuffleElapsed - 2.6f) / 0.4f);
+                }
+
+                // Kecepatan gelombang osilasi kocokan (ritme harmonis natural ala dealer kartu remi)
+                float waveSpeed = 16f;
+                float waveLeft = Mathf.Sin(shuffleElapsed * waveSpeed);
+                float waveRight = Mathf.Sin(shuffleElapsed * waveSpeed + Mathf.PI * 0.5f); // beda fase 90 derajat
+
+                if (riffleCardLeft != null)
+                {
+                    float posX = -55f * envelope + waveLeft * 14f * envelope;
+                    float posY = 40f + Mathf.Abs(waveLeft) * 18f * envelope;
+                    float rotZ = 16f * envelope + waveLeft * 5f * envelope;
+                    riffleCardLeft.anchoredPosition = new Vector2(posX, posY);
+                    riffleCardLeft.localEulerAngles = new Vector3(0f, 0f, rotZ);
+                    riffleCardLeft.localScale = Vector3.one * (1f + 0.05f * Mathf.Abs(waveLeft));
+                }
+
+                if (riffleCardRight != null)
+                {
+                    float posX = 55f * envelope + waveRight * 14f * envelope;
+                    float posY = 40f + Mathf.Abs(waveRight) * 18f * envelope;
+                    float rotZ = -16f * envelope - waveRight * 5f * envelope;
+                    riffleCardRight.anchoredPosition = new Vector2(posX, posY);
+                    riffleCardRight.localEulerAngles = new Vector3(0f, 0f, rotZ);
+                    riffleCardRight.localScale = Vector3.one * (1f + 0.05f * Mathf.Abs(waveRight));
+                }
+
+                // Ayunan berirama lembut pada meja tumpukan
                 if (bottomDeckTransform != null)
                 {
-                    float jitterX = Random.Range(-5f, 5f);
-                    float jitterY = Random.Range(-3f, 3f);
-                    bottomDeckTransform.anchoredPosition = deckOriginalPos + new Vector2(jitterX, jitterY);
+                    float deckSwayX = Mathf.Sin(shuffleElapsed * 8f) * 4f * envelope;
+                    float deckSwayRot = Mathf.Cos(shuffleElapsed * 8f) * 2f * envelope;
+                    bottomDeckTransform.anchoredPosition = deckOriginalPos + new Vector2(deckSwayX, 0f);
+                    bottomDeckTransform.localEulerAngles = new Vector3(0f, 0f, deckSwayRot);
                 }
 
                 // Update hitung mundur status pill
@@ -346,16 +401,21 @@ namespace AlgeCardAdventure.UI
                 if (shuffleElapsed >= nextSfxTime)
                 {
                     AudioManager.Instance?.PlayCardFlip();
-                    nextSfxTime += 0.7f;
+                    nextSfxTime += 0.55f;
                 }
 
                 yield return null;
             }
 
-            // Hentikan efek getaran dan rotasi
+            // Kembalikan posisi awal dan nonaktifkan sayap kartu kocok
+            if (riffleCardLeft != null) riffleCardLeft.gameObject.SetActive(false);
+            if (riffleCardRight != null) riffleCardRight.gameObject.SetActive(false);
+            if (stationaryTopCard != null) stationaryTopCard.SetActive(true);
+
             if (bottomDeckTransform != null)
             {
                 bottomDeckTransform.anchoredPosition = deckOriginalPos;
+                bottomDeckTransform.localEulerAngles = Vector3.zero;
             }
             if (shuffleIconTransform != null)
             {
