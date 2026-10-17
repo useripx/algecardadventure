@@ -47,6 +47,7 @@ namespace AlgeCardAdventure.Audio
         private AudioClip _cachedCardFlip;
         private AudioClip _cachedCorrect;
         private AudioClip _cachedWrong;
+        private AudioClip _cachedDefaultBgm;
 
         public bool IsMuted { get; private set; } = false;
         public float BgmVolume { get; private set; } = 0.8f;
@@ -100,6 +101,25 @@ namespace AlgeCardAdventure.Audio
             bgmSource.loop = loop;
             bgmSource.mute = IsMuted;
             bgmSource.Play();
+        }
+
+        /// <summary>
+        /// Memainkan musik latar default (BGM bawaan procedural atau aset yang telah diatur).
+        /// </summary>
+        public void PlayDefaultBGM()
+        {
+            if (defaultBgmClip != null)
+            {
+                PlayBGM(defaultBgmClip);
+            }
+            else
+            {
+                if (_cachedDefaultBgm == null)
+                {
+                    _cachedDefaultBgm = ProceduralAudio.CreateCozyFantasyBGMClip();
+                }
+                PlayBGM(_cachedDefaultBgm);
+            }
         }
 
         public void StopBGM()

@@ -54,12 +54,26 @@
 | **TC-NAV-03** | `LevelSelectionController` | Pemilihan level 'Hard' | Menyimpan level 'Hard', inisialisasi batas 10 soal, dan berpindah ke Screen 03 | **PASS** |
 | **TC-NAV-04** | `LevelSelectionController` | Klik tombol Back | Memicu navigasi kembali ke Screen 01 Splash Screen | **PASS** |
 
+### Batch 4: Screen 03 Mission Cards & Cozy Fantasy BGM
+- **Tanggal:** 17 Oktober 2026 17:05 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / Unity Test Framework 1.8.0
+- **Tipe Uji:** EditMode Automated Unit Tests
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC-MISSION-01** | `QuestionRepository` | Penarikan 5 kartu misi acak per level | Tepat 5 soal unik, level sesuai, dan eligible dimainkan | **PASS** |
+| **TC-MISSION-02** | `QuestionRepository` | Anti-duplikasi eksklusi completed IDs | Soal yang telah dikerjakan tidak muncul kembali di batch berikutnya | **PASS** |
+| **TC-MISSION-03** | `GameSession` | Siklus `CompletedQuestionIds` | ID tersimpan unik, tidak dobel, dan bersih saat sesi direset | **PASS** |
+| **TC-MISSION-04** | `ProceduralAudio` | Pembuatan klip Cozy Fantasy BGM (loop 8 detik) | Klip valid, loopable, frekuensi 22050Hz, dan bebas exception | **PASS** |
+| **TC-MISSION-05** | `MissionCardController` | Pemilihan kartu dari deretan misteri | Mengisi objek `SelectedQuestion` secara akurat sesuai kartu yang diklik | **PASS** |
+| **TC-MISSION-06** | `MissionCardController` | Klik tombol Continue | Menyimpan soal aktif ke sesi, mencatat completed ID, dan menuju Screen 04 | **PASS** |
+
 ---
 
 ## 📋 Ringkasan Hasil Pengujian Terakhir
 
-- **Total Kasus Uji:** 30
-- **Lulus (PASS):** 30 (100%)
+- **Total Kasus Uji:** 36
+- **Lulus (PASS):** 36 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

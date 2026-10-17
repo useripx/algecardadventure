@@ -100,5 +100,58 @@ namespace AlgeCardAdventure.Audio
             clip.SetData(samples, 0);
             return clip;
         }
+
+        /// <summary>
+        /// Membuat klip melodi musik latar (BGM) petualangan kartun santai (Cozy Fantasy Melody)
+        /// dengan loop 8 detik bernada kalimba/akustik pentatonik tanpa jeda.
+        /// </summary>
+        public static AudioClip CreateCozyFantasyBGMClip()
+        {
+            const int sampleRate = 22050; // Ringan & efisien di memori
+            const float duration = 8.0f;
+            int totalSamples = (int)(sampleRate * duration);
+            float[] samples = new float[totalSamples];
+
+            // 16 nada melodi (0.5 detik per ketukan)
+            float[] melodyNotes = new float[]
+            {
+                261.63f, 329.63f, 392.00f, 523.25f, // C4, E4, G4, C5
+                440.00f, 392.00f, 329.63f, 293.66f, // A4, G4, E4, D4
+                349.23f, 440.00f, 523.25f, 440.00f, // F4, A4, C5, A4
+                392.00f, 329.63f, 293.66f, 261.63f  // G4, E4, D4, C4
+            };
+
+            // 4 nada bass per bar (2 detik per bar)
+            float[] bassNotes = new float[] { 130.81f, 110.00f, 87.31f, 98.00f }; // C3, A2, F2, G2
+
+            for (int i = 0; i < totalSamples; i++)
+            {
+                float t = (float)i / sampleRate;
+
+                // Hitung posisi ketukan melodi
+                int noteIndex = (int)(t / 0.5f) % melodyNotes.Length;
+                float noteTime = t % 0.5f;
+                float melodyFreq = melodyNotes[noteIndex];
+
+                // Amplop suara petikan kalimba (attack instan, decay eksponensial lembut)
+                float melodyEnv = Mathf.Exp(-noteTime * 6.0f) * 0.28f;
+                float melodyWave = Mathf.Sin(2f * Mathf.PI * melodyFreq * t) +
+                                   0.35f * Mathf.Sin(2f * Mathf.PI * melodyFreq * 2f * t);
+
+                // Hitung bass pedal tone
+                int bassIndex = (int)(t / 2.0f) % bassNotes.Length;
+                float bassTime = t % 2.0f;
+                float bassFreq = bassNotes[bassIndex];
+                float bassEnv = Mathf.Exp(-bassTime * 2.2f) * 0.22f;
+                float bassWave = Mathf.Sin(2f * Mathf.PI * bassFreq * t);
+
+                // Gabungkan melodi & bass dengan pembatas aman (clamping)
+                samples[i] = Mathf.Clamp((melodyWave * melodyEnv) + (bassWave * bassEnv), -0.9f, 0.9f);
+            }
+
+            AudioClip clip = AudioClip.Create("Procedural_CozyFantasyBGM", totalSamples, 1, sampleRate, false);
+            clip.SetData(samples, 0);
+            return clip;
+        }
     }
 }

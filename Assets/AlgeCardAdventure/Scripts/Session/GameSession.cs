@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using AlgeCardAdventure.Data;
 using AlgeCardAdventure.Core;
@@ -41,6 +42,7 @@ namespace AlgeCardAdventure.Session
         public int CorrectCount { get; private set; } = 0;
         public QuestionModel CurrentQuestion { get; private set; }
         public bool IsSessionActive { get; private set; } = false;
+        public List<string> CompletedQuestionIds { get; } = new List<string>();
 
         public event Action<string> OnSessionStarted;
         public event Action<int, int> OnAnswerRecorded;
@@ -90,6 +92,7 @@ namespace AlgeCardAdventure.Session
             TotalAnswered = 0;
             CorrectCount = 0;
             CurrentQuestion = null;
+            CompletedQuestionIds.Clear();
             IsSessionActive = true;
 
             Debug.Log($"[GameSession] Sesi baru dimulai untuk level: {CurrentLevel}");
@@ -102,6 +105,18 @@ namespace AlgeCardAdventure.Session
         public void SetCurrentQuestion(QuestionModel question)
         {
             CurrentQuestion = question;
+        }
+
+        /// <summary>
+        /// Menandai sebuah soal telah selesai dikerjakan agar tidak diulang dalam sesi yang sama (DEC-10).
+        /// </summary>
+        public void MarkQuestionCompleted(string questionId)
+        {
+            if (string.IsNullOrWhiteSpace(questionId)) return;
+            if (!CompletedQuestionIds.Contains(questionId))
+            {
+                CompletedQuestionIds.Add(questionId);
+            }
         }
 
         /// <summary>
@@ -144,6 +159,7 @@ namespace AlgeCardAdventure.Session
             TotalAnswered = 0;
             CorrectCount = 0;
             CurrentQuestion = null;
+            CompletedQuestionIds.Clear();
             IsSessionActive = false;
 
             OnSessionReset?.Invoke();

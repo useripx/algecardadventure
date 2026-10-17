@@ -1,8 +1,8 @@
 # Task Status — AlgeCard Adventure
 
-> **Terakhir Diperbarui:** 17 Oktober 2026 16:15 WIB  
-> **Status Keseluruhan Proyek:** Phase 4 Selesai — Screen 02 Level Selection & Audio Foundation Siap Ditinjau  
-> **Total Progres:** ~48% (Fondasi Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, & Screen 02)  
+> **Terakhir Diperbarui:** 17 Oktober 2026 17:05 WIB  
+> **Status Keseluruhan Proyek:** Phase 5 Selesai — Screen 03 Mission Cards, Shuffle & Cozy Fantasy BGM Siap Ditinjau  
+> **Total Progres:** ~60% (Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, Screen 02, & Screen 03)  
 
 ---
 
@@ -15,7 +15,7 @@
 | **Phase 2** | Fondasi UI Portrait & Safe Area | **DONE** | 100% | Orientation terkunci Portrait (0), SafeAreaFitter & Canvas Scaler 1080x1920 siap. |
 | **Phase 3** | Screen 01 — Splash Screen | **DONE** | 100% | Scene 01_SplashScreen.unity siap, logo, background, pulsing text, tap-to-start aktif. |
 | **Phase 4** | Screen 02 — Level Selection & Audio | **DONE** | 100% | Scene 02_Level.unity siap, GameSession manager, AudioManager & 28 test PASS. |
-| **Phase 5** | Screen 03 — Mission Cards & Shuffle | PENDING | 0% | Integrasi QuestionRepository ke kartu misi. |
+| **Phase 5** | Screen 03 — Mission Cards & Shuffle | **DONE** | 100% | Scene 03_MissionCard.unity siap, Cozy Fantasy BGM loop, modal soal & 36 test PASS. |
 | **Phase 6** | Screen 04 — Algebra Card Board | PENDING | 0% | Menggunakan soal pilot terkurasi (OPEN-02). |
 | **Phase 7** | Screen 05 — True or False & Explanation | PENDING | 0% | Konten T/F pilot disetujui (OPEN-03). |
 | **Phase 8** | Screen 06 — Score Results, Loop Sesi & Credits | PENDING | 0% | Integrasi DEC-15 (Credits Scene Yogi Ario, Nisa Aprilia, UNP Kediri). |
@@ -61,4 +61,26 @@
 - [x] Keputusan `DEC-17` (Audio Foundation & Procedural Fallback) dicatat di `Docs/Decision_Log.md`.
 - [x] Dokumentasi `Docs/Task_Status.md` dan `Docs/Test_Report.md` diperbarui (**Pilar 5**).
 - [x] Changelog `changelog/17/10/2026/16/30.md` dibuat (**Pilar 5**).
+
+---
+
+## 📋 Checklist Batch 4 (Phase 5 — Screen 03 & Cozy Fantasy BGM)
+
+- [x] Generator `CreateCozyFantasyBGMClip()` dibuat di `ProceduralAudio.cs` (loop 8 detik nada pentatonik kalimba/akustik santai tanpa jeda).
+- [x] Integrasi `PlayDefaultBGM()` ditambahkan ke `AudioManager.cs` dengan pemutaran otomatis di latar belakang.
+- [x] Pelacakan `CompletedQuestionIds` dan `MarkQuestionCompleted()` ditambahkan ke `GameSession.cs` (**DEC-10 Anti-duplikasi**).
+- [x] Modul `MissionCardController.cs` dibuat untuk mengelola penarikan batch 5 kartu, suara flip kartu, modal soal, dan navigasi.
+- [x] Aset latar fantasi meja petualangan disalin ke `Assets/AlgeCardAdventure/Art/Backgrounds/mission_card_bg.png`.
+- [x] Scene `Assets/AlgeCardAdventure/Scenes/03_MissionCard.unity` disusun rapi sesuai mockup:
+  - Header logo AlgeCard, tombol `◀ BACK`, dan plakat judul *"Mission Card"*.
+  - Banner instruksi tengah *"Select one of the mission cards"*.
+  - Deretan 5 kartu misteri tertutup bermotif biru emas dan tanda tanya (`?`).
+  - Modal detail misi pop-up menampilkan nomor misi, judul, teks soal, kotak persamaan aljabar, dan tombol *"Continue >"*.
+- [x] Scene `03_MissionCard.unity` didaftarkan di `EditorBuildSettings.asset` (Index 2).
+- [x] Unit test `MissionCardTests.cs` (6 test) dibuat (TC_MISSION_01 s.d. 06).
+- [x] Seluruh 36 kasus uji otomatis diverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
+- [x] Keputusan `DEC-18` (Cozy Fantasy Procedural BGM) dicatat di `Docs/Decision_Log.md`.
+- [x] Dokumentasi `Docs/Task_Status.md` dan `Docs/Test_Report.md` diperbarui (**Pilar 5**).
+- [x] Changelog `changelog/17/10/2026/17/00.md` dibuat (**Pilar 5**).
+
 
