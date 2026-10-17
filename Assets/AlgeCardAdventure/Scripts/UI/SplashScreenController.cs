@@ -29,11 +29,13 @@ namespace AlgeCardAdventure.UI
 
         private void Update()
         {
-            // Mendukung klik mouse atau sentuhan sembarang di Editor
+#if ENABLE_LEGACY_INPUT_MANAGER
+            // Mendukung klik mouse atau sentuhan sembarang di Editor (jika legacy input aktif)
             if (!_hasTriggered && (Input.GetMouseButtonDown(0) || Input.anyKeyDown))
             {
                 OnScreenTapped();
             }
+#endif
         }
 
         public void OnScreenTapped()

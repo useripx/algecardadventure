@@ -78,5 +78,21 @@ namespace AlgeCardAdventure.Tests
                 SceneNavigator.OnBeforeSceneLoad -= Handler;
             }
         }
+
+        [Test]
+        public void TC_UI_04_SafeArea_ApplySafeArea_ResetsOffsetsToZero()
+        {
+            var go = new GameObject("TestSafeArea");
+            var rt = go.AddComponent<RectTransform>();
+            rt.offsetMin = new Vector2(10, 20);
+            rt.offsetMax = new Vector2(-10, -20);
+            var fitter = go.AddComponent<SafeAreaFitter>();
+
+            fitter.ApplySafeArea(new Rect(0, 50, 1080, 1800), new Vector2(1080, 1920));
+
+            Assert.AreEqual(Vector2.zero, rt.offsetMin);
+            Assert.AreEqual(Vector2.zero, rt.offsetMax);
+            Object.DestroyImmediate(go);
+        }
     }
 }

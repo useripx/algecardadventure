@@ -30,6 +30,7 @@
 | **TC-UI-01** | `SafeAreaFitter` | Layar standar tanpa notch/poni (1080x1920) | Menghasilkan `anchorMin=(0,0)` dan `anchorMax=(1,1)` | **PASS** |
 | **TC-UI-02** | `SafeAreaFitter` | Layar HP bertakik (notch atas 80px, nav bar 60px) | Menghitung normalisasi anchor yang presisi dan aman dari terpotong | **PASS** |
 | **TC-UI-03** | `SafeAreaFitter` | Kondisi resolusi layar nol / transisi | Fallback aman tanpa crash atau exception zero division | **PASS** |
+| **TC-UI-04** | `SafeAreaFitter` | Reset offset saat menerapkan Safe Area | `offsetMin` dan `offsetMax` terbukti direset ke `(0,0)` | **PASS** |
 | **TC-NAV-01** | `SceneNavigator` | Verifikasi konstanta string scene 6 layar & Credits | Seluruh nama scene terdefinisi stabil dan konsisten | **PASS** |
 | **TC-NAV-02** | `SceneNavigator` | Event delegasi `OnBeforeSceneLoad` | Event terpanggil membawa nama scene tujuan secara tepat | **PASS** |
 
@@ -37,8 +38,8 @@
 
 ## 📋 Ringkasan Hasil Pengujian Terakhir
 
-- **Total Kasus Uji:** 17
-- **Lulus (PASS):** 17 (100%)
+- **Total Kasus Uji:** 18
+- **Lulus (PASS):** 18 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

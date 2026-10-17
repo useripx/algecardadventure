@@ -26,6 +26,7 @@ Dokumen ini mencatat seluruh keputusan arsitektural, teknis, dan operasional pen
 | **DEC-13** | 17/10/2026 | Review Gate UI | Pengembangan UI dikerjakan bertahap satu per satu (Screen 01 s.d. 06) dengan persetujuan Yogi. | Memastikan kualitas visual dan interaksi terverifikasi sebelum lanjut. | **APPROVED** |
 | **DEC-14** | 17/10/2026 | Proteksi Aset & Git | `Docs/Ui Template/` berstatus Read-Only; branch `main` terlindungi, AI bekerja di `develop`. | Mencegah kerusakan aset asli dan menjamin stabilitas rilis produksi. | **APPROVED** |
 | **DEC-15** | 17/10/2026 | Credits Scene & Atribusi | Saat pemain menekan 'Exit' pada Screen 06 (Score Results), game menampilkan Credits Scene (Game Dev: Yogi Ario, Game Planner & Math Expert: Nisa Aprilia, Institusi: Universitas Nusantara PGRI Kediri) sebelum kembali ke Splash Screen. | Atribusi formal tim pengembang dan institusi pendidikan pendukung; diimplementasikan pada Phase 8. | **APPROVED** |
+| **DEC-16** | 17/10/2026 | UGUI GUID & Input Fix | Memperbaiki seluruh GUID skrip UGUI resmi Unity 6 di scene 01_SplashScreen, migrasi EventSystem ke InputSystemUIInputModule, dan set activeInputHandler: 2 (Both). | Menyelesaikan bug layar hijau polos dan jutaan InvalidOperationException saat Play di Unity Editor. | **APPROVED** |
 
 ---
 

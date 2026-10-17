@@ -71,6 +71,8 @@ namespace AlgeCardAdventure.UI
 
             _rectTransform.anchorMin = anchorMin;
             _rectTransform.anchorMax = anchorMax;
+            _rectTransform.offsetMin = Vector2.zero;
+            _rectTransform.offsetMax = Vector2.zero;
         }
 
         /// <summary>
