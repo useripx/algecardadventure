@@ -44,6 +44,11 @@ namespace AlgeCardAdventure.UI
         [SerializeField] private Button continueButton;
         [SerializeField] private Button backToCardsButton;
 
+        [Header("Elemen Efek Visual Tambahan")]
+        [SerializeField] private Button deckPileButton;
+        [SerializeField] private RectTransform shuffleIconTransform;
+        [SerializeField] private GameObject shuffleSparkles;
+
         private List<QuestionModel> _currentBatch = new List<QuestionModel>();
         private QuestionModel _selectedQuestion;
         private QuestionRepository _repository;
@@ -101,7 +106,12 @@ namespace AlgeCardAdventure.UI
                 bottomDeckButton.onClick.AddListener(OnShuffleClicked);
             }
 
-            // Sembunyikan modal di awal
+            if (deckPileButton != null)
+            {
+                deckPileButton.onClick.AddListener(OnShuffleClicked);
+            }
+
+            // Sembunyikan modal & efek sparkle di awal
             if (missionDetailModal != null)
             {
                 missionDetailModal.SetActive(false);
@@ -110,6 +120,11 @@ namespace AlgeCardAdventure.UI
             if (shuffleStatusPill != null)
             {
                 shuffleStatusPill.SetActive(false);
+            }
+
+            if (shuffleSparkles != null)
+            {
+                shuffleSparkles.SetActive(false);
             }
 
             if (shuffleButtonText != null)
@@ -183,12 +198,13 @@ namespace AlgeCardAdventure.UI
                 {
                     cardTransforms[i].anchoredPosition = _fannedPositions[i];
                     cardTransforms[i].localEulerAngles = new Vector3(0f, 0f, _fannedRotations[i]);
+                    cardTransforms[i].localScale = Vector3.one;
                 }
             }
         }
 
         /// <summary>
-        /// Menampilkan kartu secara langsung ke formasi kipas.
+        /// Menampilkan kartu secara langsung ke formasi kipas tanpa animasi.
         /// </summary>
         public void DealCardsImmediately()
         {
@@ -217,6 +233,8 @@ namespace AlgeCardAdventure.UI
         {
             if (_isShuffling) return;
 
+            Debug.Log("[MissionCardController] OnShuffleClicked terpicu — memulai urutan kocok kartu...");
+
             if (_shuffleCoroutine != null)
             {
                 StopCoroutine(_shuffleCoroutine);
@@ -226,85 +244,204 @@ namespace AlgeCardAdventure.UI
         }
 
         /// <summary>
-        /// Coroutine urutan kocok kartu 3 detik sesuai spesifikasi HTML template.
+        /// Coroutine urutan kocok kartu 4-fase sesuai spesifikasi prototipe code.html:
+        /// 1. Retract: Kartu meluncur turun ke dek meja.
+        /// 2. Riffle & Sparkles (3s): Tumpukan meja bergetar, ikon putar berputar, kilau emas, hitung mundur status pill.
+        /// 3. Dealing Upward: Kartu baru meluncur naik satu per satu secara berurutan (staggered delay).
+        /// 4. Settle & Idle: Tombol aktif kembali sebagai 'SHUFFLE AGAIN'.
         /// </summary>
         private IEnumerator ShuffleSequenceRoutine()
         {
             _isShuffling = true;
 
-            // Sembunyikan atau tarik kartu ke bawah saat dikocok
-            if (cardObjects != null)
+            // Kunci interaktivitas tombol selama proses kocok
+            if (bottomDeckButton != null) bottomDeckButton.interactable = false;
+            if (deckPileButton != null) deckPileButton.interactable = false;
+            if (shuffleButtonText != null) shuffleButtonText.text = "SHUFFLING...";
+
+            Vector2 tableDeckOrigin = bottomDeckTransform != null ? bottomDeckTransform.anchoredPosition : new Vector2(0f, -600f);
+
+            // ==========================================
+            // FASE 1: RETRACT ANIMATION (0.35s)
+            // Kartu ditarik turun meluncur ke dek meja
+            // ==========================================
+            if (_hasDealt && cardTransforms != null && cardObjects != null)
             {
+                float retractDuration = 0.35f;
+                float retractElapsed = 0f;
+
+                Vector2[] startPositions = new Vector2[cardTransforms.Length];
+                for (int i = 0; i < cardTransforms.Length; i++)
+                {
+                    if (cardTransforms[i] != null) startPositions[i] = cardTransforms[i].anchoredPosition;
+                }
+
+                AudioManager.Instance?.PlayCardFlip();
+
+                while (retractElapsed < retractDuration)
+                {
+                    retractElapsed += Time.deltaTime;
+                    float t = Mathf.SmoothStep(0f, 1f, retractElapsed / retractDuration);
+
+                    for (int i = 0; i < cardTransforms.Length; i++)
+                    {
+                        if (cardTransforms[i] != null && cardObjects[i] != null && cardObjects[i].activeSelf)
+                        {
+                            cardTransforms[i].anchoredPosition = Vector2.Lerp(startPositions[i], new Vector2(0f, -600f), t);
+                            cardTransforms[i].localScale = Vector3.Lerp(Vector3.one, new Vector3(0.4f, 0.4f, 1f), t);
+                        }
+                    }
+
+                    yield return null;
+                }
+
                 foreach (var card in cardObjects)
                 {
                     if (card != null) card.SetActive(false);
                 }
             }
 
-            // Update status tombol
-            if (bottomDeckButton != null) bottomDeckButton.interactable = false;
-            if (shuffleButtonText != null) shuffleButtonText.text = "SHUFFLING...";
-
-            // Tampilkan status pill
+            // ==========================================
+            // FASE 2: RIFFLE, ROTATING ICON & SPARKLES (3.0s)
+            // ==========================================
             if (shuffleStatusPill != null) shuffleStatusPill.SetActive(true);
             if (shuffleStatusText != null) shuffleStatusText.text = "Shuffling deck (3s)...";
+            if (shuffleSparkles != null) shuffleSparkles.SetActive(true);
 
             AudioManager.Instance?.PlayCardFlip();
 
-            // Efek getar tumpukan kartu meja
-            Vector2 origPos = bottomDeckTransform != null ? bottomDeckTransform.anchoredPosition : Vector2.zero;
-            float elapsed = 0f;
+            Vector2 deckOriginalPos = bottomDeckTransform != null ? bottomDeckTransform.anchoredPosition : Vector2.zero;
+            float shuffleElapsed = 0f;
+            float nextSfxTime = 0.7f;
 
-            while (elapsed < 3.0f)
+            while (shuffleElapsed < 3.0f)
             {
-                elapsed += Time.deltaTime;
+                shuffleElapsed += Time.deltaTime;
 
-                if (bottomDeckTransform != null)
+                // Putar ikon panah shuffle
+                if (shuffleIconTransform != null)
                 {
-                    float jitterX = Random.Range(-4f, 4f);
-                    float jitterY = Random.Range(-3f, 3f);
-                    bottomDeckTransform.anchoredPosition = origPos + new Vector2(jitterX, jitterY);
+                    shuffleIconTransform.Rotate(0f, 0f, -540f * Time.deltaTime);
                 }
 
-                if (elapsed >= 2.0f && shuffleStatusText != null)
+                // Getaran riffle shuffle pada dek meja
+                if (bottomDeckTransform != null)
+                {
+                    float jitterX = Random.Range(-5f, 5f);
+                    float jitterY = Random.Range(-3f, 3f);
+                    bottomDeckTransform.anchoredPosition = deckOriginalPos + new Vector2(jitterX, jitterY);
+                }
+
+                // Update hitung mundur status pill
+                if (shuffleElapsed >= 2.0f && shuffleStatusText != null)
                 {
                     shuffleStatusText.text = "Shuffling deck (1s)...";
                 }
-                else if (elapsed >= 1.0f && shuffleStatusText != null)
+                else if (shuffleElapsed >= 1.0f && shuffleStatusText != null)
                 {
                     shuffleStatusText.text = "Shuffling deck (2s)...";
+                }
+
+                // Suara desir kartu berulang selama kocok
+                if (shuffleElapsed >= nextSfxTime)
+                {
+                    AudioManager.Instance?.PlayCardFlip();
+                    nextSfxTime += 0.7f;
                 }
 
                 yield return null;
             }
 
-            // Kembalikan posisi tumpukan kartu meja
+            // Hentikan efek getaran dan rotasi
             if (bottomDeckTransform != null)
             {
-                bottomDeckTransform.anchoredPosition = origPos;
+                bottomDeckTransform.anchoredPosition = deckOriginalPos;
+            }
+            if (shuffleIconTransform != null)
+            {
+                shuffleIconTransform.localEulerAngles = Vector3.zero;
+            }
+            if (shuffleSparkles != null)
+            {
+                shuffleSparkles.SetActive(false);
             }
 
-            // Muat batch soal baru secara acak
-            LoadMissionDeck();
-
-            // Bagikan kartu
+            // ==========================================
+            // FASE 3: DEALING CARDS UPWARD (STAGGERED)
+            // ==========================================
             if (shuffleStatusText != null)
             {
                 shuffleStatusText.text = "Dealing 5 mission cards!";
             }
-            AudioManager.Instance?.PlayCardFlip();
 
-            DealCardsImmediately();
+            // Muat batch soal baru secara acak dari repository
+            LoadMissionDeck();
 
-            // Tunggu 0.8 detik sebelum menyembunyikan status pill
-            yield return new WaitForSeconds(0.8f);
+            // Animasikan pembagian kartu naik satu per satu
+            int totalCards = cardObjects != null ? Mathf.Min(cardObjects.Length, _currentBatch.Count) : 0;
+            float dealDuration = 0.35f;
+
+            for (int i = 0; i < totalCards; i++)
+            {
+                int cardIndex = i;
+                if (cardObjects[cardIndex] != null && cardTransforms[cardIndex] != null)
+                {
+                    cardObjects[cardIndex].SetActive(true);
+                    cardTransforms[cardIndex].anchoredPosition = new Vector2(0f, -600f);
+                    cardTransforms[cardIndex].localScale = new Vector3(0.4f, 0.4f, 1f);
+                    cardTransforms[cardIndex].localEulerAngles = Vector3.zero;
+
+                    StartCoroutine(AnimateSingleCardDeal(cardTransforms[cardIndex], _fannedPositions[cardIndex], _fannedRotations[cardIndex], dealDuration));
+                    AudioManager.Instance?.PlayCardFlip();
+                }
+
+                yield return new WaitForSeconds(0.08f);
+            }
+
+            // Tunggu hingga kartu terakhir selesai mencapai formasi kipas
+            yield return new WaitForSeconds(dealDuration + 0.1f);
+            _hasDealt = true;
+
+            // ==========================================
+            // FASE 4: SETTLE & IDLE STATE
+            // ==========================================
+            yield return new WaitForSeconds(0.7f);
 
             if (shuffleStatusPill != null) shuffleStatusPill.SetActive(false);
             if (bottomDeckButton != null) bottomDeckButton.interactable = true;
+            if (deckPileButton != null) deckPileButton.interactable = true;
             if (shuffleButtonText != null) shuffleButtonText.text = "SHUFFLE AGAIN";
 
             _isShuffling = false;
             _shuffleCoroutine = null;
+        }
+
+        /// <summary>
+        /// Coroutine pembantu untuk menganimasikan kartu tunggal meluncur naik dari dek ke posisi kipas.
+        /// </summary>
+        private IEnumerator AnimateSingleCardDeal(RectTransform cardTr, Vector2 targetPos, float targetRotZ, float duration)
+        {
+            if (cardTr == null) yield break;
+
+            Vector2 startPos = cardTr.anchoredPosition;
+            Vector3 startScale = cardTr.localScale;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+
+                cardTr.anchoredPosition = Vector2.Lerp(startPos, targetPos, t);
+                cardTr.localScale = Vector3.Lerp(startScale, Vector3.one, t);
+                cardTr.localEulerAngles = new Vector3(0f, 0f, Mathf.Lerp(0f, targetRotZ, t));
+
+                yield return null;
+            }
+
+            cardTr.anchoredPosition = targetPos;
+            cardTr.localScale = Vector3.one;
+            cardTr.localEulerAngles = new Vector3(0f, 0f, targetRotZ);
         }
 
         /// <summary>

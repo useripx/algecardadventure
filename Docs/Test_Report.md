@@ -69,13 +69,14 @@
 | **TC-MISSION-06** | `MissionCardController` | Klik tombol Continue | Menyimpan soal aktif ke sesi, mencatat completed ID, dan menuju Screen 04 | **PASS** |
 | **TC-MISSION-07** | `MissionCardController` | Klik tombol Back to Cards | Menutup modal detail misi dan mengembalikan tampilan ke kartu kipas | **PASS** |
 | **TC-MISSION-08** | `MissionCardController` | Eksekusi deal kartu awal | Mengaktifkan formasi kipas dan menandai `HasDealt` bernilai true | **PASS** |
+| **TC-MISSION-09** | `MissionCardController` | Eksekusi `OnShuffleClicked` | Memulai urutan kocok, menandai `IsShuffling = true`, dan mengunci interaksi tombol | **PASS** |
 
 ---
 
 ## 📋 Ringkasan Hasil Pengujian Terakhir
 
-- **Total Kasus Uji:** 38
-- **Lulus (PASS):** 38 (100%)
+- **Total Kasus Uji:** 39
+- **Lulus (PASS):** 39 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

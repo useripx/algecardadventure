@@ -137,4 +137,25 @@
 - [x] Keputusan `DEC-20` dicatat di `Docs/Decision_Log.md`.
 - [x] Changelog `changelog/17/10/2026/19/15.md` dibuat (**Pilar 5**).
 
+---
+
+## 📋 Checklist Batch 7 (Phase 5 — Interaktivitas Penuh & Animasi Shuffle 4-Fase Sesuai `code.html`)
+
+- [x] Root cause interaktivitas ditemukan: `InputSystemUIInputModule` di `EventSystem` kehilangan binding `m_ActionsAsset` dan `m_PointAction`.
+- [x] `EventSystem` pada `03_MissionCard.unity` diperbaiki secara resmi:
+  - `m_ActionsAsset` terhubung ke DefaultInputActions (`ca9f5fa95ffab41fb9a615ab714db018`).
+  - `m_PointAction` terhubung ke aksi pointer kursor (`-1654692200621890270`).
+  - Klik mouse dan sentuhan jari terdeteksi seketika pada seluruh canvas UI.
+- [x] Komponen `Button` dan `TargetGraphic` ditambahkan ke `StationaryTopCard` (ID 1620) sehingga seluruh area tumpukan kartu meja bawah dapat diklik pemain.
+- [x] GameObject `ShuffleIcon` (ID 1640) dan `DeckSparkles` (ID 1650) ditambahkan ke scene Unity.
+- [x] Siklus animasi shuffle 4-fase diimplementasikan 1:1 sesuai prototipe acuan desainer `code.html` di `MissionCardController.cs`:
+  - **Fase 1 (Retract)**: Kartu kipas di atas meluncur turun ke dek meja `(0, -600)` dalam 0.35s dan mengecil smooth.
+  - **Fase 2 (Riffle & Sparkles 3s)**: Tumpukan meja bergetar, ikon panah shuffle berputar kencang, kilau emas berkedip, status pill melayang menghitung mundur `(3s)... -> (2s)... -> (1s)...`, SFX desir kartu dimainkan berkala.
+  - **Fase 3 (Dealing Upward)**: Status pill berganti jadi *"Dealing 5 mission cards!"*, 5 kartu baru ditarik dari `banksoal.json` dan meluncur naik satu per satu secara berurutan (*staggered delay* 0.08s) ke posisi kipas melengkung (+14° s.d. -14°).
+  - **Fase 4 (Settle & Glow)**: Tombol aktif kembali bertuliskan *"SHUFFLE AGAIN"*, siap diklik ulang.
+- [x] Unit test `TC_MISSION_09` dibuat di `MissionCardTests.cs` (verifikasi pemanggilan `OnShuffleClicked`, status `IsShuffling`, dan penguncian tombol).
+- [x] Rangkaian 39 kasus uji otomatis diverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
+- [x] Keputusan arsitektur `DEC-21` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
+- [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
 

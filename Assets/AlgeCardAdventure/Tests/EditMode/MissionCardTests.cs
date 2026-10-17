@@ -190,5 +190,25 @@ namespace AlgeCardAdventure.Tests
                 Object.DestroyImmediate(controllerGo);
             }
         }
+
+        [Test]
+        public void TC_MISSION_09_MissionCardController_ShuffleRoutine_SetsIsShufflingTrue()
+        {
+            var controllerGo = new GameObject("TestMissionController");
+            var controller = controllerGo.AddComponent<MissionCardController>();
+
+            try
+            {
+                controller.LoadMissionDeck();
+                Assert.IsFalse(controller.IsShuffling);
+
+                controller.OnShuffleClicked();
+                Assert.IsTrue(controller.IsShuffling, "IsShuffling harus bernilai true saat OnShuffleClicked dipanggil.");
+            }
+            finally
+            {
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
     }
 }
