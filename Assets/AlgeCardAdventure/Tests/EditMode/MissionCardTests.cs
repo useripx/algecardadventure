@@ -145,5 +145,50 @@ namespace AlgeCardAdventure.Tests
                 Object.DestroyImmediate(sessionGo);
             }
         }
+
+        [Test]
+        public void TC_MISSION_07_MissionCardController_BackToCards_HidesModal()
+        {
+            var controllerGo = new GameObject("TestMissionController");
+            var controller = controllerGo.AddComponent<MissionCardController>();
+
+            var modalGo = new GameObject("MissionDetailModal");
+            modalGo.SetActive(true);
+
+            // Set modal via reflection
+            var field = typeof(MissionCardController).GetField("missionDetailModal", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            field.SetValue(controller, modalGo);
+
+            try
+            {
+                Assert.IsTrue(modalGo.activeSelf);
+                controller.OnBackToCardsClicked();
+                Assert.IsFalse(modalGo.activeSelf, "Modal misi harus tertutup setelah tombol OnBackToCardsClicked ditekan.");
+            }
+            finally
+            {
+                Object.DestroyImmediate(modalGo);
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
+
+        [Test]
+        public void TC_MISSION_08_MissionCardController_DealCardsImmediately_SetsHasDealt()
+        {
+            var controllerGo = new GameObject("TestMissionController");
+            var controller = controllerGo.AddComponent<MissionCardController>();
+
+            try
+            {
+                controller.LoadMissionDeck();
+                controller.DealCardsImmediately();
+                Assert.IsTrue(controller.HasDealt);
+                Assert.IsFalse(controller.IsShuffling);
+            }
+            finally
+            {
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
     }
 }

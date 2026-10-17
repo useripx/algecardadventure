@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,9 @@ namespace AlgeCardAdventure.UI
     /// <summary>
     /// Mengontrol interaksi pada Screen 03 — Mission Cards.
     /// Mengelola penarikan batch 5 kartu acak dari banksoal.json sesuai level aktif,
-    /// animasi buka kartu (flip), modal detail soal misi, dan navigasi ke Screen 04.
+    /// animasi kocok kartu (riffle shuffle 3 detik), formasi kipas kartu (fanned arc),
+    /// modal detail soal misi dengan tombol 'Continue >' dan '✕ Back to Cards',
+    /// serta navigasi ke Screen 04.
     /// </summary>
     public class MissionCardController : MonoBehaviour
     {
@@ -20,9 +23,17 @@ namespace AlgeCardAdventure.UI
         [SerializeField] private Text levelTitleText;
         [SerializeField] private Text levelSubtitleText;
 
-        [Header("Deretan Kartu Misi")]
+        [Header("Deretan Kartu Misi (Kipas)")]
         [SerializeField] private Button[] cardButtons;
         [SerializeField] private GameObject[] cardObjects;
+        [SerializeField] private RectTransform[] cardTransforms;
+
+        [Header("Tumpukan Kartu Meja & Tombol Shuffle")]
+        [SerializeField] private Button bottomDeckButton;
+        [SerializeField] private Text shuffleButtonText;
+        [SerializeField] private RectTransform bottomDeckTransform;
+        [SerializeField] private GameObject shuffleStatusPill;
+        [SerializeField] private Text shuffleStatusText;
 
         [Header("Modal Detail Misi")]
         [SerializeField] private GameObject missionDetailModal;
@@ -31,13 +42,38 @@ namespace AlgeCardAdventure.UI
         [SerializeField] private Text missionInstructionText;
         [SerializeField] private Text equationPreviewText;
         [SerializeField] private Button continueButton;
+        [SerializeField] private Button backToCardsButton;
 
         private List<QuestionModel> _currentBatch = new List<QuestionModel>();
         private QuestionModel _selectedQuestion;
         private QuestionRepository _repository;
+        private bool _isShuffling = false;
+        private bool _hasDealt = false;
+        private Coroutine _shuffleCoroutine;
+
+        // Formasi melengkung (fanned arc) untuk 5 kartu di canvas 1080x1920
+        private readonly Vector2[] _fannedPositions = new Vector2[]
+        {
+            new Vector2(-280f, -35f),
+            new Vector2(-140f, -5f),
+            new Vector2(0f, 10f),
+            new Vector2(140f, -5f),
+            new Vector2(280f, -35f)
+        };
+
+        private readonly float[] _fannedRotations = new float[]
+        {
+            14f,
+            7f,
+            0f,
+            -7f,
+            -14f
+        };
 
         public IReadOnlyList<QuestionModel> CurrentBatch => _currentBatch;
         public QuestionModel SelectedQuestion => _selectedQuestion;
+        public bool IsShuffling => _isShuffling;
+        public bool HasDealt => _hasDealt;
 
         private void Start()
         {
@@ -55,14 +91,40 @@ namespace AlgeCardAdventure.UI
                 continueButton.onClick.AddListener(OnContinueClicked);
             }
 
+            if (backToCardsButton != null)
+            {
+                backToCardsButton.onClick.AddListener(OnBackToCardsClicked);
+            }
+
+            if (bottomDeckButton != null)
+            {
+                bottomDeckButton.onClick.AddListener(OnShuffleClicked);
+            }
+
             // Sembunyikan modal di awal
             if (missionDetailModal != null)
             {
                 missionDetailModal.SetActive(false);
             }
 
-            // Muat dan tampilkan batch kartu misi
+            if (shuffleStatusPill != null)
+            {
+                shuffleStatusPill.SetActive(false);
+            }
+
+            if (shuffleButtonText != null)
+            {
+                shuffleButtonText.text = "SHUFFLE HERE";
+            }
+
+            // Atur posisi awal kartu tersembunyi / bertumpuk di meja
+            ApplyInitialCardLayout();
+
+            // Muat data soal misi dari repository
             LoadMissionDeck();
+
+            // Deal otomatis kartu pertama kali agar pemain langsung dapat memilih
+            DealCardsImmediately();
         }
 
         /// <summary>
@@ -99,25 +161,150 @@ namespace AlgeCardAdventure.UI
                 int cardIndex = i;
                 if (cardIndex < _currentBatch.Count)
                 {
-                    if (cardObjects != null && cardIndex < cardObjects.Length && cardObjects[cardIndex] != null)
-                    {
-                        cardObjects[cardIndex].SetActive(true);
-                    }
-
                     if (cardButtons[cardIndex] != null)
                     {
                         cardButtons[cardIndex].onClick.RemoveAllListeners();
                         cardButtons[cardIndex].onClick.AddListener(() => OnCardSelected(cardIndex));
                     }
                 }
-                else
+            }
+        }
+
+        /// <summary>
+        /// Mengatur posisi awal 5 kartu agar tersusun melengkung (kipas).
+        /// </summary>
+        private void ApplyInitialCardLayout()
+        {
+            if (cardTransforms == null) return;
+
+            for (int i = 0; i < cardTransforms.Length; i++)
+            {
+                if (cardTransforms[i] != null && i < _fannedPositions.Length)
                 {
-                    if (cardObjects != null && cardIndex < cardObjects.Length && cardObjects[cardIndex] != null)
-                    {
-                        cardObjects[cardIndex].SetActive(false);
-                    }
+                    cardTransforms[i].anchoredPosition = _fannedPositions[i];
+                    cardTransforms[i].localEulerAngles = new Vector3(0f, 0f, _fannedRotations[i]);
                 }
             }
+        }
+
+        /// <summary>
+        /// Menampilkan kartu secara langsung ke formasi kipas.
+        /// </summary>
+        public void DealCardsImmediately()
+        {
+            int cardCount = cardObjects != null ? cardObjects.Length : 0;
+            for (int i = 0; i < cardCount; i++)
+            {
+                if (cardObjects[i] != null)
+                {
+                    cardObjects[i].SetActive(i < _currentBatch.Count);
+                }
+            }
+
+            ApplyInitialCardLayout();
+            _hasDealt = true;
+
+            if (shuffleButtonText != null)
+            {
+                shuffleButtonText.text = "SHUFFLE AGAIN";
+            }
+        }
+
+        /// <summary>
+        /// Dipanggil saat tombol SHUFFLE di meja bawah ditekan.
+        /// </summary>
+        public void OnShuffleClicked()
+        {
+            if (_isShuffling) return;
+
+            if (_shuffleCoroutine != null)
+            {
+                StopCoroutine(_shuffleCoroutine);
+            }
+
+            _shuffleCoroutine = StartCoroutine(ShuffleSequenceRoutine());
+        }
+
+        /// <summary>
+        /// Coroutine urutan kocok kartu 3 detik sesuai spesifikasi HTML template.
+        /// </summary>
+        private IEnumerator ShuffleSequenceRoutine()
+        {
+            _isShuffling = true;
+
+            // Sembunyikan atau tarik kartu ke bawah saat dikocok
+            if (cardObjects != null)
+            {
+                foreach (var card in cardObjects)
+                {
+                    if (card != null) card.SetActive(false);
+                }
+            }
+
+            // Update status tombol
+            if (bottomDeckButton != null) bottomDeckButton.interactable = false;
+            if (shuffleButtonText != null) shuffleButtonText.text = "SHUFFLING...";
+
+            // Tampilkan status pill
+            if (shuffleStatusPill != null) shuffleStatusPill.SetActive(true);
+            if (shuffleStatusText != null) shuffleStatusText.text = "Shuffling deck (3s)...";
+
+            AudioManager.Instance?.PlayCardFlip();
+
+            // Efek getar tumpukan kartu meja
+            Vector2 origPos = bottomDeckTransform != null ? bottomDeckTransform.anchoredPosition : Vector2.zero;
+            float elapsed = 0f;
+
+            while (elapsed < 3.0f)
+            {
+                elapsed += Time.deltaTime;
+
+                if (bottomDeckTransform != null)
+                {
+                    float jitterX = Random.Range(-4f, 4f);
+                    float jitterY = Random.Range(-3f, 3f);
+                    bottomDeckTransform.anchoredPosition = origPos + new Vector2(jitterX, jitterY);
+                }
+
+                if (elapsed >= 2.0f && shuffleStatusText != null)
+                {
+                    shuffleStatusText.text = "Shuffling deck (1s)...";
+                }
+                else if (elapsed >= 1.0f && shuffleStatusText != null)
+                {
+                    shuffleStatusText.text = "Shuffling deck (2s)...";
+                }
+
+                yield return null;
+            }
+
+            // Kembalikan posisi tumpukan kartu meja
+            if (bottomDeckTransform != null)
+            {
+                bottomDeckTransform.anchoredPosition = origPos;
+            }
+
+            // Muat batch soal baru secara acak
+            LoadMissionDeck();
+
+            // Bagikan kartu
+            if (shuffleStatusText != null)
+            {
+                shuffleStatusText.text = "Dealing 5 mission cards!";
+            }
+            AudioManager.Instance?.PlayCardFlip();
+
+            DealCardsImmediately();
+
+            // Tunggu 0.8 detik sebelum menyembunyikan status pill
+            yield return new WaitForSeconds(0.8f);
+
+            if (shuffleStatusPill != null) shuffleStatusPill.SetActive(false);
+            if (bottomDeckButton != null) bottomDeckButton.interactable = true;
+            if (shuffleButtonText != null) shuffleButtonText.text = "SHUFFLE AGAIN";
+
+            _isShuffling = false;
+            _shuffleCoroutine = null;
         }
 
         /// <summary>
@@ -125,6 +312,8 @@ namespace AlgeCardAdventure.UI
         /// </summary>
         public void OnCardSelected(int index)
         {
+            if (_isShuffling) return;
+
             if (_currentBatch == null || index < 0 || index >= _currentBatch.Count)
             {
                 Debug.LogWarning($"[MissionCardController] Indeks kartu {index} tidak valid.");
@@ -142,17 +331,17 @@ namespace AlgeCardAdventure.UI
 
             if (missionNumberText != null)
             {
-                missionNumberText.text = $"Question {currentNumber} of {GameSession.MaxQuestionsPerSession}";
+                missionNumberText.text = $"Mission {index + 1}";
             }
 
             if (missionTitleText != null)
             {
-                missionTitleText.text = _selectedQuestion.title ?? "Algebra Mission";
+                missionTitleText.text = _selectedQuestion.title ?? "Variables & Simplification";
             }
 
             if (missionInstructionText != null)
             {
-                missionInstructionText.text = _selectedQuestion.question_text ?? string.Empty;
+                missionInstructionText.text = _selectedQuestion.question_text ?? "Simplify the following algebraic expressions.";
             }
 
             if (equationPreviewText != null)
@@ -170,6 +359,20 @@ namespace AlgeCardAdventure.UI
             if (missionDetailModal != null)
             {
                 missionDetailModal.SetActive(true);
+            }
+        }
+
+        /// <summary>
+        /// Menutup modal detail misi dan kembali ke deretan kartu kipas.
+        /// </summary>
+        public void OnBackToCardsClicked()
+        {
+            Debug.Log("[MissionCardController] Menutup modal detail misi, kembali ke kartu.");
+            AudioManager.Instance?.PlayButtonClick();
+
+            if (missionDetailModal != null)
+            {
+                missionDetailModal.SetActive(false);
             }
         }
 

@@ -83,4 +83,29 @@
 - [x] Dokumentasi `Docs/Task_Status.md` dan `Docs/Test_Report.md` diperbarui (**Pilar 5**).
 - [x] Changelog `changelog/17/10/2026/17/00.md` dibuat (**Pilar 5**).
 
+---
+
+## 📋 Checklist Batch 5 (Phase 5 Penyelarasan Penuh dengan Template HTML `code.html`)
+
+- [x] Generator aset transparan `scratch/build_clean_sprites.py` menghasilkan:
+  - `Assets/AlgeCardAdventure/Art/Cards/mission_card_back.png` (Kartu biru royal gradien dengan border emas, corner dots, kompas bintang, dan tanda tanya `?`).
+  - `Assets/AlgeCardAdventure/Art/Cards/btn_shuffle_badge.png` (Badge tombol emas "SHUFFLE HERE" / "SHUFFLE AGAIN" dengan ikon shuffle).
+  - `Assets/AlgeCardAdventure/Art/Backgrounds/mission_card_bg.png` (Latar bersih pemandangan fantasi kastil & bukit, maskot jangkrik hijau dan oranye mengapit balon dialog, meja kayu berdaun, tumpukan buku Science & Math, dan peta kompas antik).
+- [x] Formasi 5 kartu kipas melengkung (*fanned arc*) diterapkan pada `03_MissionCard.unity`:
+  - Card 0: X -280, Y -35, Rot +14°
+  - Card 1: X -140, Y -5,  Rot +7°
+  - Card 2: X 0,    Y 10,  Rot 0° (puncak kipas)
+  - Card 3: X 140,  Y -5,  Rot -7°
+  - Card 4: X 280,  Y -35, Rot -14°
+- [x] Tumpukan meja diam (*stationary draw deck*) dipasang di bawah tengah dengan tombol emas "SHUFFLE HERE" (berganti jadi "SHUFFLE AGAIN").
+- [x] Mekanisme kocok kartu 3 detik (*3-second shuffle routine*) diimplementasikan di `MissionCardController.cs`:
+  - Animasi getar tumpukan kartu meja (*riffle vibration*).
+  - Floating status pill countdown: "Shuffling deck (3s)..." -> "2s..." -> "1s..." -> "Dealing 5 mission cards!".
+  - Efek audio desir kartu saat kocok dan saat dealing.
+- [x] Tombol penutup *"✕ Back to Cards"* diintegrasikan pada modal misi sehingga pemain dapat menutup modal tanpa melanjutkan dan memilih kartu lain.
+- [x] Unit test baru `TC_MISSION_07` (Back to Cards dismiss) dan `TC_MISSION_08` (Deal cards immediately) dibuat.
+- [x] Seluruh 38 kasus uji otomatis diverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
+- [x] Keputusan `DEC-19` dicatat di `Docs/Decision_Log.md`.
+- [x] Changelog `changelog/17/10/2026/17/45.md` dibuat (**Pilar 5**).
+
 

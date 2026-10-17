@@ -67,13 +67,15 @@
 | **TC-MISSION-04** | `ProceduralAudio` | Pembuatan klip Cozy Fantasy BGM (loop 8 detik) | Klip valid, loopable, frekuensi 22050Hz, dan bebas exception | **PASS** |
 | **TC-MISSION-05** | `MissionCardController` | Pemilihan kartu dari deretan misteri | Mengisi objek `SelectedQuestion` secara akurat sesuai kartu yang diklik | **PASS** |
 | **TC-MISSION-06** | `MissionCardController` | Klik tombol Continue | Menyimpan soal aktif ke sesi, mencatat completed ID, dan menuju Screen 04 | **PASS** |
+| **TC-MISSION-07** | `MissionCardController` | Klik tombol Back to Cards | Menutup modal detail misi dan mengembalikan tampilan ke kartu kipas | **PASS** |
+| **TC-MISSION-08** | `MissionCardController` | Eksekusi deal kartu awal | Mengaktifkan formasi kipas dan menandai `HasDealt` bernilai true | **PASS** |
 
 ---
 
 ## 📋 Ringkasan Hasil Pengujian Terakhir
 
-- **Total Kasus Uji:** 36
-- **Lulus (PASS):** 36 (100%)
+- **Total Kasus Uji:** 38
+- **Lulus (PASS):** 38 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)
