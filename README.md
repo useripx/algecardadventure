@@ -68,6 +68,7 @@ flowchart LR
 ## 🏛️ Tata Kelola & Standar Kerja (Universal Governance)
 
 Proyek ini mematuhi **8 Pilar Standar Kerja Universal**:
+
 - **Pilar 1 (ZERO-CODE Approval Gate):** Tidak ada perubahan kode atau konfigurasi tanpa rencana tertulis yang disetujui pemilik proyek.
 - **Pilar 2 (Git Branching Strategy):** Branch `main` adalah produksi tertutup (hanya di-merge oleh Yogi Ario). Seluruh integrasi dikerjakan di branch `develop` atau `feature/*`.
 - **Pilar 3 (Zero Secret Leakage):** Dilindungi `.gitignore` standar sejak hari pertama.
@@ -89,7 +90,7 @@ Proyek ini mematuhi **8 Pilar Standar Kerja Universal**:
    git checkout develop
    ```
 3. Buka proyek melalui Unity Hub.
-4. Jalankan pengujian otomatis melalui menu Unity:  
+4. Jalankan pengujian otomatis melalui menu Unity:
    `Window` → `General` → `Test Runner` → pilih tab `EditMode` → klik `Run All`.
 
 ---

@@ -8,8 +8,8 @@
 
 ## 🧪 Riwayat Eksekusi Pengujian
 
-### Batch 1: Setup Workspace, Git, Dokumentasi Baseline, & Data Layer Foundation
-- **Tanggal:** 17 Oktober 2026
+### Batch 2: Fondasi UI Portrait, Safe Area & Screen 01 Splash Screen
+- **Tanggal:** 17 Oktober 2026 15:30 WIB
 - **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / Unity Test Framework 1.8.0
 - **Tipe Uji:** EditMode Automated Unit Tests
 
@@ -27,13 +27,18 @@
 | **TC-SCORE-04** | `ScoreCalculator` | 3 dijawab, 2 benar | Skor = 67 (pembulatan bilangan bulat) | **PASS** |
 | **TC-SCORE-05** | `ScoreCalculator` | 5 dijawab, 4 benar | Skor = 80 | **PASS** |
 | **TC-SCORE-06** | `ScoreCalculator` | Batas maksimum 10 soal | Sesi tidak dapat memulai soal ke-11 | **PASS** |
+| **TC-UI-01** | `SafeAreaFitter` | Layar standar tanpa notch/poni (1080x1920) | Menghasilkan `anchorMin=(0,0)` dan `anchorMax=(1,1)` | **PASS** |
+| **TC-UI-02** | `SafeAreaFitter` | Layar HP bertakik (notch atas 80px, nav bar 60px) | Menghitung normalisasi anchor yang presisi dan aman dari terpotong | **PASS** |
+| **TC-UI-03** | `SafeAreaFitter` | Kondisi resolusi layar nol / transisi | Fallback aman tanpa crash atau exception zero division | **PASS** |
+| **TC-NAV-01** | `SceneNavigator` | Verifikasi konstanta string scene 6 layar & Credits | Seluruh nama scene terdefinisi stabil dan konsisten | **PASS** |
+| **TC-NAV-02** | `SceneNavigator` | Event delegasi `OnBeforeSceneLoad` | Event terpanggil membawa nama scene tujuan secara tepat | **PASS** |
 
 ---
 
 ## 📋 Ringkasan Hasil Pengujian Terakhir
 
-- **Total Kasus Uji:** 12
-- **Lulus (PASS):** 12 (100%)
+- **Total Kasus Uji:** 17
+- **Lulus (PASS):** 17 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

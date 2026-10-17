@@ -25,6 +25,7 @@ Dokumen ini mencatat seluruh keputusan arsitektural, teknis, dan operasional pen
 | **DEC-12** | 17/10/2026 | Exit Dialog | Keluar sesi memerlukan popup konfirmasi; jika disetujui, sesi aktif direset dan kembali ke Splash. | Melindungi pemain dari ketidaksengajaan memencet tombol keluar. | **APPROVED** |
 | **DEC-13** | 17/10/2026 | Review Gate UI | Pengembangan UI dikerjakan bertahap satu per satu (Screen 01 s.d. 06) dengan persetujuan Yogi. | Memastikan kualitas visual dan interaksi terverifikasi sebelum lanjut. | **APPROVED** |
 | **DEC-14** | 17/10/2026 | Proteksi Aset & Git | `Docs/Ui Template/` berstatus Read-Only; branch `main` terlindungi, AI bekerja di `develop`. | Mencegah kerusakan aset asli dan menjamin stabilitas rilis produksi. | **APPROVED** |
+| **DEC-15** | 17/10/2026 | Credits Scene & Atribusi | Saat pemain menekan 'Exit' pada Screen 06 (Score Results), game menampilkan Credits Scene (Game Dev: Yogi Ario, Game Planner & Math Expert: Nisa Aprilia, Institusi: Universitas Nusantara PGRI Kediri) sebelum kembali ke Splash Screen. | Atribusi formal tim pengembang dan institusi pendidikan pendukung; diimplementasikan pada Phase 8. | **APPROVED** |
 
 ---
 

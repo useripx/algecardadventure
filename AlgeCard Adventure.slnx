@@ -1,3 +1,5 @@
 ﻿<Solution>
+  <Project Path="AlgeCardAdventure.Runtime.csproj" />
+  <Project Path="AlgeCardAdventure.Tests.csproj" />
   <Project Path="Unity.2D.Welcome.csproj" />
 </Solution>
