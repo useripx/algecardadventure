@@ -1180,10 +1180,40 @@
     - `MissionTestRunner`: **14/14 PASS (100% PASS)**
     - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
     - **Total Pengujian Proyek: 73/73 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
-- [x] **Fase 6 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
-  - Keputusan arsitektur `DEC-55` dicatat di `Docs/Decision_Log.md`.
-  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/22/00.md` diperbarui.
+---
+
+## 📋 Checklist Batch 43 (Kalibrasi Kapasitas Kartu Fisik Dek Aljabar & Resolusi Progresi Stage 2 Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana tertulis `fix_board_card_capacity_and_stage2_progression_plan.md` disetujui eksplisit oleh Yogi Ario (*The user has approved this document* dengan komentar *"oke"*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Data 60 soal aljabar lokal dan evaluasi permainan berjalan 100% offline.
+- [x] **Fase 1 — Diagnosa & Kalibrasi Kapasitas Kartu Fisik (`banksoal.json`):**
+  - Mengembangkan script pendeteksi overflow `scratch/check_overflow.py` yang menganalisis ekspansi token angka 2-digit (`10`, `11`, `12` -> 2 kartu individual `1` dan `0`).
+  - Menemukan 6 soal yang membutuhkan 9 kartu fisik di Step 1: `HARD-011`, `HARD-013`, `HARD-016`, `HARD-017`, `HARD-019`, dan `NORMAL-016`.
+  - Mengembangkan dan mengeksekusi `scratch/apply_calibrated_banksoal.py` untuk menyederhanakan tahap substitusi menjadi $\le 7$ token (seperti `3y + 4 = 10`), menjamin 100% dari 60 soal muat utuh dalam 8 slot papan aljabar.
+  - Memverifikasi dengan `scratch/test_calibrated.py` bahwa 0 soal mengalami overflow.
+- [x] **Fase 2 — Pembaruan Logika Controller & Feedback Notice (`AlgebraBoardController.cs`):**
+  - Memperbarui `CheckIfRowIsComplete` agar tidak menampilkan notice mengecoh *"Row filled!"*, melainkan *"Equation ready! Tap 'Continue' to verify."*, memperjelas bahwa pemain dapat memvalidasi formula aljabar segera setelah kartu formula selesai disusun tanpa harus menunggu seluruh 8 kotak kosong terisi.
+  - Menambahkan shortcut responsif pada `OnDeckCardClicked` saat Stage 1 Mode Eliminasi aktif: klik kartu operator `+` atau `-` dari dek bawah langsung diteruskan ke `OnEliminationOperationClicked(token)`.
+  - Memastikan `ValidateStage` berhasil mengevaluasi formula aljabar dengan slot kosong trailing dan perangkaian token multi-digit secara mulus.
+- [x] **Fase 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan 2 pengujian unit pada `AlgebraBoardTests.cs` dan `BoardTestRunner`:
+    - `TC_BOARD_25_ValidationSucceeds_WithEmptyTrailingSlots`: Memastikan persamaan 5 kartu dengan 3 slot kosong di belakang berhasil divalidasi dan tidak menuntut dek penuh.
+    - `TC_BOARD_26_Hard011_SubstitutionStage1_AdvancesToStage2`: Memastikan `HARD-011` Stage 1 substitusi dengan 7 kartu fisik (`3, y, +, 4, =, 1, 0`) berhasil divalidasi dan menekan Continue sukses memajukan pemain ke Stage 2 (Step 2) tanpa terhambat.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **32/32 PASS (100% PASS)**
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 75/75 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+- [x] **Fase 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-56` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/22/30.md` diperbarui.
   - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
 
 
 

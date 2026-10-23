@@ -211,18 +211,28 @@
 | **TC_HARD_05** | `AlgebraBoardController` | Perumusan 4 tahap substitusi aljabar $\le 8$ token | Keempat tahap (Isolate, Substitute, Simplify, Result) terisi target tokens $\le 8$ | **PASS** |
 | **TC_HARD_06** | `banksoal.json` & `AlgebraBoardController` | Verifikasi seluruh 20 soal Hard SPLDV (10 Eliminasi, 10 Substitusi) | 20 soal lolos uji, target token $\le 8$, elimination_op valid, 0 deadlock | **PASS** |
 
+### Batch 43: Kalibrasi Kapasitas Kartu Fisik Dek Aljabar & Resolusi Progresi Stage 2 Layar 04
+- **Tanggal:** 23 Oktober 2026 22:30 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_BOARD_25** | `AlgebraBoardController` | Validasi sukses dengan slot kosong di belakang (*trailing empty slots*) | Persamaan 5 kartu dengan 3 slot kosong di belakang berhasil divalidasi dan pemain tidak dituntut mengisi penuh seluruh 8 kotak | **PASS** |
+| **TC_BOARD_26** | `banksoal.json` & `AlgebraBoardController` | Progresi Stage 1 Substitusi HARD-011 melangkah maju ke Stage 2 | Target Stage 1 disederhanakan menjadi 6 token aljabar (7 kartu fisik), muat utuh dalam 8 slot, validasi sukses, dan tombol Continue memajukan pemain ke Stage 2 | **PASS** |
+
 ---
 
-## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 42)
+## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 43)
 
 - **Total Test Suite Mandiri Proyek:** 5 Runner
-  - `BoardTestRunner`: **30/30 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_24`, `TC_HARD_01` s.d. `TC_HARD_06`)
+  - `BoardTestRunner`: **32/32 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_26`, `TC_HARD_01` s.d. `TC_HARD_06`)
   - `TFTestRunner`: **11/11 PASS** (`TC_TF_01` s.d. `TC_TF_11`)
   - `ChatbotTestRunner`: **8/8 PASS** (`TC_CHAT_01` s.d. `TC_CHAT_08`)
   - `MissionTestRunner`: **14/14 PASS** (`TC_MISSION_01` s.d. `TC_MISSION_14`)
   - `ScoreTestRunner`: **10/10 PASS** (`TC_SRES_01` s.d. `TC_SRES_10`)
-- **Total Kasus Uji Terverifikasi:** 73 Test
-- **Lulus (PASS):** 73 (100%)
+- **Total Kasus Uji Terverifikasi:** 75 Test
+- **Lulus (PASS):** 75 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

@@ -1094,14 +1094,20 @@ namespace AlgeCardAdventure.UI
         }
 
         /// <summary>
-        /// <summary>
-        /// <summary>
         /// Handler saat kartu pada dek diklik (Tap-to-Slot).
         /// Mengisi slot kosong pertama pada tahap aktif sesuai jumlah target token.
         /// </summary>
         public void OnDeckCardClicked(string token, string cardType)
         {
             if (IsAllStagesCompleted || CurrentStageIndex >= stages.Count) return;
+
+            // Jika sedang di Stage 1 Mode Eliminasi dan pemain mengklik kartu operator '+' atau '-',
+            // arahkan langsung ke OnEliminationOperationClicked untuk responsivitas maksimal
+            if (CurrentStageIndex == 1 && ActiveHardMode == HardAlgebraMode.Elimination && (token == "+" || token == "-"))
+            {
+                OnEliminationOperationClicked(token);
+                return;
+            }
 
             var currentStage = stages[CurrentStageIndex];
             int maxSlots = currentStage.slots.Count;
@@ -1230,7 +1236,7 @@ namespace AlgeCardAdventure.UI
 
             if (filledCount >= totalNeeded && totalNeeded > 0)
             {
-                ShowNotice("Row filled! Tap 'Continue' to verify.", true);
+                ShowNotice("Equation ready! Tap 'Continue' to verify.", true);
             }
         }
 

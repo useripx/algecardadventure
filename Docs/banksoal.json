@@ -991,14 +991,14 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Water Flow Rate of Two Tanks",
-          "question_text": "Sepuluh menit pengisian m ditambah 40 liter menghasilkan 90 liter. Tentukan nilai m!",
+          "question_text": "Empat menit pengisian ditambah m liter menghasilkan 9 liter. Tentukan nilai m!",
           "equation_model": [
-            "10m + 40 = 90"
+            "m + 4 = 9"
           ],
           "solution_steps": [
             "Waktu menit m",
-            "10m + 40 = 90",
-            "10m = 50",
+            "m + 4 = 9",
+            "m = 9 - 4",
             "m = 5"
           ],
           "final_answer": "5",
@@ -1338,7 +1338,7 @@
           ],
           "solution_steps": [
             "x = y + 2",
-            "Substitute x = y + 2: 2y + 4 + y = 10",
+            "Substitute x = y + 2: 3y + 4 = 10",
             "3y = 6",
             "x = 4"
           ],
@@ -1376,7 +1376,7 @@
           ],
           "solution_steps": [
             "y = x + 3",
-            "Substitute y = x + 3: 2x + x + 3 = 12",
+            "Substitute y = x + 3: 3x + 3 = 12",
             "3x = 9",
             "y = 6"
           ],
@@ -1433,7 +1433,7 @@
           ],
           "solution_steps": [
             "x = 2y + 3",
-            "Substitute x = 2y + 3: 4y + 6 + y = 11",
+            "Substitute x = 2y + 3: 5y + 6 = 11",
             "5y = 5",
             "x = 5"
           ],
@@ -1452,7 +1452,7 @@
           ],
           "solution_steps": [
             "x = y + 3",
-            "Substitute x = y + 3: y + 3 + 3y = 11",
+            "Substitute x = y + 3: 4y + 3 = 11",
             "4y = 8",
             "x = 5"
           ],
@@ -1490,7 +1490,7 @@
           ],
           "solution_steps": [
             "x = y + 1",
-            "Substitute x = y + 1: y + 1 + 2y = 10",
+            "Substitute x = y + 1: 3y + 1 = 10",
             "3y = 9",
             "x = 4"
           ],

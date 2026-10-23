@@ -946,6 +946,92 @@ namespace AlgeCardAdventure.Tests
             bool valid = _controller.ValidateStage(row);
             Assert.IsTrue(valid, "Penyusunan 8 kartu harus valid dan sukses divalidasi!");
         }
+
+        [Test]
+        public void TC_BOARD_25_ValidationSucceeds_WithEmptyTrailingSlots()
+        {
+            var row = new BoardStageRow();
+            for (int slotIdx = 0; slotIdx < 8; slotIdx++)
+            {
+                row.slots.Add(new CardSlotView());
+            }
+            row.targetTokens = new List<string> { "x", "=", "y", "+", "2" };
+
+            // Pemain hanya mengisi 5 slot sesuai target; 3 slot sisanya kosong
+            string[] testCards = { "x", "=", "y", "+", "2" };
+            for (int i = 0; i < testCards.Length; i++)
+            {
+                row.slots[i].SetToken(testCards[i], null, Color.black);
+            }
+
+            // Slot 5, 6, 7 tetap kosong
+            Assert.IsTrue(row.slots[5].IsEmpty, "Slot 5 harus tetap kosong!");
+            Assert.IsTrue(row.slots[6].IsEmpty, "Slot 6 harus tetap kosong!");
+            Assert.IsTrue(row.slots[7].IsEmpty, "Slot 7 harus tetap kosong!");
+
+            bool valid = _controller.ValidateStage(row);
+            Assert.IsTrue(valid, "Penyusunan 5 kartu dengan 3 slot kosong di belakang harus valid dan tidak menuntut dek penuh!");
+        }
+
+        [Test]
+        public void TC_BOARD_26_Hard011_SubstitutionStage1_AdvancesToStage2()
+        {
+            var q = new QuestionModel
+            {
+                id = "HARD-011",
+                ui_level = "Hard",
+                method = "substitution",
+                equation_model = new string[] { "x - y = 2", "2x + y = 10" },
+                solution_steps = new string[] {
+                    "Substitute x = y + 2: 3y + 4 = 10",
+                    "Substitute x = y + 2: 3y + 4 = 10",
+                    "3y = 6",
+                    "y = 2"
+                },
+                final_answer = "x = 4, y = 2"
+            };
+
+            GameSession.Instance.CurrentQuestion = q;
+            _controller.stages = new List<BoardStageRow>();
+            for (int s = 0; s < 4; s++)
+            {
+                var r = new BoardStageRow();
+                for (int slotIdx = 0; slotIdx < 8; slotIdx++)
+                {
+                    r.slots.Add(new CardSlotView());
+                }
+                _controller.stages.Add(r);
+            }
+
+            _controller.FormulateStagesFromQuestion(q);
+
+            // Verifikasi target Stage 1 adalah 6 token aljabar (muat di 8 slot)
+            Assert.LessOrEqual(_controller.stages[1].targetTokens.Count, 8, "Target Stage 1 untuk HARD-011 harus <= 8 token!");
+            Assert.AreEqual(6, _controller.stages[1].targetTokens.Count, "Target Stage 1 harus 6 token aljabar (3, y, +, 4, =, 10)!");
+
+            // Aktifkan Stage 1
+            _controller.SetStageActive(1);
+            Assert.AreEqual(1, _controller.CurrentStageIndex);
+
+            // Pemain memasukkan 7 kartu fisik ("3", "y", "+", "4", "=", "1", "0")
+            string[] physicalCards = { "3", "y", "+", "4", "=", "1", "0" };
+            for (int i = 0; i < physicalCards.Length; i++)
+            {
+                _controller.OnDeckCardClicked(physicalCards[i], "number");
+            }
+
+            // Slot ke-8 (index 7) tetap kosong
+            Assert.IsTrue(_controller.stages[1].slots[7].IsEmpty, "Slot ke-8 harus tetap kosong!");
+
+            // Validasi sukses
+            bool valid = _controller.ValidateStage(_controller.stages[1]);
+            Assert.IsTrue(valid, "Stage 1 substitusi HARD-011 harus valid!");
+
+            // Pemain menekan Continue -> harus berhasil pindah ke Stage 2 (Step 2)
+            _controller.OnContinueClicked();
+            Assert.IsTrue(_controller.stages[1].isCompleted, "Stage 1 harus berstatus completed!");
+            Assert.AreEqual(2, _controller.CurrentStageIndex, "Pemain harus berhasil maju ke Stage 2 tanpa terhambat!");
+        }
     }
 }
 
