@@ -197,18 +197,32 @@
 | **TC_BOARD_23** | `AlgebraBoardController` | Verifikasi seluruh 8 slot aktif dan dapat diisi | Baris tahap memiliki 8 slot, seluruh slot aktif dan kartu ke-8 berhasil masuk | **PASS** |
 | **TC_BOARD_24** | `AlgebraBoardController` | Validasi susunan persamaan matematika 8 token | Formula aljabar 8 kartu terisi berhasil divalidasi dan lolos tanpa hambatan | **PASS** |
 
+### Batch 42: Dual Mode Aljabar Khusus Level Hard — Eliminasi & Substitusi SPLDV Layar 04
+- **Tanggal:** 23 Oktober 2026 22:00 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_HARD_01** | `AlgebraBoardController` | Deteksi otomatis mode Eliminasi dan visualisasi ribbon | Ribbon container aktif, menampilkan teks 'ELIMINATION', mode internal Elimination | **PASS** |
+| **TC_HARD_02** | `AlgebraBoardController` | Deteksi otomatis mode Substitusi dan visualisasi ribbon | Ribbon container aktif, menampilkan teks 'SUBSTITUTION', mode internal Substitution | **PASS** |
+| **TC_HARD_03** | `AlgebraBoardController` | Mode standar pada level Easy dan Normal | Ribbon container tersembunyi, active mode None, perumusan persamaan standar terjaga | **PASS** |
+| **TC_HARD_04** | `AlgebraBoardController` | Interaktivitas & validasi tombol operasi eliminasi Stage 2 | Operasi salah ditolak, operasi benar diterima, slot 0 terisi token, auto-advance ke Stage 3 | **PASS** |
+| **TC_HARD_05** | `AlgebraBoardController` | Perumusan 4 tahap substitusi aljabar $\le 8$ token | Keempat tahap (Isolate, Substitute, Simplify, Result) terisi target tokens $\le 8$ | **PASS** |
+| **TC_HARD_06** | `banksoal.json` & `AlgebraBoardController` | Verifikasi seluruh 20 soal Hard SPLDV (10 Eliminasi, 10 Substitusi) | 20 soal lolos uji, target token $\le 8$, elimination_op valid, 0 deadlock | **PASS** |
+
 ---
 
-## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 41)
+## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 42)
 
 - **Total Test Suite Mandiri Proyek:** 5 Runner
-  - `BoardTestRunner`: **24/24 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_24`)
+  - `BoardTestRunner`: **30/30 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_24`, `TC_HARD_01` s.d. `TC_HARD_06`)
   - `TFTestRunner`: **11/11 PASS** (`TC_TF_01` s.d. `TC_TF_11`)
   - `ChatbotTestRunner`: **8/8 PASS** (`TC_CHAT_01` s.d. `TC_CHAT_08`)
   - `MissionTestRunner`: **14/14 PASS** (`TC_MISSION_01` s.d. `TC_MISSION_14`)
   - `ScoreTestRunner`: **10/10 PASS** (`TC_SRES_01` s.d. `TC_SRES_10`)
-- **Total Kasus Uji Terverifikasi:** 67 Test
-- **Lulus (PASS):** 67 (100%)
+- **Total Kasus Uji Terverifikasi:** 73 Test
+- **Lulus (PASS):** 73 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

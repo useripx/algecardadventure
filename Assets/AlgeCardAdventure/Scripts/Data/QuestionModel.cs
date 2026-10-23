@@ -38,6 +38,8 @@ namespace AlgeCardAdventure.Data
         public string answer_summary;
         public string review_status;
         public string review_note;
+        public string method;
+        public string elimination_op;
         public TrueFalseData true_false;
 
         /// <summary>

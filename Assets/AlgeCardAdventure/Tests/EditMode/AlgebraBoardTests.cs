@@ -570,13 +570,199 @@ namespace AlgeCardAdventure.Tests
                     for (int s = 0; s < 4; s++)
                     {
                         int tokenCount = _controller.stages[s].targetTokens.Count;
-                        Assert.LessOrEqual(tokenCount, 7, $"Soal {q.id} Stage {s} memiliki {tokenCount} token (melebihi batas fisik 7 slot)!");
+                        Assert.LessOrEqual(tokenCount, 8, $"Soal {q.id} Stage {s} memiliki {tokenCount} token (melebihi batas fisik 8 slot)!");
                     }
                     testedQuestions++;
                 }
             }
 
-            Assert.GreaterOrEqual(testedQuestions, 60, "Seluruh 60 soal wajib teruji dan menghasilkan <= 7 token di setiap tahap!");
+            Assert.GreaterOrEqual(testedQuestions, 60, "Seluruh 60 soal wajib teruji dan menghasilkan <= 8 token di setiap tahap!");
+        }
+
+        [Test]
+        public void TC_HARD_01_EliminationMode_DetectedAndConfigured()
+        {
+            var q = new QuestionModel
+            {
+                id = "HARD-001",
+                ui_level = "Hard",
+                method = "elimination",
+                elimination_op = "+",
+                title = "Buying Burgers and Drinks",
+                question_text = "2x + y = 10 dan x - y = 2",
+                equation_model = new string[] { "2x + y = 10", "x - y = 2" },
+                solution_steps = new string[] { "2x + y = 10 and x - y = 2", "Eliminate y (+)", "3x = 12", "x = 4" },
+                final_answer = "x = 4, y = 2"
+            };
+
+            GameSession.Instance.CurrentQuestion = q;
+            var ribbonGO = new GameObject("ModeRibbon");
+            var ribbonTxtGO = new GameObject("ModeRibbonText");
+            var ribbonText = ribbonTxtGO.AddComponent<Text>();
+            _controller.ModeRibbonContainer = ribbonGO;
+            _controller.ModeRibbonText = ribbonText;
+
+            _controller.InitializeBoard();
+
+            Assert.AreEqual(AlgebraBoardController.HardAlgebraMode.Elimination, _controller.ActiveHardMode);
+            Assert.IsTrue(ribbonGO.activeSelf, "Mode Ribbon harus aktif untuk Level Hard Elimination!");
+            Assert.IsTrue(ribbonText.text.Contains("ELIMINATION"), "Ribbon text harus memuat 'ELIMINATION'!");
+        }
+
+        [Test]
+        public void TC_HARD_02_SubstitutionMode_DetectedAndConfigured()
+        {
+            var q = new QuestionModel
+            {
+                id = "HARD-011",
+                ui_level = "Hard",
+                method = "substitution",
+                title = "Guessing Two Whole Numbers",
+                question_text = "2x + y = 10 dan x - y = 2",
+                equation_model = new string[] { "2x + y = 10", "x - y = 2" },
+                solution_steps = new string[] { "x = y + 2", "Substitute: 2y + 4 + y = 10", "3y = 6", "x = 4" },
+                final_answer = "x = 4, y = 2"
+            };
+
+            GameSession.Instance.CurrentQuestion = q;
+            var ribbonGO = new GameObject("ModeRibbon");
+            var ribbonTxtGO = new GameObject("ModeRibbonText");
+            var ribbonText = ribbonTxtGO.AddComponent<Text>();
+            _controller.ModeRibbonContainer = ribbonGO;
+            _controller.ModeRibbonText = ribbonText;
+
+            _controller.InitializeBoard();
+
+            Assert.AreEqual(AlgebraBoardController.HardAlgebraMode.Substitution, _controller.ActiveHardMode);
+            Assert.IsTrue(ribbonGO.activeSelf, "Mode Ribbon harus aktif untuk Level Hard Substitution!");
+            Assert.IsTrue(ribbonText.text.Contains("SUBSTITUTION"), "Ribbon text harus memuat 'SUBSTITUTION'!");
+        }
+
+        [Test]
+        public void TC_HARD_03_EasyAndNormal_HidesModeRibbon()
+        {
+            var qEasy = new QuestionModel
+            {
+                id = "EASY-001",
+                ui_level = "Easy",
+                equation_model = new string[] { "x + 2 = 5" },
+                solution_steps = new string[] { "x + 2 = 5", "x = 5 - 2", "x = 3" },
+                final_answer = "3"
+            };
+
+            GameSession.Instance.CurrentQuestion = qEasy;
+            var ribbonGO = new GameObject("ModeRibbon");
+            _controller.ModeRibbonContainer = ribbonGO;
+
+            _controller.InitializeBoard();
+
+            Assert.AreEqual(AlgebraBoardController.HardAlgebraMode.None, _controller.ActiveHardMode);
+            Assert.IsFalse(ribbonGO.activeSelf, "Mode Ribbon harus nonaktif pada Level Easy!");
+        }
+
+        [Test]
+        public void TC_HARD_04_EliminationStage2_OperationButtonsValidation()
+        {
+            var q = new QuestionModel
+            {
+                id = "HARD-001",
+                ui_level = "Hard",
+                method = "elimination",
+                elimination_op = "+",
+                equation_model = new string[] { "2x + y = 10", "x - y = 2" },
+                solution_steps = new string[] { "2x + y = 10 and x - y = 2", "Eliminate y (+)", "3x = 12", "x = 4" },
+                final_answer = "x = 4, y = 2"
+            };
+
+            GameSession.Instance.CurrentQuestion = q;
+            _controller.InitializeBoard();
+            _controller.SetStageActive(1);
+
+            // 1. Pilih operasi salah (-)
+            _controller.OnEliminationOperationClicked("-");
+            Assert.AreNotEqual("+", _controller.SelectedEliminationOp);
+            Assert.IsFalse(_controller.stages[1].isCompleted, "Operasi yang salah tidak boleh menyelesaikan Stage 1!");
+
+            // 2. Pilih operasi benar (+)
+            _controller.OnEliminationOperationClicked("+");
+            Assert.AreEqual("+", _controller.SelectedEliminationOp);
+            Assert.IsTrue(_controller.stages[1].isCompleted, "Operasi yang benar harus menyelesaikan Stage 1!");
+            Assert.AreEqual(2, _controller.CurrentStageIndex, "Harus otomatis maju ke Stage 2 (Tahap 3 UI)!");
+        }
+
+        [Test]
+        public void TC_HARD_05_SubstitutionStages_4StagesFormulatedWith8TokensMax()
+        {
+            var q = new QuestionModel
+            {
+                id = "HARD-011",
+                ui_level = "Hard",
+                method = "substitution",
+                equation_model = new string[] { "2x + y = 10", "x - y = 2" },
+                solution_steps = new string[] {
+                    "x = y + 2",
+                    "Substitute x = y + 2: 2y + 4 + y = 10",
+                    "3y = 6",
+                    "x = 4"
+                },
+                final_answer = "x = 4, y = 2"
+            };
+
+            _controller.FormulateStagesFromQuestion(q);
+
+            Assert.AreEqual("Isolate a Variable", _controller.stages[0].stageName);
+            Assert.AreEqual("Substitute Expression", _controller.stages[1].stageName);
+            Assert.AreEqual("Simplify Expression", _controller.stages[2].stageName);
+            Assert.AreEqual("Card Arrangement Results", _controller.stages[3].stageName);
+
+            for (int s = 0; s < 4; s++)
+            {
+                Assert.LessOrEqual(_controller.stages[s].targetTokens.Count, 8, $"Stage {s} substitution melebihi kapasitas 8 slot!");
+            }
+        }
+
+        [Test]
+        public void TC_HARD_06_All20HardSPLDVQuestions_HaveMax8Tokens_AndCorrectMethods()
+        {
+            string jsonPath = System.IO.Path.Combine("Assets", "StreamingAssets", "banksoal.json");
+            if (!System.IO.File.Exists(jsonPath))
+            {
+                jsonPath = System.IO.Path.Combine("..", "..", "Assets", "StreamingAssets", "banksoal.json");
+            }
+
+            string json = System.IO.File.ReadAllText(jsonPath);
+            var bankData = JsonUtility.FromJson<BankSoalData>(json);
+
+            var hardLevel = bankData.levels.Find(l => (l.source_level == "Hard" || l.ui_level == "Hard"));
+            Assert.IsNotNull(hardLevel, "Level Hard harus ada di banksoal.json!");
+            Assert.AreEqual(20, hardLevel.questions.Count, "Harus ada tepat 20 soal Hard SPLDV!");
+
+            int elimCount = 0;
+            int subCount = 0;
+
+            foreach (var q in hardLevel.questions)
+            {
+                Assert.AreEqual("Hard", q.ui_level);
+                if (q.method == "elimination")
+                {
+                    elimCount++;
+                    Assert.IsTrue(q.elimination_op == "+" || q.elimination_op == "-", $"Soal {q.id} harus memiliki elimination_op valid (+ atau -)!");
+                }
+                else if (q.method == "substitution")
+                {
+                    subCount++;
+                }
+
+                _controller.FormulateStagesFromQuestion(q);
+                for (int s = 0; s < 4; s++)
+                {
+                    int tokens = _controller.stages[s].targetTokens.Count;
+                    Assert.LessOrEqual(tokens, 8, $"Soal {q.id} Stage {s} memiliki {tokens} token (melebihi 8 slot)!");
+                }
+            }
+
+            Assert.AreEqual(10, elimCount, "Harus ada tepat 10 soal Eliminasi di Level Hard!");
+            Assert.AreEqual(10, subCount, "Harus ada tepat 10 soal Substitusi di Level Hard!");
         }
 
         [Test]

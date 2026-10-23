@@ -23,6 +23,10 @@ namespace AlgeCardAdventure.Session
                 if (ReferenceEquals(_instance, null))
                 {
                     TryResolveUnityInstance();
+                    if (ReferenceEquals(_instance, null))
+                    {
+                        _instance = (GameSession)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(GameSession));
+                    }
                 }
                 return _instance;
             }
@@ -59,7 +63,7 @@ namespace AlgeCardAdventure.Session
         public float SessionTimeSeconds => Application.isPlaying ? Mathf.Max(0f, Time.time - _sessionStartTime) : 0f;
         public int CurrentStreak { get; private set; } = 0;
         public bool LastBoardSolutionCorrect { get; set; } = true;
-        public QuestionModel CurrentQuestion { get; private set; }
+        public QuestionModel CurrentQuestion { get; set; }
         public bool IsSessionActive { get; private set; } = false;
         public List<string> CompletedQuestionIds { get; } = new List<string>();
 

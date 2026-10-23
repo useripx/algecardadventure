@@ -146,7 +146,68 @@ namespace AlgeCardAdventure.UI
         [SerializeField] private Sprite panelNormalSprite;
         [SerializeField] private Sprite panelCompleteSprite;
 
+        [Header("Level Hard Mode SPLDV (Mockup Alignment)")]
+        [SerializeField] private GameObject modeRibbonContainer;
+        [SerializeField] private Text modeRibbonText;
+        [SerializeField] private GameObject eliminationOpPanel;
+        [SerializeField] private Button addEquationButton;
+        [SerializeField] private Button subtractEquationButton;
+        [SerializeField] private Text addEquationText;
+        [SerializeField] private Text subtractEquationText;
+
+        public enum HardAlgebraMode
+        {
+            None,
+            Elimination,
+            Substitution
+        }
+
+        public HardAlgebraMode ActiveHardMode { get; private set; } = HardAlgebraMode.None;
+        public string SelectedEliminationOp { get; private set; } = "";
+
         // Button Accessor Properties for Testing & Scripting
+        public GameObject ModeRibbonContainer
+        {
+            get => modeRibbonContainer;
+            set => modeRibbonContainer = value;
+        }
+
+        public Text ModeRibbonText
+        {
+            get => modeRibbonText;
+            set => modeRibbonText = value;
+        }
+
+        public GameObject EliminationOpPanel
+        {
+            get => eliminationOpPanel;
+            set => eliminationOpPanel = value;
+        }
+
+        public Button AddEquationButton
+        {
+            get => addEquationButton;
+            set => addEquationButton = value;
+        }
+
+        public Button SubtractEquationButton
+        {
+            get => subtractEquationButton;
+            set => subtractEquationButton = value;
+        }
+
+        public Text AddEquationText
+        {
+            get => addEquationText;
+            set => addEquationText = value;
+        }
+
+        public Text SubtractEquationText
+        {
+            get => subtractEquationText;
+            set => subtractEquationText = value;
+        }
+
         public Button CustomVariableButton
         {
             get => customVariableButton;
@@ -240,6 +301,35 @@ namespace AlgeCardAdventure.UI
                 catch { }
             }
 
+            // Deteksi Mode Aljabar Khusus Level Hard (Eliminasi vs Substitusi)
+            bool isHard = string.Equals(ActiveQuestion.ui_level, "Hard", StringComparison.OrdinalIgnoreCase);
+            if (isHard)
+            {
+                string method = ActiveQuestion.method != null ? ActiveQuestion.method.ToLowerInvariant() : "";
+                if (method == "elimination" || (ActiveQuestion.equation_model != null && ActiveQuestion.equation_model.Length > 1 && string.IsNullOrEmpty(method)))
+                {
+                    ActiveHardMode = HardAlgebraMode.Elimination;
+                    if (modeRibbonContainer != null) modeRibbonContainer.SetActive(true);
+                    if (modeRibbonText != null) modeRibbonText.text = "⚔️ ELIMINATION MODE";
+                }
+                else if (method == "substitution")
+                {
+                    ActiveHardMode = HardAlgebraMode.Substitution;
+                    if (modeRibbonContainer != null) modeRibbonContainer.SetActive(true);
+                    if (modeRibbonText != null) modeRibbonText.text = "🔄 SUBSTITUTION MODE";
+                }
+                else
+                {
+                    ActiveHardMode = HardAlgebraMode.None;
+                    if (modeRibbonContainer != null) modeRibbonContainer.SetActive(false);
+                }
+            }
+            else
+            {
+                ActiveHardMode = HardAlgebraMode.None;
+                if (modeRibbonContainer != null) modeRibbonContainer.SetActive(false);
+            }
+
             if (questionBodyText != null)
             {
                 // Proteksi runtime anti-meluber frame (Catatan Revisi 1 Butir 4)
@@ -253,14 +343,31 @@ namespace AlgeCardAdventure.UI
                 }
                 catch { }
 
-                // Tampilkan soal cerita dan petunjuk variabel (Catatan Revisi 1 Butir 5 & 6)
-                if (!string.IsNullOrWhiteSpace(ActiveQuestion.question_text))
+                if (isHard && ActiveQuestion.equation_model != null && ActiveQuestion.equation_model.Length > 1)
                 {
-                    questionBodyText.text = $"{ActiveQuestion.question_text}\n💡 <b>Petunjuk:</b> {varHint}";
+                    string eq1 = ActiveQuestion.equation_model[0];
+                    string eq2 = ActiveQuestion.equation_model[1];
+                    string modeLabel = ActiveHardMode == HardAlgebraMode.Elimination ? "Metode Eliminasi" : "Metode Substitusi";
+                    if (!string.IsNullOrWhiteSpace(ActiveQuestion.question_text))
+                    {
+                        questionBodyText.text = $"{ActiveQuestion.question_text}\n💡 <b>Mode:</b> {modeLabel} · Cari nilai x dan y";
+                    }
+                    else
+                    {
+                        questionBodyText.text = $"Selesaikan sistem persamaan linear dua variabel:\n<b>(1) {eq1}</b>\n<b>(2) {eq2}</b>\n💡 <b>Mode:</b> {modeLabel}";
+                    }
                 }
                 else
                 {
-                    questionBodyText.text = $"Selesaikan persamaan aljabar berikut:\n<color=#003882><b>{formula}</b></color> (Tentukan nilai {targetVar}!)\n💡 <b>Petunjuk:</b> {varHint}";
+                    // Tampilkan soal cerita dan petunjuk variabel (Catatan Revisi 1 Butir 5 & 6)
+                    if (!string.IsNullOrWhiteSpace(ActiveQuestion.question_text))
+                    {
+                        questionBodyText.text = $"{ActiveQuestion.question_text}\n💡 <b>Petunjuk:</b> {varHint}";
+                    }
+                    else
+                    {
+                        questionBodyText.text = $"Selesaikan persamaan aljabar berikut:\n<color=#003882><b>{formula}</b></color> (Tentukan nilai {targetVar}!)\n💡 <b>Petunjuk:</b> {varHint}";
+                    }
                 }
             }
 
@@ -412,6 +519,63 @@ namespace AlgeCardAdventure.UI
                     }
                 }
             }
+
+            if (addEquationButton != null)
+            {
+                addEquationButton.onClick.RemoveAllListeners();
+                addEquationButton.onClick.AddListener(() => OnEliminationOperationClicked("+"));
+            }
+
+            if (subtractEquationButton != null)
+            {
+                subtractEquationButton.onClick.RemoveAllListeners();
+                subtractEquationButton.onClick.AddListener(() => OnEliminationOperationClicked("-"));
+            }
+        }
+
+        /// <summary>
+        /// Handler saat tombol operasi eliminasi dipilih (+ atau -) pada Stage 2 Mode Eliminasi Level Hard.
+        /// Memvalidasi keselarasan operasi dengan ActiveQuestion.elimination_op.
+        /// </summary>
+        public void OnEliminationOperationClicked(string op)
+        {
+            if (ActiveHardMode != HardAlgebraMode.Elimination) return;
+
+            string expectedOp = !string.IsNullOrEmpty(ActiveQuestion?.elimination_op) ? ActiveQuestion.elimination_op.Trim() : "+";
+
+            if (op == expectedOp)
+            {
+                SelectedEliminationOp = op;
+                SafePlayCorrect();
+
+                if (stages != null && stages.Count > 1)
+                {
+                    stages[1].isCompleted = true;
+                    if (stages[1].badgeStatusText != null) stages[1].badgeStatusText.text = "DONE ✓";
+                    if (stages[1].badgeStatusImage != null && badgeDoneSprite != null)
+                    {
+                        stages[1].badgeStatusImage.sprite = badgeDoneSprite;
+                    }
+                    if (panelCompleteSprite != null && stages[1].rowBackground != null)
+                    {
+                        stages[1].rowBackground.sprite = panelCompleteSprite;
+                    }
+
+                    if (stages[1].slots != null && stages[1].slots.Count > 0 && stages[1].slots[0] != null)
+                    {
+                        stages[1].slots[0].SetToken(op, orangeTileSprite != null ? orangeTileSprite : whiteTileSprite, new Color(0.55f, 0.25f, 0.02f, 1f));
+                    }
+                }
+
+                ShowNotice($"Operasi [{op}] Tepat! Variabel tereliminasi. Melangkah ke Tahap 3!", true);
+                SetStageActive(2);
+            }
+            else
+            {
+                SafePlayWrong();
+                string hint = expectedOp == "+" ? "menjumlahkan (+)" : "mengurangkan (-)";
+                ShowNotice($"Operasi belum tepat. Cobalah {hint} kedua persamaan untuk mengeliminasi variabel!", false);
+            }
         }
 
         /// <summary>
@@ -433,6 +597,136 @@ namespace AlgeCardAdventure.UI
                 stages.Add(new BoardStageRow());
             }
 
+            bool isHard = string.Equals(question.ui_level, "Hard", StringComparison.OrdinalIgnoreCase);
+            string method = question.method != null ? question.method.ToLowerInvariant() : "";
+
+            if (isHard && method == "elimination")
+            {
+                FormulateEliminationStages(question);
+            }
+            else if (isHard && method == "substitution")
+            {
+                FormulateSubstitutionStages(question);
+            }
+            else
+            {
+                FormulateStandardStages(question);
+            }
+
+            // Pastikan jumlah target tokens per baris tidak melebihi kapasitas fisik 8 slot (DEC-54)
+            for (int s = 0; s < stages.Count; s++)
+            {
+                if (stages[s].targetTokens != null && stages[s].targetTokens.Count > 8)
+                {
+                    stages[s].targetTokens = stages[s].targetTokens.GetRange(0, 8);
+                }
+            }
+
+            // Pastikan seluruh 8 slot selalu aktif dan terbuka di semua tahap (Pilar 1 Zero Code Approved Plan)
+            for (int s = 0; s < stages.Count; s++)
+            {
+                var stage = stages[s];
+                if (stage.slots == null) stage.slots = new List<CardSlotView>();
+                for (int i = 0; i < stage.slots.Count; i++)
+                {
+                    if (stage.slots[i] != null)
+                    {
+                        if (stage.slots[i].slotButton != null)
+                        {
+                            stage.slots[i].slotButton.gameObject.SetActive(true);
+                        }
+                        stage.slots[i].Clear(emptySlotSprite);
+                    }
+                }
+            }
+        }
+
+        private void FormulateEliminationStages(QuestionModel question)
+        {
+            // Stage 0: Initial Equations
+            stages[0].stageName = "Initial Equations";
+            if (stages[0].stageTitleText != null) stages[0].stageTitleText.text = "Card Board: Initial Equations";
+            if (stages[0].stageIconText != null) stages[0].stageIconText.text = "📖";
+            string eq0 = (question.equation_model != null && question.equation_model.Length > 0)
+                ? question.equation_model[0]
+                : "2x + y = 10";
+            if (stages[0].stageInstructionText != null) stages[0].stageInstructionText.text = $"Susun persamaan utama: {eq0}";
+            stages[0].targetTokens = TokenizeExpression(eq0);
+
+            // Stage 1: Choose Operation (+ or -)
+            stages[1].stageName = "Choose Operation";
+            if (stages[1].stageTitleText != null) stages[1].stageTitleText.text = "Card Board: Choose Operation";
+            if (stages[1].stageIconText != null) stages[1].stageIconText.text = "⚔️";
+            string op = !string.IsNullOrEmpty(question.elimination_op) ? question.elimination_op : "+";
+            if (stages[1].stageInstructionText != null) stages[1].stageInstructionText.text = "Pilih operasi [ + ] Tambah atau [ - ] Kurang untuk mengeliminasi variabel!";
+            stages[1].targetTokens = new List<string> { op };
+
+            // Stage 2: Result after Elimination
+            stages[2].stageName = "Result after Elimination";
+            if (stages[2].stageTitleText != null) stages[2].stageTitleText.text = "Card Board: Result after Elimination";
+            if (stages[2].stageIconText != null) stages[2].stageIconText.text = "💡";
+            string step2Eq = (question.solution_steps != null && question.solution_steps.Length > 2)
+                ? ExtractPureEquation(question.solution_steps[2])
+                : "3x = 12";
+            if (stages[2].stageInstructionText != null) stages[2].stageInstructionText.text = "Sederhanakan persamaan gabungan setelah eliminasi.";
+            stages[2].targetTokens = TokenizeExpression(step2Eq);
+
+            // Stage 3: Solve for Variable
+            stages[3].stageName = "Card Arrangement Results";
+            if (stages[3].stageTitleText != null) stages[3].stageTitleText.text = "Card Board: Solved Variable";
+            if (stages[3].stageIconText != null) stages[3].stageIconText.text = "⭐";
+            string step3Eq = (question.solution_steps != null && question.solution_steps.Length > 3)
+                ? ExtractPureEquation(question.solution_steps[3])
+                : "x = 4";
+            if (stages[3].stageInstructionText != null) stages[3].stageInstructionText.text = $"Hasil nilai variabel yang diselesaikan: {step3Eq}";
+            stages[3].targetTokens = TokenizeExpression(step3Eq);
+        }
+
+        private void FormulateSubstitutionStages(QuestionModel question)
+        {
+            // Stage 0: Isolate a Variable
+            stages[0].stageName = "Isolate a Variable";
+            if (stages[0].stageTitleText != null) stages[0].stageTitleText.text = "Card Board: Isolate Variable";
+            if (stages[0].stageIconText != null) stages[0].stageIconText.text = "📖";
+            string step0Eq = (question.solution_steps != null && question.solution_steps.Length > 0)
+                ? ExtractPureEquation(question.solution_steps[0])
+                : "x = y + 2";
+            if (stages[0].stageInstructionText != null) stages[0].stageInstructionText.text = $"Isolasi variabel: {step0Eq}";
+            stages[0].targetTokens = TokenizeExpression(step0Eq);
+
+            // Stage 1: Substitute into Other Equation
+            stages[1].stageName = "Substitute Expression";
+            if (stages[1].stageTitleText != null) stages[1].stageTitleText.text = "Card Board: Substitute Expression";
+            if (stages[1].stageIconText != null) stages[1].stageIconText.text = "🔄";
+            string step1Eq = (question.solution_steps != null && question.solution_steps.Length > 1)
+                ? ExtractPureEquation(question.solution_steps[1])
+                : "2y + 4 + y = 10";
+            if (stages[1].stageInstructionText != null) stages[1].stageInstructionText.text = "Substitusikan ekspresi ke persamaan lain.";
+            stages[1].targetTokens = TokenizeExpression(step1Eq);
+
+            // Stage 2: Simplify the Expression
+            stages[2].stageName = "Simplify Expression";
+            if (stages[2].stageTitleText != null) stages[2].stageTitleText.text = "Card Board: Simplify Expression";
+            if (stages[2].stageIconText != null) stages[2].stageIconText.text = "💡";
+            string step2Eq = (question.solution_steps != null && question.solution_steps.Length > 2)
+                ? ExtractPureEquation(question.solution_steps[2])
+                : "3y = 6";
+            if (stages[2].stageInstructionText != null) stages[2].stageInstructionText.text = "Sederhanakan persamaan untuk mencari variabel pertama.";
+            stages[2].targetTokens = TokenizeExpression(step2Eq);
+
+            // Stage 3: Final Solution
+            stages[3].stageName = "Card Arrangement Results";
+            if (stages[3].stageTitleText != null) stages[3].stageTitleText.text = "Card Board: Final Solution";
+            if (stages[3].stageIconText != null) stages[3].stageIconText.text = "⭐";
+            string step3Eq = (question.solution_steps != null && question.solution_steps.Length > 3)
+                ? ExtractPureEquation(question.solution_steps[3])
+                : "x = 4";
+            if (stages[3].stageInstructionText != null) stages[3].stageInstructionText.text = $"Nilai variabel: {step3Eq}";
+            stages[3].targetTokens = TokenizeExpression(step3Eq);
+        }
+
+        private void FormulateStandardStages(QuestionModel question)
+        {
             string varName = ExtractVariableFromQuestion(question);
 
             // ==========================================
@@ -769,6 +1063,11 @@ namespace AlgeCardAdventure.UI
                 stageBadgeIndicatorText.text = $"Stage {displayStage} of {stages.Count}";
             }
 
+            if (eliminationOpPanel != null)
+            {
+                eliminationOpPanel.SetActive(ActiveHardMode == HardAlgebraMode.Elimination && CurrentStageIndex == 1 && !IsAllStagesCompleted);
+            }
+
             UpdateActionButtonsVisual();
             AutoScrollToActiveStage(CurrentStageIndex);
         }
@@ -954,6 +1253,18 @@ namespace AlgeCardAdventure.UI
             }
 
             var currentStage = stages[CurrentStageIndex];
+
+            // Proteksi Stage 1 Mode Eliminasi: wajib memilih operasi
+            if (CurrentStageIndex == 1 && ActiveHardMode == HardAlgebraMode.Elimination)
+            {
+                if (string.IsNullOrEmpty(SelectedEliminationOp) && (currentStage.slots == null || currentStage.slots.Count == 0 || currentStage.slots[0].IsEmpty))
+                {
+                    SafePlayWrong();
+                    ShowNotice("Pilih tombol operasi [ + ] atau [ - ] pada papan untuk mengeliminasi variabel!", false);
+                    return;
+                }
+            }
+
             bool isCorrect = ValidateStage(currentStage);
 
             if (isCorrect)
@@ -1119,6 +1430,15 @@ namespace AlgeCardAdventure.UI
         {
             if (stage == null || stage.targetTokens == null) return false;
 
+            // Penanganan khusus Stage 1 Mode Eliminasi (pemilihan operasi + atau -)
+            if (ActiveHardMode == HardAlgebraMode.Elimination && stages != null && stages.Count > 1 && stage == stages[1])
+            {
+                string expectedOp = !string.IsNullOrEmpty(ActiveQuestion?.elimination_op) ? ActiveQuestion.elimination_op.Trim() : "+";
+                if (SelectedEliminationOp == expectedOp) return true;
+                if (stage.slots != null && stage.slots.Count > 0 && stage.slots[0].currentToken == expectedOp) return true;
+                return false;
+            }
+
             int targetCount = Mathf.Min(stage.targetTokens.Count, stage.slots.Count);
             if (targetCount == 0) return true;
 
@@ -1210,9 +1530,9 @@ namespace AlgeCardAdventure.UI
 
         private void UpdateDeckInteractivity()
         {
-            foreach (var b in numberButtons) if (b != null) b.interactable = true;
-            foreach (var b in variableButtons) if (b != null) b.interactable = true;
-            foreach (var b in operatorButtons) if (b != null) b.interactable = true;
+            if (numberButtons != null) { foreach (var b in numberButtons) if (b != null) b.interactable = true; }
+            if (variableButtons != null) { foreach (var b in variableButtons) if (b != null) b.interactable = true; }
+            if (operatorButtons != null) { foreach (var b in operatorButtons) if (b != null) b.interactable = true; }
         }
 
         /// <summary>

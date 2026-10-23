@@ -1139,5 +1139,51 @@
   - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/20/15.md` diperbarui.
   - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
 
+---
+
+## 📋 Checklist Batch 42 (Dual Mode Aljabar Khusus Level Hard — Eliminasi & Substitusi SPLDV Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `level_hard_dual_mode_splvd_implementation_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Data 60 soal lokal di `banksoal.json` dan evaluasi permainan berjalan 100% offline.
+- [x] **Fase 1 — Kurasi 20 Soal SPLDV Bersih & Kalibrasi Token (`banksoal.json`):**
+  - Mengembangkan dan mengeksekusi script kurasi `scratch/curate_hard_spldv_questions.py`.
+  - Mengkurasi 20 soal SPLDV bilangan bulat ramah SMP (10 Eliminasi dengan field `method: "elimination"`, `elimination_op: "+"` atau `"-"`; 10 Substitusi dengan `method: "substitution"`).
+  - Mengalibrasi seluruh 4 tahap per soal menjadi $\le 8$ token dan hanya menggunakan kartu dek yang tersedia tanpa membutuhkan kurung aljabar.
+  - Memperbarui `Assets/StreamingAssets/banksoal.json` dan `Docs/banksoal.json`.
+- [x] **Fase 2 — Model Data & Singleton Session (`QuestionModel.cs` & `GameSession.cs`):**
+  - Menambahkan field `public string method;` dan `public string elimination_op;` pada `QuestionModel.cs`.
+  - Mengonfigurasi setter publik `CurrentQuestion` dan fallback uninitialized object pada `GameSession.Instance` untuk lingkungan non-Unity runtime.
+- [x] **Fase 3 — Antarmuka Mode Ribbon & Panel Operasi Eliminasi (`04_AlgebraCardBoard.unity`):**
+  - Menambahkan GameObject `ModeRibbonContainer` (ID 850-853) dengan `ModeRibbonText` (ID 854-857) di bawah header papan aljabar, menampilkan pita banner `"⚔️ ELIMINATION MODE"` (warna emas) atau `"🔄 SUBSTITUTION MODE"` (warna biru) secara dinamis saat Level Hard aktif.
+  - Menambahkan GameObject `ElimOpPanel` (ID 870-873) dengan tombol `Btn_AddEq` (ID 874-882, `[ + ] Add`) dan `Btn_SubEq` (ID 883-891, `[ - ] Subtract`) pada StagePanel_2, yang muncul khusus di Stage 2 mode Eliminasi.
+  - Menghubungkan seluruh serialized field ke `AlgebraBoardController` (ID 11) tanpa duplikasi ID (max ID 891).
+- [x] **Fase 4 — Logika Controller Dual Mode (`AlgebraBoardController.cs`):**
+  - Menambahkan enum `HardAlgebraMode { None, Elimination, Substitution }` dan properti `ActiveHardMode`.
+  - Mengimplementasikan perumusan tahap modular: `FormulateEliminationStages()`, `FormulateSubstitutionStages()`, dan `FormulateStandardStages()`.
+  - Mengimplementasikan handler `OnEliminationOperationClicked(string op)`: validasi kesesuaian operasi dengan `elimination_op` soal, memainkan audio sukses/gagal, mengisi slot 0 dengan token `+` atau `-`, dan membuka Stage 3.
+  - Memperbarui `SetStageActive()`, `OnContinueClicked()`, dan `ValidateStage()`.
+- [x] **Fase 5 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan 6 pengujian unit pada `AlgebraBoardTests.cs` dan `BoardTestRunner`:
+    - `TC_HARD_01_EliminationMode_DetectedAndConfigured`
+    - `TC_HARD_02_SubstitutionMode_DetectedAndConfigured`
+    - `TC_HARD_03_EasyAndNormal_StandardFormulationPreserved`
+    - `TC_HARD_04_EliminationStage2_OperationButtonsValidation`
+    - `TC_HARD_05_SubstitutionStages_4StagesFormulatedWith8TokensMax`
+    - `TC_HARD_06_All20HardSPLDVQuestions_HaveMax8Tokens_AndCorrectMethods`
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **30/30 PASS (100% PASS)**
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 73/73 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+- [x] **Fase 6 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-55` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/22/00.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
 
 

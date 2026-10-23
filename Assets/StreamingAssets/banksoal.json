@@ -1128,563 +1128,393 @@
       "questions": [
         {
           "id": "HARD-001",
-          "source_number": 1,
-          "source_level": "Hard",
           "ui_level": "Hard",
+          "method": "elimination",
+          "elimination_op": "+",
           "title": "Buying Burgers and Drinks",
-          "question_text": "Tiga paket x dan dua paket y berharga 70 ribu rupiah. Jika y = 8, tentukan x!",
+          "question_text": "Dua burger dan satu minuman seharga 10 ribu (2x + y = 10). Selisih harga burger dan minuman adalah 2 ribu (x - y = 2). Tentukan harga burger x dan minuman y dengan metode eliminasi!",
           "equation_model": [
-            "3x + 2y = 70"
+            "2x + y = 10",
+            "x - y = 2"
           ],
           "solution_steps": [
-            "3x + 2y = 70",
-            "3x = 70 - 2y",
-            "3x = 54",
-            "x = 18"
+            "2x + y = 10 and x - y = 2",
+            "Eliminate y by adding the equations (+)",
+            "3x = 12",
+            "x = 4"
           ],
-          "final_answer": "18",
-          "answer_summary": "Burger = 18000 IDR; drink = 8000 IDR",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 4, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-002",
-          "source_number": 2,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Guessing Father's and Child's Ages",
-          "question_text": "A father's current age is 3 times his child's age. Five years from now, the sum of their ages will be 66 years. What are the father's and child's current ages?",
+          "method": "elimination",
+          "elimination_op": "+",
+          "title": "Guessing Two Secret Numbers",
+          "question_text": "Jumlah x dan dua kali y adalah 8 (x + 2y = 8), sedangkan x dikurangi dua kali y adalah 0 (x - 2y = 0). Tentukan nilai x dan y dengan metode eliminasi!",
           "equation_model": [
-            "a = 3b",
-            "(a + 5) + (b + 5) = 66"
+            "x + 2y = 8",
+            "x - 2y = 0"
           ],
           "solution_steps": [
-            "Let a be the father's age and b the child's age.",
-            "a = 3b",
-            "a + b = 56",
-            "3b + b = 56",
-            "3b + b = 56",
-            "b = 14",
-            "a = 3(14) = 42"
+            "x + 2y = 8 and x - 2y = 0",
+            "Eliminate y by adding the equations (+)",
+            "2x = 8",
+            "x = 4"
           ],
-          "final_answer": "Father: 42 years old; child: 14 years old",
-          "answer_summary": "Father = 42 years; child = 14 years",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 4, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-003",
-          "source_number": 3,
-          "source_level": "Hard",
           "ui_level": "Hard",
+          "method": "elimination",
+          "elimination_op": "-",
           "title": "Vehicle Parking Lot",
-          "question_text": "Jumlah mobil m dan motor s di parkiran adalah 50 unit. Jika motor ada 30 unit, berapa jumlah mobil m?",
+          "question_text": "Tiga mobil dan satu motor bertarif 11 ribu (3x + y = 11). Satu mobil dan satu motor bertarif 5 ribu (x + y = 5). Tentukan tarif parkir mobil x dan motor y dengan metode eliminasi!",
           "equation_model": [
-            "m + s = 50"
+            "3x + y = 11",
+            "x + y = 5"
           ],
           "solution_steps": [
-            "m + s = 50",
-            "m = 50 - s",
-            "m = 50 - 30",
-            "m = 20"
+            "3x + y = 11 and x + y = 5",
+            "Eliminate y by subtracting the equations (-)",
+            "2x = 6",
+            "x = 3"
           ],
-          "final_answer": "20",
-          "answer_summary": "Cars = 20; motorcycles = 30",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 3, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-004",
-          "source_number": 4,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Buying Stationery",
-          "question_text": "Dua buku b dan tiga pensil p seharga 17 ribu rupiah. Jika p = 3, tentukan nilai b!",
+          "method": "elimination",
+          "elimination_op": "-",
+          "title": "Buying Stationery Supplies",
+          "question_text": "Dua buku dan tiga pensil seharga 13 ribu (2x + 3y = 13). Dua buku dan satu pensil seharga 7 ribu (2x + y = 7). Tentukan harga pensil y dan buku x dengan metode eliminasi!",
           "equation_model": [
-            "2b + 3p = 17"
+            "2x + 3y = 13",
+            "2x + y = 7"
           ],
           "solution_steps": [
-            "2b + 3p = 17",
-            "2b = 17 - 3p",
-            "2b = 8",
-            "b = 4"
+            "2x + 3y = 13 and 2x + y = 7",
+            "Eliminate x by subtracting the equations (-)",
+            "2y = 6",
+            "y = 3"
           ],
-          "final_answer": "4",
-          "answer_summary": "Notebook = 5500 IDR; pen = 2000 IDR",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 2, y = 3",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-005",
-          "source_number": 5,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Grandfather's Livestock",
-          "question_text": "Grandfather raises chickens (2 legs) and goats (4 legs). The number of livestock heads is 30, while the number of livestock legs is 80. How many chickens and goats are there?",
+          "method": "elimination",
+          "elimination_op": "-",
+          "title": "Grandfather's Livestock Feed",
+          "question_text": "Dua karung pakan ayam dan satu pakan kambing seharga 40 ribu (2x + y = 40). Satu pakan ayam dan satu kambing seharga 30 ribu (x + y = 30). Tentukan nilai x dan y!",
           "equation_model": [
-            "x + y = 30",
-            "2x + 4y = 80"
+            "2x + y = 40",
+            "x + y = 30"
           ],
           "solution_steps": [
-            "Let x be chickens and y be goats.",
-            "x + y = 30",
-            "2x + 4y = 80",
-            "2y = 20",
-            "y = 10",
-            "x = 30 - 10 = 20"
+            "2x + y = 40 and x + y = 30",
+            "Eliminate y by subtracting the equations (-)",
+            "x = 10",
+            "x = 10"
           ],
-          "final_answer": "Chickens: 20; goats: 10",
-          "answer_summary": "Chickens = 20; goats = 10",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 10, y = 20",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-006",
-          "source_number": 6,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Cinema Ticket Revenue",
-          "question_text": "Total tiket dewasa d dan anak c adalah 50 lembar. Jika tiket anak 20 lembar, berapa tiket dewasa d?",
+          "method": "elimination",
+          "elimination_op": "+",
+          "title": "Cinema Ticket Sales",
+          "question_text": "Tiga tiket reguler dan dua tiket snack seharga 16 ribu (3x + 2y = 16). Satu tiket reguler dikurangi dua snack seharga 0 (x - 2y = 0). Tentukan harga tiket reguler x!",
           "equation_model": [
-            "d + c = 50"
+            "3x + 2y = 16",
+            "x - 2y = 0"
           ],
           "solution_steps": [
-            "d + c = 50",
-            "d = 50 - c",
-            "d = 50 - 20",
-            "d = 30"
+            "3x + 2y = 16 and x - 2y = 0",
+            "Eliminate y by adding the equations (+)",
+            "4x = 16",
+            "x = 4"
           ],
-          "final_answer": "30",
-          "answer_summary": "The source includes an inconsistent intermediate line, '30,000d + 30,000a = 3,000,000', which does not match the stated adult ticket price. The question conditions and final answer imply the equations shown here.",
-          "review_status": "needs_source_check",
-          "review_note": "The final answer is consistent with the question, but one intermediate equation in the source solution appears mistyped. Verify against the PDF page before treating the worked solution as source-authoritative.",
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 4, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-007",
-          "source_number": 7,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Paper Money Denominations",
-          "question_text": "A wallet contains Rp500,000 in Rp10,000 and Rp20,000 denominations, totaling 35 bills. How many of each denomination are there?",
+          "method": "elimination",
+          "elimination_op": "+",
+          "title": "Paper Money Savings",
+          "question_text": "Dua lembar uang x dan satu lembar uang y bernilai 15 ribu (2x + y = 15). Selisih nilainya adalah 3 ribu (x - y = 3). Tentukan nilai nominal x dan y!",
           "equation_model": [
-            "x + y = 35",
-            "10000x + 20000y = 500000"
+            "2x + y = 15",
+            "x - y = 3"
           ],
           "solution_steps": [
-            "Let x be Rp10,000 bills and y be Rp20,000 bills.",
-            "x + y = 35",
-            "x + 2y = 50",
-            "y = 15",
-            "x = 35 - 15 = 20"
+            "2x + y = 15 and x - y = 3",
+            "Eliminate y by adding the equations (+)",
+            "3x = 18",
+            "x = 6"
           ],
-          "final_answer": "Rp10,000 bills: 20; Rp20,000 bills: 15",
-          "answer_summary": "Rp10,000 = 20 bills; Rp20,000 = 15 bills",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 6, y = 3",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-008",
-          "source_number": 8,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Buying Fruit",
-          "question_text": "Dua kilo apel a dan satu kilo jeruk j berharga 65 ribu rupiah. Jika j = 15, tentukan harga 1 kg apel a!",
+          "method": "elimination",
+          "elimination_op": "-",
+          "title": "Buying Fresh Fruit",
+          "question_text": "Empat kilo apel dan satu kilo jeruk berharga 14 ribu (4x + y = 14). Dua kilo apel dan satu kilo jeruk berharga 8 ribu (2x + y = 8). Tentukan harga 1 kg apel x!",
           "equation_model": [
-            "2a + j = 65"
+            "4x + y = 14",
+            "2x + y = 8"
           ],
           "solution_steps": [
-            "2a + j = 65",
-            "2a = 65 - j",
-            "2a = 50",
-            "a = 25"
+            "4x + y = 14 and 2x + y = 8",
+            "Eliminate y by subtracting the equations (-)",
+            "2x = 6",
+            "x = 3"
           ],
-          "final_answer": "25",
-          "answer_summary": "Apples = 25000 IDR/kg; oranges = 15000 IDR/kg",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 3, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-009",
-          "source_number": 9,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Lodging Rooms",
-          "question_text": "Total kamar twin t dan family f di hotel adalah 40 kamar. Jika family ada 10 kamar, berapa kamar twin t?",
+          "method": "elimination",
+          "elimination_op": "+",
+          "title": "Hotel Room Key Cards",
+          "question_text": "Jumlah kartu kamar x dan tiga kali kartu y adalah 10 (x + 3y = 10). Selisih x dan tiga kali y adalah 4 (x - 3y = 4). Tentukan jumlah kartu kamar x!",
           "equation_model": [
-            "t + f = 40"
+            "x + 3y = 10",
+            "x - 3y = 4"
           ],
           "solution_steps": [
-            "t + f = 40",
-            "t = 40 - f",
-            "t = 40 - 10",
-            "t = 30"
+            "x + 3y = 10 and x - 3y = 4",
+            "Eliminate y by adding the equations (+)",
+            "2x = 14",
+            "x = 7"
           ],
-          "final_answer": "30",
-          "answer_summary": "Twin = 30 rooms; Family = 10 rooms",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 7, y = 1",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-010",
-          "source_number": 10,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Buying Clothes",
-          "question_text": "Tiga kemeja k dan dua celana c berharga 55 ribu rupiah. Jika c = 5, berapa harga 1 kemeja k?",
+          "method": "elimination",
+          "elimination_op": "+",
+          "title": "School Uniform Tailoring",
+          "question_text": "Dua meter kain kemeja dan satu meter celana berharga 9 ribu (2x + y = 9). Dua meter kemeja dikurangi satu meter celana seharga 7 ribu (2x - y = 7). Tentukan harga per meter kain kemeja x!",
           "equation_model": [
-            "3k + 2c = 55"
+            "2x + y = 9",
+            "2x - y = 7"
           ],
           "solution_steps": [
-            "3k + 2c = 55",
-            "3k = 55 - 2c",
-            "3k = 45",
-            "k = 15"
+            "2x + y = 9 and 2x - y = 7",
+            "Eliminate y by adding the equations (+)",
+            "4x = 16",
+            "x = 4"
           ],
-          "final_answer": "15",
-          "answer_summary": "Shirt = 100000 IDR; pants = 125000 IDR",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 4, y = 1",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-011",
-          "source_number": 11,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Guessing Two Numbers",
-          "question_text": "The sum of two whole numbers is 45, while the difference between the larger and smaller number is 15. What are the two numbers?",
+          "method": "substitution",
+          "title": "Guessing Two Whole Numbers",
+          "question_text": "Dua kali bilangan x ditambah y sama dengan 10 (2x + y = 10), dan selisih bilangan x dan y adalah 2 (x - y = 2). Selesaikan dengan metode substitusi!",
           "equation_model": [
-            "x + y = 45",
-            "x - y = 15"
+            "2x + y = 10",
+            "x - y = 2"
           ],
           "solution_steps": [
-            "Let x be the larger number and y the smaller number.",
-            "x + y = 45",
-            "x - y = 15",
-            "2x = 60",
-            "x = 30",
-            "30 + y = 45, so y = 15"
+            "x = y + 2",
+            "Substitute x = y + 2: 2y + 4 + y = 10",
+            "3y = 6",
+            "x = 4"
           ],
-          "final_answer": "30 and 15",
-          "answer_summary": "Larger number = 30; smaller number = 15",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 4, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-012",
-          "source_number": 12,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Multiple Choice Exam Score",
-          "question_text": "Dari 40 soal ujian, jumlah soal benar b dan salah s adalah 40. Jika salah 10 soal, berapa soal benar b?",
+          "method": "substitution",
+          "title": "Exam Points Distribution",
+          "question_text": "Nilai x ditambah dua kali y adalah 9 (x + 2y = 9), dan nilai x adalah y ditambah 3 (x = y + 3). Tentukan nilai y dan x dengan metode substitusi!",
           "equation_model": [
-            "b + s = 40"
+            "x + 2y = 9",
+            "x = y + 3"
           ],
           "solution_steps": [
-            "b + s = 40",
-            "b = 40 - s",
-            "b = 40 - 10",
-            "b = 30"
+            "x = y + 3",
+            "Substitute x = y + 3: y + 3 + 2y = 9",
+            "3y = 6",
+            "x = 5"
           ],
-          "final_answer": "30",
-          "answer_summary": "Correct = 30; incorrect = 10",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 5, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-013",
-          "source_number": 13,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Rectangular Park",
-          "question_text": "The perimeter of a rectangular park is 60 meters. Its length is 6 meters longer than its width. What are the length and width dimensions of the park?",
+          "method": "substitution",
+          "title": "Rectangular Garden Dimensions",
+          "question_text": "Dua kali panjang x ditambah lebar y adalah 12 meter (2x + y = 12), dan lebar y adalah x ditambah 3 meter (y = x + 3). Tentukan dimensi taman!",
           "equation_model": [
-            "2p + 2l = 60",
-            "p = l + 6"
+            "2x + y = 12",
+            "y = x + 3"
           ],
           "solution_steps": [
-            "Let p be the length and l be the width.",
-            "2p + 2l = 60, so p + l = 30",
-            "p = l + 6",
-            "(l + 6) + l = 30",
-            "2l = 24, so l = 12",
-            "p = 12 + 6 = 18"
+            "y = x + 3",
+            "Substitute y = x + 3: 2x + x + 3 = 12",
+            "3x = 9",
+            "y = 6"
           ],
-          "final_answer": "Length: 18 m; width: 12 m",
-          "answer_summary": "Length = 18 m; width = 12 m",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 3, y = 6",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-014",
-          "source_number": 14,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Price of Wet Cakes",
-          "question_text": "Dua bolu b dan tiga cup cake c seharga 45 ribu rupiah. Jika c = 5, berapa harga 1 bolu b?",
+          "method": "substitution",
+          "title": "Bakery Cake Bundles",
+          "question_text": "Tiga bolu x dan satu pie y seharga 14 ribu (3x + y = 14), dan pie y berharga 2x dikurangi 1 ribu (y = 2x - 1). Tentukan harga bolu x!",
           "equation_model": [
-            "2b + 3c = 45"
+            "3x + y = 14",
+            "y = 2x - 1"
           ],
           "solution_steps": [
-            "2b + 3c = 45",
-            "2b = 45 - 3c",
-            "2b = 30",
-            "b = 15"
+            "y = 2x - 1",
+            "Substitute y = 2x - 1: 5x - 1 = 14",
+            "5x = 15",
+            "y = 5"
           ],
-          "final_answer": "15",
-          "answer_summary": "Sponge cake = 7500 IDR; brownie = 10000 IDR",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 3, y = 5",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-015",
-          "source_number": 15,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Renting Boats of Different Capacities",
-          "question_text": "Total perahu besar b dan perahu kecil k di dermaga adalah 15 unit. Jika perahu kecil 9 unit, berapa perahu besar b?",
+          "method": "substitution",
+          "title": "Harbor Ferry Passengers",
+          "question_text": "Jumlah penumpang kapal x dan y adalah 8 orang (x + y = 8), dan kapasitas kapal x adalah 3 kali kapal y (x = 3y). Tentukan kapasitas kapal y!",
           "equation_model": [
-            "b + k = 15"
+            "x + y = 8",
+            "x = 3y"
           ],
           "solution_steps": [
-            "b + k = 15",
-            "b = 15 - k",
-            "b = 15 - 9",
-            "b = 6"
+            "x = 3y",
+            "Substitute x = 3y: 3y + y = 8",
+            "4y = 8",
+            "x = 6"
           ],
-          "final_answer": "6",
-          "answer_summary": "Large boats = 6; small boats = 9",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 6, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-016",
-          "source_number": 16,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Remembering Past Ages",
-          "question_text": "Five years ago, Mother's age was 4 times Tini's age. Currently, Mother's age is exactly 3 times Tini's age. What are Mother's and Tini's current ages?",
+          "method": "substitution",
+          "title": "Family Ages Riddle",
+          "question_text": "Dua kali usia anak x ditambah usia adik y adalah 11 tahun (2x + y = 11), dan usia anak x adalah dua kali y ditambah 3 tahun (x = 2y + 3). Tentukan usia adik y!",
           "equation_model": [
-            "i = 3t",
-            "i - 5 = 4(t - 5)"
+            "2x + y = 11",
+            "x = 2y + 3"
           ],
           "solution_steps": [
-            "Let i be Mother's current age and t be Tini's current age.",
-            "i = 3t",
-            "i - 4t = -15",
-            "t = 15",
-            "3t - 4t = -15, so t = 15",
-            "i = 3(15) = 45"
+            "x = 2y + 3",
+            "Substitute x = 2y + 3: 4y + 6 + y = 11",
+            "5y = 5",
+            "x = 5"
           ],
-          "final_answer": "Mother: 45 years old; Tini: 15 years old",
-          "answer_summary": "Mother = 45 years; Tini = 15 years",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 5, y = 1",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-017",
-          "source_number": 17,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Rose and Tulip Flower Arrangements",
-          "question_text": "Tiga mawar m dan empat tulip t seharga 85 ribu rupiah. Jika t = 10, berapa harga 1 mawar m?",
+          "method": "substitution",
+          "title": "Rose and Tulip Floral Orders",
+          "question_text": "Satu buket mawar x dan tiga tulip y seharga 11 ribu (x + 3y = 11), dan mawar x seharga y ditambah 3 ribu (x = y + 3). Tentukan harga tulip y!",
           "equation_model": [
-            "3m + 4t = 85"
+            "x + 3y = 11",
+            "x = y + 3"
           ],
           "solution_steps": [
-            "3m + 4t = 85",
-            "3m = 85 - 4t",
-            "3m = 45",
-            "m = 15"
+            "x = y + 3",
+            "Substitute x = y + 3: y + 3 + 3y = 11",
+            "4y = 8",
+            "x = 5"
           ],
-          "final_answer": "15",
-          "answer_summary": "Rose = 15000 IDR; tulip = 10000 IDR",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 5, y = 2",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-018",
-          "source_number": 18,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Opening a Coin Piggy Bank",
-          "question_text": "A piggy bank contains Rp500 and Rp1,000 coins, totaling 45 coins with a total value of Rp35,000. How many Rp500 and Rp1,000 coins are there?",
+          "method": "substitution",
+          "title": "Savings and Piggy Bank",
+          "question_text": "Dua tabungan x ditambah tabungan y adalah 13 ribu (2x + y = 13), dan tabungan y adalah tiga kali x dikurangi 2 ribu (y = 3x - 2). Tentukan nilai tabungan x!",
           "equation_model": [
-            "x + y = 45",
-            "500x + 1000y = 35000"
+            "2x + y = 13",
+            "y = 3x - 2"
           ],
           "solution_steps": [
-            "Let x be Rp500 coins and y be Rp1,000 coins.",
-            "x + y = 45",
-            "x + 2y = 70",
-            "y = 25",
-            "x = 45 - 25 = 20"
+            "y = 3x - 2",
+            "Substitute y = 3x - 2: 5x - 2 = 13",
+            "5x = 15",
+            "y = 7"
           ],
-          "final_answer": "Rp500 coins: 20; Rp1,000 coins: 25",
-          "answer_summary": "Rp500 = 20 coins; Rp1000 = 25 coins",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 3, y = 7",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-019",
-          "source_number": 19,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Afternoon Snacks",
-          "question_text": "Empat donat d dan lima pie p seharga 72 ribu rupiah. Jika p = 8, berapa harga 1 donat d?",
+          "method": "substitution",
+          "title": "Snack Box Distribution",
+          "question_text": "Kotak snack x dan dua kotak jus y berjumlah 10 buah (x + 2y = 10), dan kotak snack x adalah y ditambah 1 buah (x = y + 1). Tentukan jumlah kotak jus y!",
           "equation_model": [
-            "4d + 5p = 72"
+            "x + 2y = 10",
+            "x = y + 1"
           ],
           "solution_steps": [
-            "4d + 5p = 72",
-            "4d = 72 - 5p",
-            "4d = 32",
-            "d = 8"
+            "x = y + 1",
+            "Substitute x = y + 1: y + 1 + 2y = 10",
+            "3y = 9",
+            "x = 4"
           ],
-          "final_answer": "8",
-          "answer_summary": "Donut = 8000 IDR; pie = 8000 IDR",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 4, y = 3",
+          "review_status": "transcribed"
         },
         {
           "id": "HARD-020",
-          "source_number": 20,
-          "source_level": "Hard",
           "ui_level": "Hard",
-          "title": "Part-Time Work Wages",
-          "question_text": "Lima tiket biasa x dan dua tiket VIP y berharga 70 ribu rupiah. Jika y = 10, berapa harga tiket biasa x?",
+          "method": "substitution",
+          "title": "Part-Time Project Hours",
+          "question_text": "Tiga jam kerja proyek x dan satu jam proyek y bertarif 15 ribu (3x + y = 15), dan jam kerja y adalah dua kali x (y = 2x). Tentukan jam kerja proyek x!",
           "equation_model": [
-            "5x + 2y = 70"
+            "3x + y = 15",
+            "y = 2x"
           ],
           "solution_steps": [
-            "5x + 2y = 70",
-            "5x = 70 - 2y",
-            "5x = 50",
-            "x = 10"
+            "y = 2x",
+            "Substitute y = 2x: 3x + 2x = 15",
+            "5x = 15",
+            "y = 6"
           ],
-          "final_answer": "10",
-          "answer_summary": "Regular-day wage = 100000 IDR; holiday wage = 100000 IDR",
-          "review_status": "transcribed",
-          "review_note": null,
-          "true_false": {
-            "statement": null,
-            "correct_answer": null,
-            "explanation": null,
-            "content_origin": "not_provided_by_source"
-          }
+          "final_answer": "x = 3, y = 6",
+          "review_status": "transcribed"
         }
       ]
     }
