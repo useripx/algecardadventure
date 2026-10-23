@@ -165,9 +165,19 @@
 | **TC_BOARD_19** | `AlgebraBoardController` | Input kartu variabel kustom bebas oleh user | Pemain menyetel huruf variabel arbitrary ($v$) dan berhasil menaruhnya ke slot baris papan | **PASS** |
 | **TC_BOARD_20** | `AlgebraBoardController` | Penyelesaian persamaan aljabar panjang tanpa deadlock | Memasukkan seluruh kartu formula panjang hingga validasi berhasil tanpa mentok slot | **PASS** |
 
+### Batch 39: Resolusi Tumpang Tindih Teks Soal & Kotak Formula Banner Layar 04
+- **Tanggal:** 23 Oktober 2026 17:30 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_BANNER_01** | `04_AlgebraCardBoard.unity` | Eliminasi kotak formula mengambang bertabrakan | `FormulaBox` (ID 58) dinonaktifkan (`m_IsActive: 0`), tidak ada kotak biru bertumpuk di belakang narasi | **PASS** |
+| **TC_BANNER_02** | `AlgebraBoardController` | Tata letak terpadu soal cerita + petunjuk variabel | `QuestionBodyText` (750x100 px) terbingkai bersih dan lapang tanpa tabrakan dengan maskot/plakat | **PASS** |
+
 ---
 
-## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 38)
+## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 39)
 
 - **Total Test Suite Mandiri Proyek:** 5 Runner
   - `BoardTestRunner`: **20/20 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_20`)

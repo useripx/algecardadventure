@@ -225,9 +225,19 @@ namespace AlgeCardAdventure.UI
             string targetVar = ExtractVariableFromQuestion(ActiveQuestion);
             string varHint = GetVariableContextHint(ActiveQuestion);
 
+            // Pastikan FormulaBox tersembunyi agar tidak bertabrakan dengan teks soal cerita (DEC-52)
             if (questionHighlightedFormulaText != null)
             {
                 questionHighlightedFormulaText.text = formula;
+                try
+                {
+                    if (questionHighlightedFormulaText.transform.parent != null &&
+                        questionHighlightedFormulaText.transform.parent.name.Contains("FormulaBox"))
+                    {
+                        questionHighlightedFormulaText.transform.parent.gameObject.SetActive(false);
+                    }
+                }
+                catch { }
             }
 
             if (questionBodyText != null)
@@ -250,7 +260,7 @@ namespace AlgeCardAdventure.UI
                 }
                 else
                 {
-                    questionBodyText.text = $"Jika {formula}, tentukan nilai {targetVar}!\n💡 <b>Petunjuk:</b> {varHint}";
+                    questionBodyText.text = $"Selesaikan persamaan aljabar berikut:\n<color=#003882><b>{formula}</b></color> (Tentukan nilai {targetVar}!)\n💡 <b>Petunjuk:</b> {varHint}";
                 }
             }
 

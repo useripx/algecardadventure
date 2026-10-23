@@ -1,8 +1,8 @@
 # Task Status — AlgeCard Adventure
 
-> **Terakhir Diperbarui:** 23 Oktober 2026 17:00 WIB  
-> **Status Keseluruhan Proyek:** Batch 38 Selesai — Standardisasi Batas 7 Token Persamaan Aljabar & Kartu Variabel Kustom Dinamis Layar 04, 63 Kasus Uji Otomatis PASS 100% (0 Warning, 0 Error).  
-> **Total Progres:** ~100% (Seluruh 6 Layar Utama, AI Math Companion Universal Playable, Dual Clear Buttons, Modals, Soal Kontekstual, Pembahasan Langkah Asli, Kalibrasi Tombol Hapus, & Anti-Deadlock 7 Slot Papan Aljabar Selesai & Teruji, Siap Pengujian E2E & APK Build)  
+> **Terakhir Diperbarui:** 23 Oktober 2026 17:30 WIB  
+> **Status Keseluruhan Proyek:** Batch 39 Selesai — Resolusi Tumpang Tindih Teks Soal & Kotak Formula Banner Layar 04, 63 Kasus Uji Otomatis PASS 100% (0 Warning, 0 Error).  
+> **Total Progres:** ~100% (Seluruh 6 Layar Utama, AI Math Companion Universal Playable, Dual Clear Buttons, Modals, Soal Kontekstual, Pembahasan Langkah Asli, Kalibrasi Tombol Hapus, Anti-Deadlock 7 Slot Papan Aljabar, & Eliminasi Tumpang Tindih Banner Soal Selesai & Teruji, Siap Pengujian E2E & APK Build)  
 
 ---
 
@@ -1041,6 +1041,33 @@
 - [x] **Tahap 5 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
   - Keputusan arsitektur `DEC-51` dicatat di `Docs/Decision_Log.md`.
   - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/17/00.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
+---
+
+## 📋 Checklist Batch 39 (Resolusi Tumpang Tindih Teks Soal & Kotak Formula Banner Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `fix_question_banner_overlap_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Tahap 1 — Penyesuaian Serialisasi Scene (`04_AlgebraCardBoard.unity`):**
+  - Menonaktifkan GameObject `FormulaBox` (`m_IsActive: 0` pada ID 58), menghilangkan 100% kotak biru muda yang bertabrakan dengan teks cerita.
+  - Menata ulang `QuestionBodyText` (ID 66, RT 67) dengan ukuran diperluas $750 \times 100$ px pada koordinat terkalibrasi $x = 70, y = -18$ (margin bersih 40 px dari avatar maskot dan 35 px dari batas plakat kanan).
+- [x] **Tahap 2 — Penyelarasan Runtime Script (`AlgebraBoardController.cs`):**
+  - Di metode `SetupQuestion()`: menyembunyikan parent `FormulaBox` secara defensif runtime jika ada.
+  - Format narasi soal cerita dan petunjuk variabel disajikan secara elegan, bersih, dan lapang tanpa tabrakan visual (sesuai template resmi `Docs/Ui Template/04_algebra_card_board/code.html`).
+- [x] **Tahap 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **20/20 PASS (100% PASS)**
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 63/63 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+- [x] **Tahap 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-52` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/17/30.md` diperbarui.
   - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
 
 
