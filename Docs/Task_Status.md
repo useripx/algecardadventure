@@ -1,8 +1,8 @@
 # Task Status — AlgeCard Adventure
 
-> **Terakhir Diperbarui:** 23 Oktober 2026 16:00 WIB  
-> **Status Keseluruhan Proyek:** Batch 37 Selesai — Kalibrasi Tata Letak Vertikal Tombol Hapus Layar 04 (Sidebar Dek Kartu), 59 Kasus Uji Otomatis PASS 100% (0 Warning, 0 Error).  
-> **Total Progres:** ~100% (Seluruh 6 Layar Utama, AI Math Companion Universal Playable, Dual Clear Buttons, Modals, Soal Kontekstual, Pembahasan Langkah Asli, & Kalibrasi Tombol Hapus Selesai & Teruji, Siap Pengujian E2E & APK Build)  
+> **Terakhir Diperbarui:** 23 Oktober 2026 17:00 WIB  
+> **Status Keseluruhan Proyek:** Batch 38 Selesai — Standardisasi Batas 7 Token Persamaan Aljabar & Kartu Variabel Kustom Dinamis Layar 04, 63 Kasus Uji Otomatis PASS 100% (0 Warning, 0 Error).  
+> **Total Progres:** ~100% (Seluruh 6 Layar Utama, AI Math Companion Universal Playable, Dual Clear Buttons, Modals, Soal Kontekstual, Pembahasan Langkah Asli, Kalibrasi Tombol Hapus, & Anti-Deadlock 7 Slot Papan Aljabar Selesai & Teruji, Siap Pengujian E2E & APK Build)  
 
 ---
 
@@ -1002,6 +1002,45 @@
 - [x] **Tahap 3 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
   - Keputusan arsitektur `DEC-50` dicatat di `Docs/Decision_Log.md`.
   - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/16/30.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
+---
+
+## 📋 Checklist Batch 38 (Standardisasi Batas 7 Token Persamaan Aljabar & Kartu Variabel Kustom Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `long_equation_card_board_capacity_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document* / "eksekusi mana bagusnya akan saya cek di hp").
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** 100% data lokal di `banksoal.json` dan logika runtime offline tanpa backend.
+- [x] **Tahap 1 — Kurasi & Standardisasi Data Bank Soal (`banksoal.json`):**
+  - Mengkurasi seluruh 60 soal pada `Assets/StreamingAssets/banksoal.json` dan `Docs/banksoal.json` via script `scratch/curate_banksoal.py`.
+  - Menstandarisasi persamaan linear dan formula langkah penyelesaian menjadi maksimal 7 token di seluruh 4 tahap per soal (0 soal yang melebihi 7 slot).
+- [x] **Tahap 2 — Logika Penguraian & Kartu Variabel Kustom (`AlgebraBoardController.cs`):**
+  - Menambahkan fungsi `ExtractPureEquation(string raw)` untuk memisahkan formula matematika bersih dari teks narasi naratif.
+  - Menambahkan properti `CurrentCustomVariable`, referensi `customVariableButton` dan `customVariableText`, serta metode `SetCustomVariable(string letter)`.
+  - Otomatisasi deteksi variabel soal aktif di `SetupQuestion()` sehingga kartu kustom langsung memuat huruf yang sesuai (misal: `p`, `m`, `v`).
+  - Memasang clamp kapasitas target token maksimal 7 slot di `FormulateStagesFromQuestion`, `OnDeckCardClicked`, `CheckIfRowIsComplete`, dan `ValidateStage` untuk mencegah deadlock permanen.
+- [x] **Tahap 3 — Integrasi Visual Scene (`04_AlgebraCardBoard.unity`):**
+  - Menambahkan objek kartu variabel kustom ke-5 `VarCard_custom` (ID 780-788) pada palet dek aljabar.
+  - Menata ulang 5 tombol variabel secara simetris dan rapi: `VarBtn_x` (x = -96), `VarBtn_y` (x = -48), `VarBtn_a` (x = 0), `VarBtn_b` (x = 48), dan `VarCard_custom` (x = 96).
+  - Menghubungkan binding serialisasi `customVariableButton` dan `customVariableText` ke `AlgebraBoardController`.
+- [x] **Tahap 4 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan 4 pengujian unit pada `AlgebraBoardTests.cs`:
+    - `TC_BOARD_17_AllBankSoalQuestions_HaveMax7TokensPerStage`: Menguji seluruh 60 soal pada banksoal untuk memastikan <= 7 token di setiap tahap.
+    - `TC_BOARD_18_CustomVariable_AutoAdaptsToQuestionVariable`: Memastikan kartu kustom otomatis beradaptasi dengan huruf variabel soal (misal: `p`, `m`).
+    - `TC_BOARD_19_CustomVariable_UserCanSetArbitraryLetter`: Memastikan pemain dapat menyetel huruf kustom bebas (misal: `v`) dan memainkannya ke slot papan.
+    - `TC_BOARD_20_LongEquations_SolveWithoutDeadlock`: Memastikan persamaan panjang diselesaikan tanpa deadlock pengisian kartu.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **20/20 PASS (100% PASS)**
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 63/63 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Tahap 5 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-51` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/17/00.md` diperbarui.
   - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
 
 

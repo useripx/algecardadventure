@@ -543,6 +543,130 @@ namespace AlgeCardAdventure.Tests
             string hintSavings = AlgebraBoardController.GetVariableContextHint(qSavings);
             Assert.IsTrue(hintSavings.Contains("tabungan"), "Variabel x dalam konteks tabungan harus memuat petunjuk tabungan!");
         }
+
+        [Test]
+        public void TC_BOARD_17_AllBankSoalQuestions_HaveMax7TokensPerStage()
+        {
+            string jsonPath = System.IO.Path.Combine("Assets", "StreamingAssets", "banksoal.json");
+            if (!System.IO.File.Exists(jsonPath))
+            {
+                jsonPath = System.IO.Path.Combine("..", "..", "Assets", "StreamingAssets", "banksoal.json");
+            }
+
+            Assert.IsTrue(System.IO.File.Exists(jsonPath), "banksoal.json harus ditemukan untuk pengujian komprehensif!");
+            string json = System.IO.File.ReadAllText(jsonPath);
+            var bankData = JsonUtility.FromJson<BankSoalData>(json);
+
+            Assert.IsNotNull(bankData);
+            Assert.IsNotNull(bankData.levels);
+
+            int testedQuestions = 0;
+            foreach (var lvl in bankData.levels)
+            {
+                if (lvl.questions == null) continue;
+                foreach (var q in lvl.questions)
+                {
+                    _controller.FormulateStagesFromQuestion(q);
+                    for (int s = 0; s < 4; s++)
+                    {
+                        int tokenCount = _controller.stages[s].targetTokens.Count;
+                        Assert.LessOrEqual(tokenCount, 7, $"Soal {q.id} Stage {s} memiliki {tokenCount} token (melebihi batas fisik 7 slot)!");
+                    }
+                    testedQuestions++;
+                }
+            }
+
+            Assert.GreaterOrEqual(testedQuestions, 60, "Seluruh 60 soal wajib teruji dan menghasilkan <= 7 token di setiap tahap!");
+        }
+
+        [Test]
+        public void TC_BOARD_18_CustomVariable_AutoAdaptsToQuestionVariable()
+        {
+            var qP = new QuestionModel
+            {
+                id = "TEST-VAR-P",
+                equation_model = new string[] { "2p + 4 = 10" },
+                solution_steps = new string[] { "2p + 4 = 10", "2p = 6", "p = 3" },
+                final_answer = "3"
+            };
+
+            string extractedP = AlgebraBoardController.ExtractVariableFromQuestion(qP);
+            _controller.SetCustomVariable(extractedP);
+            Assert.AreEqual("p", _controller.CurrentCustomVariable, "Kartu variabel kustom harus otomatis berlabel 'p'!");
+
+            var qM = new QuestionModel
+            {
+                id = "TEST-VAR-M",
+                equation_model = new string[] { "10m + 40 = 100" },
+                solution_steps = new string[] { "10m + 40 = 100", "10m = 60", "m = 6" },
+                final_answer = "6"
+            };
+
+            string extractedM = AlgebraBoardController.ExtractVariableFromQuestion(qM);
+            _controller.SetCustomVariable(extractedM);
+            Assert.AreEqual("m", _controller.CurrentCustomVariable, "Kartu variabel kustom harus otomatis berlabel 'm'!");
+        }
+
+        [Test]
+        public void TC_BOARD_19_CustomVariable_UserCanSetArbitraryLetter()
+        {
+            // Pemain menyetel variabel kustom ke 'v'
+            _controller.SetCustomVariable("v");
+            Assert.AreEqual("v", _controller.CurrentCustomVariable);
+
+            // Inisialisasi stage aktif
+            _controller.stages = new List<BoardStageRow>();
+            var stage = new BoardStageRow();
+            stage.targetTokens = new List<string> { "3", "v", "=", "15" };
+            for (int i = 0; i < 7; i++) stage.slots.Add(new CardSlotView());
+            _controller.stages.Add(stage);
+            _controller.SetStageActive(0);
+
+            // Pemain memasukkan kartu dari dek
+            _controller.OnDeckCardClicked("3", "number");
+            _controller.OnDeckCardClicked(_controller.CurrentCustomVariable, "variable");
+
+            Assert.AreEqual("3", _controller.stages[0].slots[0].currentToken);
+            Assert.AreEqual("v", _controller.stages[0].slots[1].currentToken);
+        }
+
+        [Test]
+        public void TC_BOARD_20_LongEquations_SolveWithoutDeadlock()
+        {
+            var q = new QuestionModel
+            {
+                id = "NORMAL-008",
+                equation_model = new string[] { "3v + 30 = 150" },
+                solution_steps = new string[] { "S0", "3v + 30 = 150", "3v = 120", "v = 40" },
+                final_answer = "40"
+            };
+
+            _controller.stages = new List<BoardStageRow>();
+            for (int s = 0; s < 4; s++)
+            {
+                var row = new BoardStageRow();
+                for (int slotIdx = 0; slotIdx < 7; slotIdx++)
+                {
+                    row.slots.Add(new CardSlotView());
+                }
+                _controller.stages.Add(row);
+            }
+
+            _controller.FormulateStagesFromQuestion(q);
+            _controller.SetStageActive(0);
+            Assert.LessOrEqual(_controller.stages[0].targetTokens.Count, 7);
+
+            // Masukkan seluruh kartu target ke Stage 0
+            for (int i = 0; i < _controller.stages[0].targetTokens.Count; i++)
+            {
+                string token = _controller.stages[0].targetTokens[i];
+                _controller.OnDeckCardClicked(token, "number");
+            }
+
+            // Validasi sukses dan tidak deadlock
+            bool valid = _controller.ValidateStage(_controller.stages[0]);
+            Assert.IsTrue(valid, "Penyusunan persamaan Stage 0 harus valid dan tidak deadlock!");
+        }
     }
 }
 

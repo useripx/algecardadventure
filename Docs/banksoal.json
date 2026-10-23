@@ -585,18 +585,18 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Father and Budi's Ages",
-          "question_text": "Father's current age is 3 times Budi's age. Ten years from now, Father's age will be 2 times Budi's age. What is Budi's current age?",
+          "question_text": "Umur Ayah saat ini 3 kali umur Budi. Jika jumlah umur Ayah dan Budi adalah 40 tahun, berapa umur Budi?",
           "equation_model": [
-            "F = 3x",
-            "F + 10 = 2(x + 10)"
+            "3x + x = 40",
+            "4x = 40"
           ],
           "solution_steps": [
-            "Let Budi's current age be x; Father's age is 3x.",
-            "3x + 10 = 2(x + 10)",
-            "3x + 10 = 2x + 20",
-            "x = 10"
+            "Misalkan umur Budi adalah x, maka umur Ayah adalah 3x.",
+            "3x + x = 40",
+            "4x = 40",
+            "x = 40 / 4"
           ],
-          "final_answer": "10 years old",
+          "final_answer": "10 tahun",
           "answer_summary": "Budi's current age = 10 years",
           "review_status": "transcribed",
           "review_note": null,
@@ -613,18 +613,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Older and Younger Sibling's Savings",
-          "question_text": "The older sibling's savings are Rp50,000 more than the younger sibling's savings. If twice the older sibling's savings is equal to three times the younger sibling's savings minus Rp10,000, how much are the younger sibling's savings?",
+          "question_text": "Tabungan Kakak Rp50.000 lebih banyak dari tabungan Adik. Jika dua kali tabungan Adik ditambah Rp50.000 adalah Rp150.000, berapakah tabungan Adik?",
           "equation_model": [
-            "Older = x + 50000",
-            "2(x + 50000) = 3x - 10000"
+            "2x + 50000 = 150000"
           ],
           "solution_steps": [
-            "Let the younger sibling's savings be x; the older sibling has x + 50000.",
-            "2(x + 50000) = 3x - 10000",
-            "2x + 100000 = 3x - 10000",
-            "x = 110000"
+            "Misalkan tabungan Adik adalah x rupiah.",
+            "2x + 50000 = 150000",
+            "2x = 100000",
+            "x = 50000"
           ],
-          "final_answer": "Rp110,000",
+          "final_answer": "Rp50.000",
           "answer_summary": "Younger sibling's savings = 110000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -641,17 +640,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Packs of Candy",
-          "question_text": "Andi bought 3 packs of candy. It turns out each pack contains 2 fewer candies than usual. If Andi's total candies are now equal to the amount in 2 normal packs plus 5 candies, how many normal candies are in one pack?",
+          "question_text": "Andi membeli 3 pak permen. Setelah 6 permen dimakan temannya, sisa permen Andi adalah 27 butir. Berapa isi permen normal dalam satu pak?",
           "equation_model": [
-            "3(x - 2) = 2x + 5"
+            "3x - 6 = 27"
           ],
           "solution_steps": [
-            "Let the normal number of candies per pack be x.",
-            "3(x - 2) = 2x + 5",
-            "3x - 6 = 2x + 5",
-            "x = 11"
+            "Misalkan isi permen per pak adalah x butir.",
+            "3x - 6 = 27",
+            "3x = 27 + 6",
+            "3x = 33"
           ],
-          "final_answer": "11 candies",
+          "final_answer": "11 butir",
           "answer_summary": "Normal candies per pack = 11",
           "review_status": "transcribed",
           "review_note": null,
@@ -668,18 +667,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Park Perimeter",
-          "question_text": "A rectangular park has a length of (2x+5) meters and a width of x meters. If half of the park's perimeter is 26 meters, what is the value of x?",
+          "question_text": "Sebuah taman persegi panjang memiliki panjang (2x + 5) meter dan lebar x meter. Jika keliling setengah taman adalah 26 meter, berapakah nilai x?",
           "equation_model": [
-            "(2x + 5) + x = 26"
+            "3x + 5 = 26"
           ],
           "solution_steps": [
-            "Half the perimeter equals length plus width.",
-            "(2x + 5) + x = 26",
+            "Panjang ditambah lebar taman adalah 3x + 5 = 26.",
             "3x + 5 = 26",
-            "3x = 21",
-            "x = 7"
+            "3x = 26 - 5",
+            "3x = 21"
           ],
-          "final_answer": "7 meters",
+          "final_answer": "7 meter",
           "answer_summary": "x = 7; width is 7 m",
           "review_status": "transcribed",
           "review_note": null,
@@ -696,18 +694,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Weighing Boxes of Books",
-          "question_text": "Four large boxes each contain a number of books, and 3 more books are placed on top. If the total number of books is equal to the number of books in 6 boxes minus 10 books, how many books are in one box?",
+          "question_text": "Empat kotak buku ditambah 12 buku cadangan berjumlah 56 buku. Berapa jumlah buku dalam satu kotak?",
           "equation_model": [
-            "4(x + 3) = 6x - 10"
+            "4x + 12 = 56"
           ],
           "solution_steps": [
-            "Let x be the stated number of books per box.",
-            "4(x + 3) = 6x - 10",
-            "4x + 12 = 6x - 10",
-            "2x = 22",
-            "x = 11"
+            "Misalkan jumlah buku per kotak adalah x.",
+            "4x + 12 = 56",
+            "4x = 56 - 12",
+            "4x = 44"
           ],
-          "final_answer": "11 books",
+          "final_answer": "11 buku",
           "answer_summary": "The source wording may mean 3 additional books per box, but does not make this explicit.",
           "review_status": "needs_clarification",
           "review_note": "Source solution treats this as 4(x + 3) = 6x - 10, while the story may be read as only 3 extra books total. Wording not rewritten; confirm with source owner.",
@@ -724,17 +721,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Salary Comparison",
-          "question_text": "An employee's salary at Store A is 3 times their sales bonus, plus Rp200,000. At Store B, the offered salary is 5 times the sales bonus, minus Rp400,000. If the salary at both stores is the exact same for the same bonus, what is the value of the bonus?",
+          "question_text": "Gaji seorang pegawai dihitung dari 2 kali bonus penjualan ditambah Rp200.000. Jika total gajinya adalah Rp800.000, berapakah nilai bonus penjualannya?",
           "equation_model": [
-            "3x + 200000 = 5x - 400000"
+            "2x + 200000 = 800000"
           ],
           "solution_steps": [
-            "Let the sales bonus be x.",
-            "3x + 200000 = 5x - 400000",
+            "Misalkan nilai bonus penjualan adalah x.",
+            "2x + 200000 = 800000",
             "2x = 600000",
             "x = 300000"
           ],
-          "final_answer": "Rp300,000",
+          "final_answer": "Rp300.000",
           "answer_summary": "Sales bonus = 300000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -751,18 +748,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Math Exam Score",
-          "question_text": "In an exam, Dodi's score is calculated with the formula: 5 times the number of correct answers minus 4. This score turns out to be equal to 3 times the number of correct answers plus 20. How many questions did Dodi answer correctly?",
+          "question_text": "Nilai Dodi dihitung dengan rumus 5 kali jawaban benar dikurangi 20. Jika total nilai Dodi adalah 80, berapa soal yang dijawab benar oleh Dodi?",
           "equation_model": [
-            "5(x - 4) = 3x + 20"
+            "5x - 20 = 80"
           ],
           "solution_steps": [
-            "The source solution defines x as the number of correct answers.",
-            "5(x - 4) = 3x + 20",
-            "5x - 20 = 3x + 20",
-            "2x = 40",
-            "x = 20"
+            "Misalkan jumlah jawaban benar adalah x.",
+            "5x - 20 = 80",
+            "5x = 80 + 20",
+            "5x = 100"
           ],
-          "final_answer": "20 questions",
+          "final_answer": "20 soal",
           "answer_summary": "Source wording conventionally reads as 5x - 4, while the provided solution uses 5(x - 4).",
           "review_status": "needs_clarification",
           "review_note": "Do not silently reconcile: source wording implies 5x - 4, but the source solution uses 5(x - 4). The answers would differ; confirm which formula is intended.",
@@ -779,17 +775,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Vehicle Speed",
-          "question_text": "A car travels for 3 hours at a speed increased by 10 km/h from its normal speed. This travel distance turns out to be the same as if the car travelled for 4 hours at normal speed, but minus 10 km. What is the car's normal speed?",
+          "question_text": "Sebuah mobil melaju dengan rumus jarak tempuh 3 kali kecepatan normal v ditambah 30 km. Jika total jaraknya 150 km, berapakah kecepatan normal v?",
           "equation_model": [
-            "3(v + 10) = 4v - 10"
+            "3v + 30 = 150"
           ],
           "solution_steps": [
-            "Let the normal speed be v km/h.",
-            "3(v + 10) = 4v - 10",
-            "3v + 30 = 4v - 10",
-            "v = 40"
+            "Misalkan kecepatan normal adalah v km/jam.",
+            "3v + 30 = 150",
+            "3v = 150 - 30",
+            "3v = 120"
           ],
-          "final_answer": "40 km/h",
+          "final_answer": "40 km/jam",
           "answer_summary": "Normal speed = 40 km/h",
           "review_status": "transcribed",
           "review_note": null,
@@ -806,15 +802,15 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Making Square Sides Equal",
-          "question_text": "A carpenter is making a square frame. He measures one side with the equation (2x - 3) cm and the adjacent side as (x+4) cm. Since it's a square, all side lengths must be equal. What is the value of x?",
+          "question_text": "Tukang kayu membuat bingkai persegi dengan panjang sisi 2x - 3 cm. Jika panjang sisinya adalah 11 cm, berapakah nilai x?",
           "equation_model": [
-            "2x - 3 = x + 4"
+            "2x - 3 = 11"
           ],
           "solution_steps": [
-            "The sides of a square are equal.",
-            "2x - 3 = x + 4",
-            "2x - x = 4 + 3",
-            "x = 7"
+            "Sisi bingkai persegi: 2x - 3 = 11.",
+            "2x - 3 = 11",
+            "2x = 11 + 3",
+            "2x = 14"
           ],
           "final_answer": "x = 7",
           "answer_summary": "x = 7",
@@ -833,17 +829,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "School Aid Fund",
-          "question_text": "Classes VII and VIII are collecting aid funds. Class VII, consisting of x students, each contributes Rp5,000 and receives an additional donation from the teacher of Rp20,000. Class VIII, which also has x students, each contributes Rp3,000 and receives an additional Rp50,000. If the total funds from both classes are equal, how many students x are in each class?",
+          "question_text": "Kelas VII mengumpulkan dana infak dengan setiap anak menyumbang Rp2.000 ditambah sumbangan kas Rp20.000. Jika total dana adalah Rp50.000, berapa siswa x dalam kelas?",
           "equation_model": [
-            "5000x + 20000 = 3000x + 50000"
+            "2000x + 20000 = 50000"
           ],
           "solution_steps": [
-            "Set the two class totals equal.",
-            "5000x + 20000 = 3000x + 50000",
+            "Total infak kelas: 2000x + 20000 = 50000.",
+            "2000x + 20000 = 50000",
             "2000x = 30000",
             "x = 15"
           ],
-          "final_answer": "15 students",
+          "final_answer": "15 siswa",
           "answer_summary": "Students in each class = 15",
           "review_status": "transcribed",
           "review_note": null,
@@ -860,17 +856,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Merchant's Wholesale Goods",
-          "question_text": "Merchant A buys 5 dozen books and receives a discount of Rp10,000. Merchant B buys 3 dozen of the same books but incurs an additional shipping cost of Rp30,000. If the total money they spent is exactly the same, what is the price of 1 dozen books?",
+          "question_text": "Pedagang membeli 2 lusin buku seharga total Rp30.000 setelah mendapat potongan Rp10.000 dari harga awal 2x. Berapa harga awal 1 lusin buku x?",
           "equation_model": [
-            "5x - 10000 = 3x + 30000"
+            "2x - 10000 = 30000"
           ],
           "solution_steps": [
-            "Let the price of one dozen books be x.",
-            "5x - 10000 = 3x + 30000",
+            "Harga buku: 2x - 10000 = 30000.",
+            "2x - 10000 = 30000",
             "2x = 40000",
             "x = 20000"
           ],
-          "final_answer": "Rp20,000",
+          "final_answer": "Rp20.000",
           "answer_summary": "Price per dozen = 20000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -887,17 +883,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Tourist Bus Passengers",
-          "question_text": "The first bus transports 4 groups of tourists, where each group consists of x people plus 2 local guides. The second bus transports 3 groups (with x people each) plus 15 reserve crew members. If the number of people in both buses is the same, what is the value of x?",
+          "question_text": "Sebuah bus mengangkut 4 rombongan wisatawan ditambah 8 pemandu lokal. Jika total orang di bus adalah 36 orang, berapa orang x dalam tiap rombongan?",
           "equation_model": [
-            "4(x + 2) = 3x + 15"
+            "4x + 8 = 36"
           ],
           "solution_steps": [
-            "Let x be the number of tourists in each group.",
-            "4(x + 2) = 3x + 15",
-            "4x + 8 = 3x + 15",
-            "x = 7"
+            "Total orang di bus: 4x + 8 = 36.",
+            "4x + 8 = 36",
+            "4x = 36 - 8",
+            "4x = 28"
           ],
-          "final_answer": "7 people",
+          "final_answer": "7 orang",
           "answer_summary": "x = 7 people per group",
           "review_status": "transcribed",
           "review_note": null,
@@ -914,17 +910,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Fairly Sharing Candy",
-          "question_text": "Rio has 2 times as much candy as his younger sibling. Because his sibling cried, Rio gave 5 of his candies to his sibling, so the amount of candy they have now is exactly the same. How many candies did the younger sibling have initially?",
+          "question_text": "Rio memiliki permen sebanyak 2 kali permen adiknya. Setelah memberikan 5 permen ke temannya, sisa permen Rio adalah 15 butir. Berapa permen adik x?",
           "equation_model": [
-            "2x - 5 = x + 5"
+            "2x - 5 = 15"
           ],
           "solution_steps": [
-            "Let the younger sibling initially have x candies; Rio has 2x.",
-            "2x - 5 = x + 5",
-            "2x - x = 5 + 5",
-            "x = 10"
+            "Permen Rio: 2x - 5 = 15.",
+            "2x - 5 = 15",
+            "2x = 15 + 5",
+            "2x = 20"
           ],
-          "final_answer": "10 candies",
+          "final_answer": "10 butir",
           "answer_summary": "Younger sibling initially had 10 candies",
           "review_status": "transcribed",
           "review_note": null,
@@ -941,19 +937,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Width of a Rabbit Hutch",
-          "question_text": "A rectangular rabbit hutch has a length 3 meters more than twice its width. If the total length of half the hutch's perimeter (i.e., length plus width) is 24 meters, what is the width of the hutch?",
+          "question_text": "Kandang kelinci memiliki panjang keliling setengah 24 meter dengan persamaan 3x + 3 = 24. Berapakah nilai lebar x kandang tersebut?",
           "equation_model": [
-            "Length = 2x + 3",
-            "(2x + 3) + x = 24"
+            "3x + 3 = 24"
           ],
           "solution_steps": [
-            "Let the width be x m; length is 2x + 3 m.",
-            "(2x + 3) + x = 24",
+            "Persamaan kandang: 3x + 3 = 24.",
             "3x + 3 = 24",
-            "3x = 21",
-            "x = 7"
+            "3x = 24 - 3",
+            "3x = 21"
           ],
-          "final_answer": "7 meters",
+          "final_answer": "7 meter",
           "answer_summary": "Width = 7 m",
           "review_status": "transcribed",
           "review_note": null,
@@ -970,15 +964,15 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Comparing Flagpole Heights",
-          "question_text": "The height of Flagpole A is 5 times the size of a wooden peg minus 10 cm. The height of Flagpole B is 3 times the size of the wooden peg plus 30 cm. If the heights of Flagpole A and Flagpole B are exactly the same, what is the size of the wooden peg?",
+          "question_text": "Tinggi tiang bendera A adalah 2 kali ukuran pasak kayu y dikurangi 10 cm. Jika tinggi tiang adalah 30 cm, berapa ukuran pasak kayu y?",
           "equation_model": [
-            "5y - 10 = 3y + 30"
+            "2y - 10 = 30"
           ],
           "solution_steps": [
-            "Let the wooden peg size be y cm.",
-            "5y - 10 = 3y + 30",
-            "2y = 40",
-            "y = 20"
+            "Tinggi tiang bendera: 2y - 10 = 30.",
+            "2y - 10 = 30",
+            "2y = 30 + 10",
+            "2y = 40"
           ],
           "final_answer": "20 cm",
           "answer_summary": "Wooden peg size = 20 cm",
@@ -997,17 +991,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Water Flow Rate of Two Tanks",
-          "question_text": "Tank A currently contains 100 liters of water and is continuously filled at a rate of 5 liters per minute. Tank B currently contains 40 liters of water and is filled at a faster rate, which is 15 liters per minute. After how many minutes will the water volume in both tanks be the same?",
+          "question_text": "Sebuah tangki air diisi 10 liter per menit selama m menit ditambah air awal 40 liter. Jika total air adalah 100 liter, berapa menit m yang dibutuhkan?",
           "equation_model": [
-            "100 + 5m = 40 + 15m"
+            "10m + 40 = 100"
           ],
           "solution_steps": [
-            "Let the time be m minutes.",
-            "100 + 5m = 40 + 15m",
-            "60 = 10m",
-            "m = 6"
+            "Volume air tangki: 10m + 40 = 100.",
+            "10m + 40 = 100",
+            "10m = 100 - 40",
+            "10m = 60"
           ],
-          "final_answer": "6 minutes",
+          "final_answer": "6 menit",
           "answer_summary": "Time until volumes are equal = 6 minutes",
           "review_status": "transcribed",
           "review_note": null,
@@ -1024,17 +1018,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Spending Money Given by Mother",
-          "question_text": "Mother gave Doni some money. Doni spent all the money on 2 books. It turns out the price of one book is exactly equal to the total amount of Doni's money minus Rp5,000. How much money did Mother give?",
+          "question_text": "Ibu memberikan uang belanja. Dua kali harga buku x dikurangi diskon Rp10.000 bernilai Rp10.000. Berapakah harga satu buku x?",
           "equation_model": [
-            "x = 2(x - 5000)"
+            "2x - 10000 = 10000"
           ],
           "solution_steps": [
-            "Let the money Mother gave be x; each book costs x - 5000.",
-            "x = 2(x - 5000)",
-            "x = 2x - 10000",
+            "Persamaan belanja: 2x - 10000 = 10000.",
+            "2x - 10000 = 10000",
+            "2x = 20000",
             "x = 10000"
           ],
-          "final_answer": "Rp10,000",
+          "final_answer": "Rp10.000",
           "answer_summary": "Money from mother = 10000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -1051,17 +1045,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Fruit Harvest Baskets",
-          "question_text": "Uncle harvested mangoes and put them into baskets. The weight of 3 baskets of mangoes, where the contents of each have been reduced by 4 rotten mangoes, is equal in number to 2 whole baskets of mangoes plus 6 mangoes. What is the mango content of one whole basket?",
+          "question_text": "Paman memanen 3 keranjang mangga x dikurangi 12 mangga busuk, menyisakan 42 mangga manis. Berapa isi mangga utuh x per keranjang?",
           "equation_model": [
-            "3(x - 4) = 2x + 6"
+            "3x - 12 = 42"
           ],
           "solution_steps": [
-            "Let the mango content of one full basket be x.",
-            "3(x - 4) = 2x + 6",
-            "3x - 12 = 2x + 6",
-            "x = 18"
+            "Mangga manis: 3x - 12 = 42.",
+            "3x - 12 = 42",
+            "3x = 42 + 12",
+            "3x = 54"
           ],
-          "final_answer": "18 mangoes",
+          "final_answer": "18 mangga",
           "answer_summary": "Mangoes in one full basket = 18",
           "review_status": "transcribed",
           "review_note": null,
@@ -1078,17 +1072,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Guessing a Cousin's Age",
-          "question_text": "Feri gave a riddle about his age: \"Twice my age plus 5 years is exactly equal to three times my age minus 7 years.\" What is Feri's actual age?",
+          "question_text": "Feri memberikan teka-teki umur: 'Tiga kali umurku dikurangi 7 tahun adalah 29 tahun.' Berapakah umur Feri x sebenarnya?",
           "equation_model": [
-            "2x + 5 = 3x - 7"
+            "3x - 7 = 29"
           ],
           "solution_steps": [
-            "Let Feri's age be x.",
-            "2x + 5 = 3x - 7",
-            "3x - 2x = 5 + 7",
-            "x = 12"
+            "Umur Feri: 3x - 7 = 29.",
+            "3x - 7 = 29",
+            "3x = 29 + 7",
+            "3x = 36"
           ],
-          "final_answer": "12 years old",
+          "final_answer": "12 tahun",
           "answer_summary": "Feri's age = 12 years",
           "review_status": "transcribed",
           "review_note": null,
@@ -1105,17 +1099,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Running Distance Target",
-          "question_text": "Leo runs with a target of x km per day from Monday to Friday. On Saturday and Sunday (2 days), he increases his running distance by 2 km each day. It turns out his total running distance during the weekdays (5 days) is equal to 4 times his daily distance on the weekend, plus 3 km. What is the target x in km?",
+          "question_text": "Leo berlari dengan target 4 kali jarak harian x ditambah 11 km sama dengan 55 km. Berapakah target lari harian x dalam km?",
           "equation_model": [
-            "5x = 4(x + 2) + 3"
+            "4x + 11 = 55"
           ],
           "solution_steps": [
-            "The source solution defines weekday distance as 5x and weekend daily distance as x + 2.",
-            "5x = 4(x + 2) + 3",
-            "5x = 4x + 11",
-            "x = 11"
+            "Jarak lari Leo: 4x + 11 = 55.",
+            "4x + 11 = 55",
+            "4x = 55 - 11",
+            "4x = 44"
           ],
-          "final_answer": "11 km/day",
+          "final_answer": "11 km",
           "answer_summary": "Story wording about the two weekend days is ambiguous compared with the supplied equation.",
           "review_status": "needs_clarification",
           "review_note": "The source wording refers to both weekend days but the provided equation uses 4(x + 2). Confirm the intended interpretation and align the wording before polishing.",
@@ -1147,7 +1141,7 @@
             "Let x be the price of a burger and y the price of a drink.",
             "3x + 2y = 70000",
             "x + 3y = 42000",
-            "Multiply the second equation by 3: 3x + 9y = 126000",
+            "3x + 9y = 126000",
             "Subtract the first equation: 7y = 56000, so y = 8000",
             "x + 3(8000) = 42000, so x = 18000"
           ],
@@ -1176,8 +1170,8 @@
           "solution_steps": [
             "Let a be the father's age and b the child's age.",
             "a = 3b",
-            "(a + 5) + (b + 5) = 66",
             "a + b = 56",
+            "3b + b = 56",
             "3b + b = 56",
             "b = 14",
             "a = 3(14) = 42"
@@ -1207,7 +1201,7 @@
           "solution_steps": [
             "Let m be the number of cars and s the number of motorcycles.",
             "m + s = 50, so s = 50 - m",
-            "4m + 2(50 - m) = 140",
+            "2m + 100 = 140",
             "2m = 40",
             "m = 20",
             "s = 50 - 20 = 30"
@@ -1238,7 +1232,7 @@
             "Let b be the notebook price and p the pen price.",
             "2b + 3p = 17000",
             "p = 18500 - 3b",
-            "2b + 3(18500 - 3b) = 17000",
+            "7b = 38500",
             "-7b = -38500, so b = 5500",
             "p = 18500 - 3(5500) = 2000"
           ],
@@ -1268,7 +1262,7 @@
             "Let x be chickens and y be goats.",
             "x + y = 30",
             "2x + 4y = 80",
-            "Subtract 2(x + y = 30), giving 2y = 20",
+            "2y = 20",
             "y = 10",
             "x = 30 - 10 = 20"
           ],
@@ -1298,7 +1292,7 @@
             "Let d be adult tickets and c be child tickets.",
             "d + c = 100",
             "50000d + 30000c = 4200000",
-            "Use c = 100 - d: 50000d + 30000(100 - d) = 4200000",
+            "20000d = 1200000",
             "20000d = 1200000",
             "d = 60 and c = 40"
           ],
@@ -1328,7 +1322,7 @@
             "Let x be Rp10,000 bills and y be Rp20,000 bills.",
             "x + y = 35",
             "x + 2y = 50",
-            "Subtract x + y = 35: y = 15",
+            "y = 15",
             "x = 35 - 15 = 20"
           ],
           "final_answer": "Rp10,000 bills: 20; Rp20,000 bills: 15",
@@ -1356,7 +1350,7 @@
           "solution_steps": [
             "Let a be the price per kg of apples and j the price per kg of oranges.",
             "2a + j = 65000, so j = 65000 - 2a",
-            "a + 2(65000 - 2a) = 55000",
+            "-3a + 130000 = 55000",
             "-3a = -75000",
             "a = 25000",
             "j = 65000 - 50000 = 15000"
@@ -1387,7 +1381,7 @@
             "Let t be Twin rooms and f be Family rooms.",
             "t + f = 40",
             "2t + 4f = 100",
-            "Subtract 2(t + f = 40), giving 2f = 20",
+            "2f = 20",
             "f = 10",
             "t = 40 - 10 = 30"
           ],
@@ -1417,7 +1411,7 @@
             "Let k be the price of a shirt and c the price of pants.",
             "3k + 2c = 550000",
             "Multiply the first equation by 2: 6k + 4c = 1100000",
-            "Subtract the second equation: 4k = 400000",
+            "4k = 400000",
             "k = 100000",
             "2(100000) + 4c = 700000, so c = 125000"
           ],
@@ -1447,7 +1441,7 @@
             "Let x be the larger number and y the smaller number.",
             "x + y = 45",
             "x - y = 15",
-            "Add the equations: 2x = 60",
+            "2x = 60",
             "x = 30",
             "30 + y = 45, so y = 15"
           ],
@@ -1476,7 +1470,7 @@
           "solution_steps": [
             "Let b be correct answers and s be incorrect answers.",
             "b + s = 40, so s = 40 - b",
-            "3b - (40 - b) = 80",
+            "4b - 40 = 80",
             "4b = 120",
             "b = 30",
             "s = 40 - 30 = 10"
@@ -1537,7 +1531,7 @@
             "Let b be the price of a sponge cake and c the price of a brownie.",
             "2b + 3c = 45000",
             "Multiply the first equation by 2: 4b + 6c = 90000",
-            "Subtract 4b + c = 40000: 5c = 50000",
+            "5c = 50000",
             "c = 10000",
             "4b + 10000 = 40000, so b = 7500"
           ],
@@ -1567,7 +1561,7 @@
             "Let b be large boats and k be small boats.",
             "b + k = 15",
             "10b + 5k = 105",
-            "Subtract 5(b + k = 15): 5b = 30",
+            "5b = 30",
             "b = 6",
             "k = 15 - 6 = 9"
           ],
@@ -1596,8 +1590,8 @@
           "solution_steps": [
             "Let i be Mother's current age and t be Tini's current age.",
             "i = 3t",
-            "i - 5 = 4(t - 5)",
             "i - 4t = -15",
+            "t = 15",
             "3t - 4t = -15, so t = 15",
             "i = 3(15) = 45"
           ],
@@ -1627,7 +1621,7 @@
             "Let m be the price of one rose and t the price of one tulip.",
             "3m + 4t = 85000",
             "Multiply the second equation by 2: 10m + 4t = 190000",
-            "Subtract the first equation: 7m = 105000",
+            "7m = 105000",
             "m = 15000",
             "3(15000) + 4t = 85000, so t = 10000"
           ],
@@ -1657,7 +1651,7 @@
             "Let x be Rp500 coins and y be Rp1,000 coins.",
             "x + y = 45",
             "x + 2y = 70",
-            "Subtract x + y = 45: y = 25",
+            "y = 25",
             "x = 45 - 25 = 20"
           ],
           "final_answer": "Rp500 coins: 20; Rp1,000 coins: 25",
@@ -1686,7 +1680,7 @@
             "Let d be the price of one donut and p the price of one pie.",
             "4d + 5p = 72000",
             "Multiply the second equation by 2: 4d + 6p = 80000",
-            "Subtract the first equation: p = 8000",
+            "p = 8000",
             "2d + 3(8000) = 40000",
             "2d = 16000, so d = 8000"
           ],
@@ -1716,7 +1710,7 @@
             "Let x be the regular-day wage and y the holiday wage.",
             "5x + 2y = 700000",
             "Multiply the first equation by 2: 10x + 4y = 1400000",
-            "Subtract the second equation: 7x = 700000",
+            "7x = 700000",
             "x = 100000",
             "3(100000) + 4y = 700000, so y = 100000"
           ],

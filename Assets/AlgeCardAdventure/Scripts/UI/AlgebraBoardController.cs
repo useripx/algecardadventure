@@ -108,6 +108,8 @@ namespace AlgeCardAdventure.UI
         [SerializeField] private List<Button> numberButtons = new List<Button>();
         [SerializeField] private List<Button> variableButtons = new List<Button>();
         [SerializeField] private List<Button> operatorButtons = new List<Button>();
+        [SerializeField] private Button customVariableButton;
+        [SerializeField] private Text customVariableText;
         [SerializeField] private Button deleteOneButton;
         [SerializeField] private Button clearButton;
         [SerializeField] private Button clearAllButton;
@@ -145,6 +147,20 @@ namespace AlgeCardAdventure.UI
         [SerializeField] private Sprite panelCompleteSprite;
 
         // Button Accessor Properties for Testing & Scripting
+        public Button CustomVariableButton
+        {
+            get => customVariableButton;
+            set => customVariableButton = value;
+        }
+
+        public Text CustomVariableText
+        {
+            get => customVariableText;
+            set => customVariableText = value;
+        }
+
+        public string CurrentCustomVariable { get; private set; } = "x";
+
         public Button DeleteOneButton
         {
             get => deleteOneButton;
@@ -238,6 +254,13 @@ namespace AlgeCardAdventure.UI
                 }
             }
 
+            // Setel kartu variabel kustom default sesuai variabel soal aktif (DEC-51)
+            if (ActiveQuestion != null)
+            {
+                string detectedVar = ExtractVariableFromQuestion(ActiveQuestion);
+                SetCustomVariable(detectedVar);
+            }
+
             // Bentuk target token dan struktur 4 tahap dari soal aktif
             FormulateStagesFromQuestion(ActiveQuestion);
 
@@ -248,6 +271,20 @@ namespace AlgeCardAdventure.UI
             UpdateActionButtonsVisual();
 
             ShowNotice("Arrange cards according to the mission!", true);
+        }
+
+        /// <summary>
+        /// Menyetel huruf variabel pada kartu kustom (DEC-51).
+        /// Default cerdas otomatis mengikuti variabel soal aktif.
+        /// </summary>
+        public void SetCustomVariable(string letter)
+        {
+            if (string.IsNullOrWhiteSpace(letter)) return;
+            CurrentCustomVariable = letter.Trim().Substring(0, 1).ToLower();
+            if (customVariableText != null)
+            {
+                customVariableText.text = CurrentCustomVariable;
+            }
         }
 
         private void SetupButtonListeners()
@@ -314,7 +351,7 @@ namespace AlgeCardAdventure.UI
                 }
             }
 
-            // Pasang listener Tap-to-Slot untuk tombol variabel (x, and, a, b)
+            // Pasang listener Tap-to-Slot untuk tombol variabel (x, y, a, b)
             foreach (var btn in variableButtons)
             {
                 if (btn != null)
@@ -324,6 +361,17 @@ namespace AlgeCardAdventure.UI
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() => OnDeckCardClicked(val, "variable"));
                 }
+            }
+
+            // Pasang listener untuk tombol variabel kustom / dinamis (DEC-51)
+            if (customVariableButton != null)
+            {
+                customVariableButton.onClick.RemoveAllListeners();
+                customVariableButton.onClick.AddListener(() =>
+                {
+                    string targetVar = !string.IsNullOrEmpty(CurrentCustomVariable) ? CurrentCustomVariable : "x";
+                    OnDeckCardClicked(targetVar, "variable");
+                });
             }
 
             // Pasang listener Tap-to-Slot untuk tombol operator (+, -, ×, ÷)
@@ -402,7 +450,7 @@ namespace AlgeCardAdventure.UI
 
             if (question.solution_steps != null && question.solution_steps.Length > 2)
             {
-                step1Eq = question.solution_steps[2];
+                step1Eq = ExtractPureEquation(question.solution_steps[2]);
                 if (question.solution_steps.Length > 1 && !string.IsNullOrWhiteSpace(question.solution_steps[1]))
                 {
                     step1Desc = question.solution_steps[1];
@@ -428,7 +476,7 @@ namespace AlgeCardAdventure.UI
 
             if (question.solution_steps != null && question.solution_steps.Length > 3)
             {
-                step2Eq = question.solution_steps[3];
+                step2Eq = ExtractPureEquation(question.solution_steps[3]);
                 step2Desc = "Simplify the expression.";
             }
             else
@@ -454,6 +502,15 @@ namespace AlgeCardAdventure.UI
             string finalExpr = $"{varName} = {cleanDigits}";
             stages[3].targetTokens = TokenizeExpression(finalExpr);
 
+            // Pastikan jumlah target tokens per baris tidak melebihi kapasitas fisik 7 slot (DEC-51)
+            for (int s = 0; s < stages.Count; s++)
+            {
+                if (stages[s].targetTokens != null && stages[s].targetTokens.Count > 7)
+                {
+                    stages[s].targetTokens = stages[s].targetTokens.GetRange(0, 7);
+                }
+            }
+
             // Pastikan seluruh 7 slot selalu aktif dan terbuka di semua tahap (Pilar 1 Zero Code Approved Plan)
             for (int s = 0; s < stages.Count; s++)
             {
@@ -471,6 +528,30 @@ namespace AlgeCardAdventure.UI
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Mengekstrak persamaan matematika murni dari kalimat narasi langkah solusi.
+        /// Mengambil bagian formula setelah pemisah naratif seperti ": ", ", giving ", atau "so ".
+        /// </summary>
+        public static string ExtractPureEquation(string raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw)) return "";
+            string s = raw.Trim();
+            string[] separators = new[] { ": ", ", giving ", " giving ", "so " };
+            foreach (var sep in separators)
+            {
+                if (s.Contains(sep))
+                {
+                    string[] parts = s.Split(new[] { sep }, StringSplitOptions.RemoveEmptyEntries);
+                    s = parts[parts.Length - 1].Trim();
+                }
+            }
+            if (s.Contains(","))
+            {
+                s = s.Split(',')[0].Trim();
+            }
+            return s.Trim();
         }
 
         /// <summary>
@@ -714,7 +795,7 @@ namespace AlgeCardAdventure.UI
             if (IsAllStagesCompleted || CurrentStageIndex >= stages.Count) return;
 
             var currentStage = stages[CurrentStageIndex];
-            int maxSlots = currentStage.targetTokens.Count;
+            int maxSlots = Mathf.Min(currentStage.targetTokens.Count, currentStage.slots.Count);
 
             CardSlotView emptySlot = null;
             for (int i = 0; i < maxSlots && i < currentStage.slots.Count; i++)
@@ -830,7 +911,7 @@ namespace AlgeCardAdventure.UI
         private void CheckIfRowIsComplete(BoardStageRow stage)
         {
             int filledCount = 0;
-            int totalNeeded = stage.targetTokens.Count;
+            int totalNeeded = Mathf.Min(stage.targetTokens.Count, stage.slots.Count);
 
             for (int i = 0; i < totalNeeded && i < stage.slots.Count; i++)
             {
@@ -1025,7 +1106,8 @@ namespace AlgeCardAdventure.UI
         {
             if (stage == null || stage.targetTokens == null) return false;
 
-            int targetCount = stage.targetTokens.Count;
+            int targetCount = Mathf.Min(stage.targetTokens.Count, stage.slots.Count);
+            if (targetCount == 0) return true;
             for (int i = 0; i < targetCount; i++)
             {
                 if (i >= stage.slots.Count) return false;

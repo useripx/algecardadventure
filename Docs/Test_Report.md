@@ -153,18 +153,30 @@
 | **TC_BOARD_14** | `AlgebraBoardController` | Eksekusi tombol Hapus 1 Kartu (`DeleteOneButton`) | Menghapus kartu terisi paling kanan di posisi baru $y = -105$ tanpa gangguan visual ke kartu operator | **PASS** |
 | **TC_BOARD_15** | `AlgebraBoardController` | Eksekusi tombol Hapus Semua (`ClearAllButton`) | Mengosongkan seluruh slot aktif di posisi baru $y = -157$ dengan layout proporsional | **PASS** |
 
+### Batch 38: Standardisasi Batas 7 Token Persamaan Aljabar & Kartu Variabel Kustom Layar 04
+- **Tanggal:** 23 Oktober 2026 17:00 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_BOARD_17** | `banksoal.json` & `AlgebraBoardController` | Verifikasi kapasitas token seluruh 60 soal pada banksoal | Seluruh 60 soal diuji dan menghasilkan $\le 7$ target token di setiap tahap (bebas deadlock slot) | **PASS** |
+| **TC_BOARD_18** | `AlgebraBoardController` | Adaptasi otomatis kartu variabel kustom | Mendeteksi huruf variabel soal aktif ($p, m, dll.$) dan memasangnya otomatis ke kartu kustom ke-5 | **PASS** |
+| **TC_BOARD_19** | `AlgebraBoardController` | Input kartu variabel kustom bebas oleh user | Pemain menyetel huruf variabel arbitrary ($v$) dan berhasil menaruhnya ke slot baris papan | **PASS** |
+| **TC_BOARD_20** | `AlgebraBoardController` | Penyelesaian persamaan aljabar panjang tanpa deadlock | Memasukkan seluruh kartu formula panjang hingga validasi berhasil tanpa mentok slot | **PASS** |
+
 ---
 
-## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 37)
+## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 38)
 
 - **Total Test Suite Mandiri Proyek:** 5 Runner
-  - `BoardTestRunner`: **16/16 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_16`)
+  - `BoardTestRunner`: **20/20 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_20`)
   - `TFTestRunner`: **11/11 PASS** (`TC_TF_01` s.d. `TC_TF_11`)
   - `ChatbotTestRunner`: **8/8 PASS** (`TC_CHAT_01` s.d. `TC_CHAT_08`)
   - `MissionTestRunner`: **14/14 PASS** (`TC_MISSION_01` s.d. `TC_MISSION_14`)
   - `ScoreTestRunner`: **10/10 PASS** (`TC_SRES_01` s.d. `TC_SRES_10`)
-- **Total Kasus Uji Terverifikasi:** 59 Test
-- **Lulus (PASS):** 59 (100%)
+- **Total Kasus Uji Terverifikasi:** 63 Test
+- **Lulus (PASS):** 63 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)
