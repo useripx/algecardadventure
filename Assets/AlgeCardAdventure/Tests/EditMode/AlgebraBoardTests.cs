@@ -361,11 +361,11 @@ namespace AlgeCardAdventure.Tests
         }
 
         [Test]
-        public void TC_BOARD_13_StrictValidation_RejectsIncorrectAdvancement()
+        public void TC_BOARD_13_NonBlockingValidation_WrongStageAdvancesWithRedBadge()
         {
             var q = new QuestionModel
             {
-                id = "TEST-STRICT",
+                id = "TEST-NONBLOCK",
                 equation_model = new string[] { "x + 2 = 5" },
                 solution_steps = new string[] { "S0", "S1", "x = 5 - 2", "x = 3" },
                 final_answer = "3"
@@ -375,7 +375,7 @@ namespace AlgeCardAdventure.Tests
             for (int s = 0; s < 4; s++)
             {
                 var row = new BoardStageRow();
-                for (int slotIdx = 0; slotIdx < 7; slotIdx++)
+                for (int slotIdx = 0; slotIdx < 8; slotIdx++)
                 {
                     row.slots.Add(new CardSlotView());
                 }
@@ -393,12 +393,10 @@ namespace AlgeCardAdventure.Tests
             _controller.stages[0].slots[4].SetToken("5", null, Color.black);
 
             _controller.OnContinueClicked();
-            Assert.AreEqual(0, _controller.CurrentStageIndex, "Pemain tidak boleh maju ke tahap berikutnya jika kartu belum pas.");
-
-            // Perbaiki kartu menjadi benar
-            _controller.stages[0].slots[1].SetToken("+", null, Color.black);
-            _controller.OnContinueClicked();
-            Assert.AreEqual(1, _controller.CurrentStageIndex, "Pemain harus bisa maju ke tahap berikutnya ketika kartu sudah pas.");
+            // Pemain tetap maju ke Stage 1 (non-blocking) tetapi Stage 0 ditandai salah (merah)
+            Assert.AreEqual(1, _controller.CurrentStageIndex, "Pemain harus tetap bisa maju ke tahap berikutnya meskipun kartu salah.");
+            Assert.IsFalse(_controller.stages[0].isCorrect, "Stage 0 harus ditandai isCorrect = false saat susunan salah.");
+            Assert.AreEqual("WRONG ✕", _controller.stages[0].badgeStatusText.text, "Badge Stage 0 harus bertuliskan 'WRONG ✕'.");
         }
 
         [Test]
@@ -1031,6 +1029,136 @@ namespace AlgeCardAdventure.Tests
             _controller.OnContinueClicked();
             Assert.IsTrue(_controller.stages[1].isCompleted, "Stage 1 harus berstatus completed!");
             Assert.AreEqual(2, _controller.CurrentStageIndex, "Pemain harus berhasil maju ke Stage 2 tanpa terhambat!");
+        }
+
+        [Test]
+        public void TC_BOARD_27_CorrectStage_SetsGreenBadge_AndAdvances()
+        {
+            var q = new QuestionModel
+            {
+                id = "TEST-CORRECT-ADVANCE",
+                equation_model = new string[] { "x + 2 = 5" },
+                solution_steps = new string[] { "S0", "S1", "x = 5 - 2", "x = 3" },
+                final_answer = "3"
+            };
+
+            _controller.stages = new List<BoardStageRow>();
+            for (int s = 0; s < 4; s++)
+            {
+                var row = new BoardStageRow();
+                for (int slotIdx = 0; slotIdx < 8; slotIdx++)
+                {
+                    row.slots.Add(new CardSlotView());
+                }
+                _controller.stages.Add(row);
+            }
+
+            _controller.FormulateStagesFromQuestion(q);
+            _controller.SetStageActive(0);
+
+            // Isi benar: x + 2 = 5
+            _controller.stages[0].slots[0].SetToken("x", null, Color.black);
+            _controller.stages[0].slots[1].SetToken("+", null, Color.black);
+            _controller.stages[0].slots[2].SetToken("2", null, Color.black);
+            _controller.stages[0].slots[3].SetToken("=", null, Color.black);
+            _controller.stages[0].slots[4].SetToken("5", null, Color.black);
+
+            _controller.OnContinueClicked();
+
+            Assert.AreEqual(1, _controller.CurrentStageIndex, "Pemain harus maju ke Stage 1 saat jawaban benar.");
+            Assert.IsTrue(_controller.stages[0].isCorrect, "Stage 0 harus ditandai isCorrect = true.");
+            Assert.AreEqual("CORRECT ✓", _controller.stages[0].badgeStatusText.text, "Badge Stage 0 harus bertuliskan 'CORRECT ✓'.");
+        }
+
+        [Test]
+        public void TC_BOARD_28_WrongStage_SetsRedBadge_AndAdvancesWithoutBlocking()
+        {
+            var q = new QuestionModel
+            {
+                id = "TEST-WRONG-ADVANCE",
+                equation_model = new string[] { "x + 2 = 5" },
+                solution_steps = new string[] { "S0", "S1", "x = 5 - 2", "x = 3" },
+                final_answer = "3"
+            };
+
+            _controller.stages = new List<BoardStageRow>();
+            for (int s = 0; s < 4; s++)
+            {
+                var row = new BoardStageRow();
+                for (int slotIdx = 0; slotIdx < 8; slotIdx++)
+                {
+                    row.slots.Add(new CardSlotView());
+                }
+                _controller.stages.Add(row);
+            }
+
+            _controller.FormulateStagesFromQuestion(q);
+            _controller.SetStageActive(0);
+
+            // Isi salah: x - 9 = 5
+            _controller.stages[0].slots[0].SetToken("x", null, Color.black);
+            _controller.stages[0].slots[1].SetToken("-", null, Color.black);
+            _controller.stages[0].slots[2].SetToken("9", null, Color.black);
+            _controller.stages[0].slots[3].SetToken("=", null, Color.black);
+            _controller.stages[0].slots[4].SetToken("5", null, Color.black);
+
+            _controller.OnContinueClicked();
+
+            // Tetap maju tanpa blocking
+            Assert.AreEqual(1, _controller.CurrentStageIndex, "Pemain harus tetap bisa maju ke Stage 1 meskipun jawaban salah.");
+            Assert.IsFalse(_controller.stages[0].isCorrect, "Stage 0 harus ditandai isCorrect = false saat jawaban salah.");
+            Assert.AreEqual("WRONG ✕", _controller.stages[0].badgeStatusText.text, "Badge Stage 0 harus bertuliskan 'WRONG ✕'.");
+        }
+
+        [Test]
+        public void TC_BOARD_29_Easy016_DualValidation_AcceptsInitialEquationInStep1()
+        {
+            var qEasy16 = new QuestionModel
+            {
+                id = "EASY-016",
+                ui_level = "Easy",
+                title = "3m + 5 = 95",
+                equation_model = new string[] { "3m + 5 = 95" },
+                solution_steps = new string[] {
+                    "3m + 5 = 95",
+                    "3m + 5 = 95",
+                    "3m = 90",
+                    "m = 30"
+                },
+                final_answer = "30"
+            };
+
+            _controller.stages = new List<BoardStageRow>();
+            for (int s = 0; s < 4; s++)
+            {
+                var row = new BoardStageRow();
+                for (int slotIdx = 0; slotIdx < 8; slotIdx++)
+                {
+                    row.slots.Add(new CardSlotView());
+                }
+                _controller.stages.Add(row);
+            }
+
+            _controller.FormulateStagesFromQuestion(qEasy16);
+            _controller.SetStageActive(1);
+            Assert.AreEqual(1, _controller.CurrentStageIndex);
+
+            // Pemain memasukkan kartu "3", "m", "+", "5", "=", "9", "5" pada Stage 1 (Step 1)
+            string[] userCards = { "3", "m", "+", "5", "=", "9", "5" };
+            for (int i = 0; i < userCards.Length; i++)
+            {
+                _controller.OnDeckCardClicked(userCards[i], "number");
+            }
+
+            // Validasi harus SUKSES via dual-validation fallback ke Stage 0 target
+            bool valid = _controller.ValidateStage(_controller.stages[1]);
+            Assert.IsTrue(valid, "Stage 1 harus menerima susunan persamaan awal 3m + 5 = 95 melalui dual-validation fallback!");
+
+            // Tekan Lanjut -> status harus CORRECT (Hijau) dan maju ke Stage 2
+            _controller.OnContinueClicked();
+            Assert.IsTrue(_controller.stages[1].isCorrect, "Stage 1 harus ditandai isCorrect = true.");
+            Assert.AreEqual("CORRECT ✓", _controller.stages[1].badgeStatusText.text, "Badge Stage 1 harus 'CORRECT ✓' (Hijau).");
+            Assert.AreEqual(2, _controller.CurrentStageIndex, "Pemain harus berhasil maju ke Stage 2!");
         }
     }
 }

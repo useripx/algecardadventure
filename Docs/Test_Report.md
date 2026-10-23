@@ -221,18 +221,30 @@
 | **TC_BOARD_25** | `AlgebraBoardController` | Validasi sukses dengan slot kosong di belakang (*trailing empty slots*) | Persamaan 5 kartu dengan 3 slot kosong di belakang berhasil divalidasi dan pemain tidak dituntut mengisi penuh seluruh 8 kotak | **PASS** |
 | **TC_BOARD_26** | `banksoal.json` & `AlgebraBoardController` | Progresi Stage 1 Substitusi HARD-011 melangkah maju ke Stage 2 | Target Stage 1 disederhanakan menjadi 6 token aljabar (7 kartu fisik), muat utuh dalam 8 slot, validasi sukses, dan tombol Continue memajukan pemain ke Stage 2 | **PASS** |
 
+### Batch 44: Sistem Progresi Non-Blocking Hijau Benar / Merah Salah & Dual-Validation Layar 04
+- **Tanggal:** 23 Oktober 2026 23:35 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_BOARD_13** | `AlgebraBoardController` | Progresi non-blocking saat jawaban salah | Pemain tetap melangkah ke Stage 1, Stage 0 ditandai `isCorrect = false`, badge `"WRONG ✕"` merah | **PASS** |
+| **TC_BOARD_27** | `AlgebraBoardController` | Jawaban benar menghasilkan badge hijau dan melangkah maju | Stage ditandai `isCorrect = true`, badge `"CORRECT ✓"` hijau, dan melangkah maju | **PASS** |
+| **TC_BOARD_28** | `AlgebraBoardController` | Jawaban salah menghasilkan badge merah dan melangkah maju tanpa blocking | Stage ditandai `isCorrect = false`, badge `"WRONG ✕"` merah, dan melangkah maju tanpa diblokir | **PASS** |
+| **TC_BOARD_29** | `AlgebraBoardController` | Dual-validation soal `EASY-016` menerima persamaan awal di Step 1 | Kartu `3m + 5 = 95` di Stage 1 diterima sebagai benar (hijau) via dual-validation, berhasil maju ke Stage 2 | **PASS** |
+
 ---
 
-## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 43)
+## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 44)
 
 - **Total Test Suite Mandiri Proyek:** 5 Runner
-  - `BoardTestRunner`: **32/32 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_26`, `TC_HARD_01` s.d. `TC_HARD_06`)
+  - `BoardTestRunner`: **35/35 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_29`, `TC_HARD_01` s.d. `TC_HARD_06`)
   - `TFTestRunner`: **11/11 PASS** (`TC_TF_01` s.d. `TC_TF_11`)
   - `ChatbotTestRunner`: **8/8 PASS** (`TC_CHAT_01` s.d. `TC_CHAT_08`)
   - `MissionTestRunner`: **14/14 PASS** (`TC_MISSION_01` s.d. `TC_MISSION_14`)
   - `ScoreTestRunner`: **10/10 PASS** (`TC_SRES_01` s.d. `TC_SRES_10`)
-- **Total Kasus Uji Terverifikasi:** 75 Test
-- **Lulus (PASS):** 75 (100%)
+- **Total Kasus Uji Terverifikasi:** 78 Test
+- **Lulus (PASS):** 78 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

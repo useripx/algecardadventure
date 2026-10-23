@@ -1,8 +1,8 @@
 # Task Status — AlgeCard Adventure
 
-> **Terakhir Diperbarui:** 23 Oktober 2026 17:30 WIB  
-> **Status Keseluruhan Proyek:** Batch 39 Selesai — Resolusi Tumpang Tindih Teks Soal & Kotak Formula Banner Layar 04, 63 Kasus Uji Otomatis PASS 100% (0 Warning, 0 Error).  
-> **Total Progres:** ~100% (Seluruh 6 Layar Utama, AI Math Companion Universal Playable, Dual Clear Buttons, Modals, Soal Kontekstual, Pembahasan Langkah Asli, Kalibrasi Tombol Hapus, Anti-Deadlock 7 Slot Papan Aljabar, & Eliminasi Tumpang Tindih Banner Soal Selesai & Teruji, Siap Pengujian E2E & APK Build)  
+> **Terakhir Diperbarui:** 23 Oktober 2026 23:35 WIB  
+> **Status Keseluruhan Proyek:** Batch 44 Selesai — Sistem Progresi Non-Blocking (Hijau Benar / Merah Salah), Dual-Validation Persamaan Awal Stage 1, & Penyelarasan Subtitle Instruksi Layar 04, 78 Kasus Uji Otomatis PASS 100% (0 Warning, 0 Error).  
+> **Total Progres:** ~100% (Seluruh 6 Layar Utama, AI Math Companion Universal Playable, Dual Clear Buttons, Modals, Soal Kontekstual, Pembahasan Langkah Asli, Kalibrasi Tombol Hapus, 8 Slot Papan Aljabar, Dual Mode SPLDV Level Hard, & Progresi Non-Blocking Hijau/Merah Selesai & Teruji, Siap Pengujian E2E & APK Build)  
 
 ---
 
@@ -1213,6 +1213,43 @@
   - Keputusan arsitektur `DEC-56` dicatat di `Docs/Decision_Log.md`.
   - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/22/30.md` diperbarui.
   - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
+---
+
+## 📋 Checklist Batch 44 (Sistem Progresi Non-Blocking Hijau Benar/Merah Salah & Dual-Validation Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana tertulis `green_correct_red_wrong_non_blocking_progression_plan.md` disetujui eksplisit oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Data 60 soal aljabar lokal dan evaluasi permainan berjalan 100% offline.
+- [x] **Fase 1 — Model Baris & Progresi Non-Blocking (`AlgebraBoardController.cs`):**
+  - Menambahkan field `public bool isCorrect = false;` pada `BoardStageRow`.
+  - Memperbarui `SetStageActive()`: status selesai yang benar menampilkan badge `"CORRECT ✓"` berwarna hijau zamrud (`#10B981`) dengan tint latar hijau lembut `(0.88, 1, 0.88)` dan audio `SafePlayCorrect()`; status selesai yang salah menampilkan badge `"WRONG ✕"` berwarna merah kirmizi (`#EF4444`) dengan tint latar merah lembut `(1, 0.88, 0.88)` dan audio `SafePlayWrong()`.
+  - Memperbarui `OnContinueClicked()`: baik jawaban benar maupun salah, pemain tetap melangkah maju (`CurrentStageIndex + 1`) tanpa terblokir notice kaku di layar.
+  - Memperbarui `EvaluateOverallBoardSolution()`: mengembalikan `false` jika terdapat tahap selesai yang `!isCorrect`, sehingga Layar 05 (True or False) menstempel FALSE ✕ dengan pembahasan korektif.
+- [x] **Fase 2 — Dual-Validation Fallback & Penyelarasan Subtitle (`AlgebraBoardController.cs`):**
+  - Mengimplementasikan dual-validation fallback pada `ValidateStage()` untuk Stage 1 (Step 1) Mode Standar yang menerima persamaan awal dari Stage 0 (`3m + 5 = 95`) selain bentuk sederhana (`3m = 90`), sehingga susunan kartu pemain langsung dievaluasi BENAR (HIJAU).
+  - Menyelaraskan teks instruksi subtitle per tahap menjadi format seragam: `Step 1: {step1Eq}`, `Step 2: {step2Eq}`, `Final Solution: {finalExpr}`.
+  - Mengatur `ActiveHardMode` dan reset `SelectedEliminationOp` secara otomatis pada `FormulateStagesFromQuestion()`.
+- [x] **Fase 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Memperbarui `TC_BOARD_13` menjadi `TC_BOARD_13_NonBlockingValidation_WrongStageAdvancesWithRedBadge`.
+  - Penambahan 3 pengujian unit baru pada `AlgebraBoardTests.cs` dan `BoardTestRunner`:
+    - `TC_BOARD_27_CorrectStage_SetsGreenBadge_AndAdvances`: Memverifikasi jawaban benar mendapatkan badge hijau `"CORRECT ✓"` dan melangkah ke tahap selanjutnya.
+    - `TC_BOARD_28_WrongStage_SetsRedBadge_AndAdvancesWithoutBlocking`: Memverifikasi jawaban salah mendapatkan badge merah `"WRONG ✕"` dan tetap melangkah ke tahap selanjutnya tanpa diblokir.
+    - `TC_BOARD_29_Easy016_DualValidation_AcceptsInitialEquationInStep1`: Memverifikasi soal `EASY-016` di mana kartu `3m + 5 = 95` pada Stage 1 diterima sebagai benar (hijau) via dual-validation dan berhasil maju ke Stage 2.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **35/35 PASS (100% PASS)**
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 78/78 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+- [x] **Fase 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-57` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/23/30.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
 
 
 

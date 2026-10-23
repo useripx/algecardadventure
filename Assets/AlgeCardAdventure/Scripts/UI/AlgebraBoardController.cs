@@ -76,6 +76,7 @@ namespace AlgeCardAdventure.UI
         public List<string> targetTokens = new List<string>();
         public bool isCompleted = false;
         public bool isUnlocked = false;
+        public bool isCorrect = false;
     }
 
     /// <summary>
@@ -551,7 +552,8 @@ namespace AlgeCardAdventure.UI
                 if (stages != null && stages.Count > 1)
                 {
                     stages[1].isCompleted = true;
-                    if (stages[1].badgeStatusText != null) stages[1].badgeStatusText.text = "DONE ✓";
+                    stages[1].isCorrect = true;
+                    if (stages[1].badgeStatusText != null) stages[1].badgeStatusText.text = "CORRECT ✓";
                     if (stages[1].badgeStatusImage != null && badgeDoneSprite != null)
                     {
                         stages[1].badgeStatusImage.sprite = badgeDoneSprite;
@@ -602,14 +604,18 @@ namespace AlgeCardAdventure.UI
 
             if (isHard && method == "elimination")
             {
+                ActiveHardMode = HardAlgebraMode.Elimination;
                 FormulateEliminationStages(question);
             }
             else if (isHard && method == "substitution")
             {
+                ActiveHardMode = HardAlgebraMode.Substitution;
                 FormulateSubstitutionStages(question);
             }
             else
             {
+                ActiveHardMode = HardAlgebraMode.None;
+                SelectedEliminationOp = "";
                 FormulateStandardStages(question);
             }
 
@@ -749,23 +755,17 @@ namespace AlgeCardAdventure.UI
             if (stages[1].stageTitleText != null) stages[1].stageTitleText.text = "Card Board: Step 1";
             if (stages[1].stageIconText != null) stages[1].stageIconText.text = "💡";
 
-            string step1Desc = "Move the cards to subtract from both sides.";
             string step1Eq = "";
 
             if (question.solution_steps != null && question.solution_steps.Length > 2)
             {
                 step1Eq = ExtractPureEquation(question.solution_steps[2]);
-                if (question.solution_steps.Length > 1 && !string.IsNullOrWhiteSpace(question.solution_steps[1]))
-                {
-                    step1Desc = question.solution_steps[1];
-                }
             }
             else
             {
                 step1Eq = $"3{varName} = 20 - 5";
-                step1Desc = "Move the cards to subtract 5 from both sides.";
             }
-            if (stages[1].stageInstructionText != null) stages[1].stageInstructionText.text = step1Desc;
+            if (stages[1].stageInstructionText != null) stages[1].stageInstructionText.text = $"Step 1: {step1Eq}";
             stages[1].targetTokens = TokenizeExpression(step1Eq);
 
             // ==========================================
@@ -775,20 +775,17 @@ namespace AlgeCardAdventure.UI
             if (stages[2].stageTitleText != null) stages[2].stageTitleText.text = "Card Board: Step 2";
             if (stages[2].stageIconText != null) stages[2].stageIconText.text = "🔍";
 
-            string step2Desc = "Simplify the expression to divide both sides.";
             string step2Eq = "";
 
             if (question.solution_steps != null && question.solution_steps.Length > 3)
             {
                 step2Eq = ExtractPureEquation(question.solution_steps[3]);
-                step2Desc = "Simplify the expression.";
             }
             else
             {
                 step2Eq = $"3{varName} = 15 / 3";
-                step2Desc = "Move the cards to divide both sides by 3.";
             }
-            if (stages[2].stageInstructionText != null) stages[2].stageInstructionText.text = step2Desc;
+            if (stages[2].stageInstructionText != null) stages[2].stageInstructionText.text = $"Step 2: {step2Eq}";
             stages[2].targetTokens = TokenizeExpression(step2Eq);
 
             // ==========================================
@@ -797,13 +794,13 @@ namespace AlgeCardAdventure.UI
             stages[3].stageName = "Card Arrangement Results";
             if (stages[3].stageTitleText != null) stages[3].stageTitleText.text = "Card Arrangement Results";
             if (stages[3].stageIconText != null) stages[3].stageIconText.text = "⭐";
-            if (stages[3].stageInstructionText != null) stages[3].stageInstructionText.text = "The final result after the variables are resolved.";
 
             string finalAnswer = !string.IsNullOrEmpty(question.final_answer) ? question.final_answer : "5";
             string cleanDigits = System.Text.RegularExpressions.Regex.Replace(finalAnswer, @"[^\d]", "");
             if (string.IsNullOrEmpty(cleanDigits)) cleanDigits = finalAnswer.Trim();
 
             string finalExpr = $"{varName} = {cleanDigits}";
+            if (stages[3].stageInstructionText != null) stages[3].stageInstructionText.text = $"Final Solution: {finalExpr}";
             stages[3].targetTokens = TokenizeExpression(finalExpr);
 
             // Pastikan jumlah target tokens per baris tidak melebihi kapasitas fisik 8 slot (DEC-54)
@@ -1014,14 +1011,42 @@ namespace AlgeCardAdventure.UI
                     // Tahap Selesai (Completed)
                     stage.isCompleted = true;
                     stage.isUnlocked = true;
-                    SetRowInteractable(stage, false, new Color(0.92f, 1f, 0.92f, 1f));
 
-                    if (stage.badgeStatusText != null) stage.badgeStatusText.text = "DONE ✓";
-                    if (stage.badgeStatusImage != null && badgeDoneSprite != null)
+                    if (stage.isCorrect)
                     {
-                        stage.badgeStatusImage.sprite = badgeDoneSprite;
-                        stage.badgeStatusImage.color = Color.white;
+                        // HIJAU: Jawaban Benar
+                        SetRowInteractable(stage, false, new Color(0.88f, 1f, 0.88f, 1f));
+                        if (stage.badgeStatusText != null)
+                        {
+                            stage.badgeStatusText.text = "CORRECT ✓";
+                            stage.badgeStatusText.color = Color.white;
+                        }
+                        if (stage.badgeStatusImage != null)
+                        {
+                            if (badgeDoneSprite != null) stage.badgeStatusImage.sprite = badgeDoneSprite;
+                            stage.badgeStatusImage.color = new Color(0.06f, 0.73f, 0.5f, 1f); // Emerald green
+                        }
+                        if (panelCompleteSprite != null && stage.rowBackground != null)
+                        {
+                            stage.rowBackground.sprite = panelCompleteSprite;
+                        }
                     }
+                    else
+                    {
+                        // MERAH: Jawaban Salah
+                        SetRowInteractable(stage, false, new Color(1f, 0.88f, 0.88f, 1f));
+                        if (stage.badgeStatusText != null)
+                        {
+                            stage.badgeStatusText.text = "WRONG ✕";
+                            stage.badgeStatusText.color = Color.white;
+                        }
+                        if (stage.badgeStatusImage != null)
+                        {
+                            if (badgeDoneSprite != null) stage.badgeStatusImage.sprite = badgeDoneSprite;
+                            stage.badgeStatusImage.color = new Color(0.94f, 0.27f, 0.27f, 1f); // Crimson red
+                        }
+                    }
+
                     if (stage.stepArrowDown != null) stage.stepArrowDown.SetActive(true);
                 }
                 else if (i == CurrentStageIndex && !IsAllStagesCompleted)
@@ -1031,10 +1056,14 @@ namespace AlgeCardAdventure.UI
                     stage.isUnlocked = true;
                     SetRowInteractable(stage, true, Color.white);
 
-                    if (stage.badgeStatusText != null) stage.badgeStatusText.text = "ACTIVE";
-                    if (stage.badgeStatusImage != null && badgeActiveSprite != null)
+                    if (stage.badgeStatusText != null)
                     {
-                        stage.badgeStatusImage.sprite = badgeActiveSprite;
+                        stage.badgeStatusText.text = "ACTIVE";
+                        stage.badgeStatusText.color = new Color(0.27f, 0.1f, 0.02f, 1f);
+                    }
+                    if (stage.badgeStatusImage != null)
+                    {
+                        if (badgeActiveSprite != null) stage.badgeStatusImage.sprite = badgeActiveSprite;
                         stage.badgeStatusImage.color = Color.white;
                     }
                     if (stage.stepArrowDown != null) stage.stepArrowDown.SetActive(true);
@@ -1046,10 +1075,14 @@ namespace AlgeCardAdventure.UI
                     stage.isUnlocked = false;
                     SetRowInteractable(stage, false, new Color(0.65f, 0.65f, 0.65f, 0.65f));
 
-                    if (stage.badgeStatusText != null) stage.badgeStatusText.text = "LOCKED";
-                    if (stage.badgeStatusImage != null && badgeLockedSprite != null)
+                    if (stage.badgeStatusText != null)
                     {
-                        stage.badgeStatusImage.sprite = badgeLockedSprite;
+                        stage.badgeStatusText.text = "LOCKED";
+                        stage.badgeStatusText.color = Color.white;
+                    }
+                    if (stage.badgeStatusImage != null)
+                    {
+                        if (badgeLockedSprite != null) stage.badgeStatusImage.sprite = badgeLockedSprite;
                         stage.badgeStatusImage.color = new Color(1f, 1f, 1f, 0.8f);
                     }
                     if (stage.stepArrowDown != null) stage.stepArrowDown.SetActive(false);
@@ -1242,7 +1275,8 @@ namespace AlgeCardAdventure.UI
 
         /// <summary>
         /// Handler tombol Continue > (Verifikasi jawaban langkah aktif, atau lanjut ke layar berikutnya).
-        /// Pemain harus menyusun kartu dengan benar sesuai rumus di setiap tahap agar dapat melangkah maju ("harus pas").
+        /// Mendukung progresi non-blocking: baik jawaban BENAR (hijau) maupun SALAH (merah), pemain tetap melangkah maju.
+        /// Hasil evaluasi keseluruhan disimpan di GameSession untuk Layar 05 (True or False).
         /// </summary>
         public void OnContinueClicked()
         {
@@ -1250,9 +1284,10 @@ namespace AlgeCardAdventure.UI
 
             if (IsAllStagesCompleted)
             {
+                bool overallCorrect = EvaluateOverallBoardSolution();
                 if (GameSession.Instance != null)
                 {
-                    GameSession.Instance.LastBoardSolutionCorrect = true;
+                    GameSession.Instance.LastBoardSolutionCorrect = overallCorrect;
                 }
                 SceneNavigator.LoadScene(SceneNavigator.SceneTrueOrFalse);
                 return;
@@ -1260,7 +1295,7 @@ namespace AlgeCardAdventure.UI
 
             var currentStage = stages[CurrentStageIndex];
 
-            // Proteksi Stage 1 Mode Eliminasi: wajib memilih operasi
+            // Proteksi Stage 1 Mode Eliminasi: wajib memilih operasi jika belum dipilih sama sekali
             if (CurrentStageIndex == 1 && ActiveHardMode == HardAlgebraMode.Elimination)
             {
                 if (string.IsNullOrEmpty(SelectedEliminationOp) && (currentStage.slots == null || currentStage.slots.Count == 0 || currentStage.slots[0].IsEmpty))
@@ -1272,35 +1307,31 @@ namespace AlgeCardAdventure.UI
             }
 
             bool isCorrect = ValidateStage(currentStage);
+            currentStage.isCompleted = true;
+            currentStage.isCorrect = isCorrect;
 
             if (isCorrect)
             {
                 SafePlayCorrect();
-
-                currentStage.isCompleted = true;
-                if (panelCompleteSprite != null && currentStage.rowBackground != null)
-                {
-                    currentStage.rowBackground.sprite = panelCompleteSprite;
-                }
-
-                int nextStage = CurrentStageIndex + 1;
-
-                if (nextStage >= stages.Count)
-                {
-                    IsAllStagesCompleted = true;
-                    SetStageActive(nextStage);
-                    ShowNotice("🎉 Quest Complete! You solved the equation with Professor Bug!", true);
-                }
-                else
-                {
-                    ShowNotice($"Step completed! Moving to Stage {nextStage + 1}", true);
-                    SetStageActive(nextStage);
-                }
+                ShowNotice($"Tahap {CurrentStageIndex + 1} Benar! Melangkah maju...", true);
             }
             else
             {
                 SafePlayWrong();
-                ShowNotice("Cards don't match the equation. Tap a card to clear and try again!", false);
+                ShowNotice($"Tahap {CurrentStageIndex + 1} Belum Tepat. Melangkah maju...", false);
+            }
+
+            int nextStage = CurrentStageIndex + 1;
+
+            if (nextStage >= stages.Count)
+            {
+                IsAllStagesCompleted = true;
+                SetStageActive(nextStage);
+                ShowNotice("🎉 Semua tahap selesai! Ketuk 'Continue' untuk evaluasi True/False!", true);
+            }
+            else
+            {
+                SetStageActive(nextStage);
             }
         }
 
@@ -1333,6 +1364,15 @@ namespace AlgeCardAdventure.UI
         public bool EvaluateOverallBoardSolution()
         {
             if (stages == null || stages.Count == 0) return true;
+
+            // Jika ada tahap yang telah diselesaikan namun jawabannya salah (merah), maka solusi akhir salah
+            for (int i = 0; i < stages.Count; i++)
+            {
+                if (stages[i] != null && stages[i].isCompleted && !stages[i].isCorrect)
+                {
+                    return false;
+                }
+            }
 
             // 1. Evaluasi Stage 3 (Card Arrangement Results)
             if (stages.Count > 3 && stages[3] != null)
@@ -1502,7 +1542,27 @@ namespace AlgeCardAdventure.UI
             }
             string targetConcat = string.Concat(targetNormalized).Replace(" ", "").ToLowerInvariant();
 
-            return !string.IsNullOrEmpty(playerConcat) && string.Equals(playerConcat, targetConcat, StringComparison.OrdinalIgnoreCase);
+            if (!string.IsNullOrEmpty(playerConcat) && string.Equals(playerConcat, targetConcat, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            // Dual-validation fleksibel untuk Stage 1 (Step 1): jika pemain menyusun persamaan awal dari Stage 0 (misal '3m + 5 = 95')
+            if (stages != null && stages.Count > 1 && stage == stages[1] && stages[0] != null && stages[0].targetTokens != null)
+            {
+                var initialNormalized = new List<string>();
+                foreach (var t in stages[0].targetTokens)
+                {
+                    initialNormalized.Add(NormalizeToken(t));
+                }
+                string initialConcat = string.Concat(initialNormalized).Replace(" ", "").ToLowerInvariant();
+                if (!string.IsNullOrEmpty(playerConcat) && string.Equals(playerConcat, initialConcat, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private string NormalizeToken(string token)
