@@ -202,6 +202,9 @@ namespace AlgeCardAdventure.Audio
             }
         }
 
+        public void PlayCorrectAnswer() => PlayCorrect();
+        public void PlayWrongAnswer() => PlayWrong();
+
         public void SetMute(bool mute)
         {
             IsMuted = mute;

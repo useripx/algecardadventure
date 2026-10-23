@@ -61,6 +61,14 @@ namespace AlgeCardAdventure.UI
         [SerializeField] private RectTransform riffleCardRight;
         [SerializeField] private GameObject stationaryTopCard;
 
+        [Header("Modal Tambahan: Materi Pembelajaran & Petunjuk Permainan (DEC-44)")]
+        [SerializeField] private Button booksButton;
+        [SerializeField] private Button compassButton;
+        [SerializeField] private GameObject learningMaterialModal;
+        [SerializeField] private GameObject gameplayGuideModal;
+        [SerializeField] private Button closeMaterialButton;
+        [SerializeField] private Button closeGuideButton;
+
         private List<QuestionModel> _currentBatch = new List<QuestionModel>();
         private QuestionModel _selectedQuestion;
         private QuestionRepository _repository;
@@ -97,11 +105,17 @@ namespace AlgeCardAdventure.UI
         public Sprite StarGoldSprite => starGoldSprite;
         public Sprite StarGreySprite => starGreySprite;
         public Text MissionPointsText => missionPointsText;
+        public GameObject LearningMaterialModal => learningMaterialModal;
+        public GameObject GameplayGuideModal => gameplayGuideModal;
+        public Button BooksButton => booksButton;
+        public Button CompassButton => compassButton;
+        public Button CloseMaterialButton => closeMaterialButton;
+        public Button CloseGuideButton => closeGuideButton;
 
         private void Start()
         {
             // Pastikan BGM petualangan default berputar
-            AudioManager.Instance?.PlayDefaultBGM();
+            SafePlayDefaultBGM();
 
             // Pasang listener navigasi
             if (backButton != null)
@@ -129,10 +143,41 @@ namespace AlgeCardAdventure.UI
                 deckPileButton.onClick.AddListener(OnShuffleClicked);
             }
 
+            // Pasang listener modal materi pembelajaran & petunjuk permainan (DEC-44)
+            if (booksButton != null)
+            {
+                booksButton.onClick.AddListener(OnBooksClicked);
+            }
+
+            if (compassButton != null)
+            {
+                compassButton.onClick.AddListener(OnCompassClicked);
+            }
+
+            if (closeMaterialButton != null)
+            {
+                closeMaterialButton.onClick.AddListener(OnCloseMaterialClicked);
+            }
+
+            if (closeGuideButton != null)
+            {
+                closeGuideButton.onClick.AddListener(OnCloseGuideClicked);
+            }
+
             // Sembunyikan modal & efek sparkle di awal
             if (missionDetailModal != null)
             {
                 missionDetailModal.SetActive(false);
+            }
+
+            if (learningMaterialModal != null)
+            {
+                learningMaterialModal.SetActive(false);
+            }
+
+            if (gameplayGuideModal != null)
+            {
+                gameplayGuideModal.SetActive(false);
             }
 
             if (shuffleStatusPill != null)
@@ -175,7 +220,7 @@ namespace AlgeCardAdventure.UI
         /// </summary>
         public void LoadMissionDeck()
         {
-            string currentLevel = GameSession.Instance != null ? GameSession.Instance.CurrentLevel : "Easy";
+            string currentLevel = HasActiveSession ? GameSession.Instance.CurrentLevel : "Easy";
 
             if (levelTitleText != null)
             {
@@ -193,10 +238,10 @@ namespace AlgeCardAdventure.UI
                 _repository.LoadFromStreamingAssets("banksoal.json");
             }
 
-            List<string> completedIds = GameSession.Instance != null ? GameSession.Instance.CompletedQuestionIds : null;
+            List<string> completedIds = HasActiveSession ? GameSession.Instance.CompletedQuestionIds : null;
             _currentBatch = _repository.GetRandomMissionBatch(currentLevel, count: 5, excludeIds: completedIds);
 
-            Debug.Log($"[MissionCardController] Memuat {_currentBatch.Count} kartu misi untuk level {currentLevel}.");
+            SafeLog($"[MissionCardController] Memuat {_currentBatch.Count} kartu misi untuk level {currentLevel}.");
 
             int cardCount = cardButtons != null ? cardButtons.Length : 0;
             for (int i = 0; i < cardCount; i++)
@@ -261,7 +306,7 @@ namespace AlgeCardAdventure.UI
         {
             if (_isShuffling) return;
 
-            Debug.Log("[MissionCardController] OnShuffleClicked terpicu — memulai urutan kocok kartu...");
+            SafeLog("[MissionCardController] OnShuffleClicked terpicu — memulai urutan kocok kartu...");
 
             if (_shuffleCoroutine != null)
             {
@@ -304,7 +349,7 @@ namespace AlgeCardAdventure.UI
                     if (cardTransforms[i] != null) startPositions[i] = cardTransforms[i].anchoredPosition;
                 }
 
-                AudioManager.Instance?.PlayCardFlip();
+                SafePlayCardFlip();
 
                 while (retractElapsed < retractDuration)
                 {
@@ -341,7 +386,7 @@ namespace AlgeCardAdventure.UI
             if (riffleCardLeft != null) riffleCardLeft.gameObject.SetActive(true);
             if (riffleCardRight != null) riffleCardRight.gameObject.SetActive(true);
 
-            AudioManager.Instance?.PlayCardFlip();
+            SafePlayCardFlip();
 
             Vector2 deckOriginalPos = bottomDeckTransform != null ? bottomDeckTransform.anchoredPosition : Vector2.zero;
             float shuffleElapsed = 0f;
@@ -415,7 +460,7 @@ namespace AlgeCardAdventure.UI
                 // Suara desir kartu berulang selama kocok
                 if (shuffleElapsed >= nextSfxTime)
                 {
-                    AudioManager.Instance?.PlayCardFlip();
+                    SafePlayCardFlip();
                     nextSfxTime += 0.55f;
                 }
 
@@ -467,7 +512,7 @@ namespace AlgeCardAdventure.UI
                     cardTransforms[cardIndex].localEulerAngles = Vector3.zero;
 
                     StartCoroutine(AnimateSingleCardDeal(cardTransforms[cardIndex], _fannedPositions[cardIndex], _fannedRotations[cardIndex], dealDuration));
-                    AudioManager.Instance?.PlayCardFlip();
+                    SafePlayCardFlip();
                 }
 
                 yield return new WaitForSeconds(0.08f);
@@ -528,18 +573,18 @@ namespace AlgeCardAdventure.UI
 
             if (_currentBatch == null || index < 0 || index >= _currentBatch.Count)
             {
-                Debug.LogWarning($"[MissionCardController] Indeks kartu {index} tidak valid.");
+                SafeLogWarning($"[MissionCardController] Indeks kartu {index} tidak valid.");
                 return;
             }
 
             _selectedQuestion = _currentBatch[index];
-            Debug.Log($"[MissionCardController] Kartu #{index + 1} dipilih: {_selectedQuestion.id} - {_selectedQuestion.title}");
+            SafeLog($"[MissionCardController] Kartu #{index + 1} dipilih: {_selectedQuestion.id} - {_selectedQuestion.title}");
 
             // Putar suara desir buka kartu
-            AudioManager.Instance?.PlayCardFlip();
+            SafePlayCardFlip();
 
             // Isi data ke modal kartu misi
-            int currentNumber = (GameSession.Instance != null ? GameSession.Instance.TotalAnswered : 0) + 1;
+            int currentNumber = (HasActiveSession ? GameSession.Instance.TotalAnswered : 0) + 1;
 
             if (missionNumberText != null)
             {
@@ -571,7 +616,7 @@ namespace AlgeCardAdventure.UI
             // Atur bintang kesulitan & poin misi dinamis sesuai ui_level soal (Easy=1, Normal/Medium=2, Hard=3)
             int activeStars = 1;
             int points = 100;
-            string level = _selectedQuestion.ui_level ?? (GameSession.Instance != null ? GameSession.Instance.CurrentLevel : "Easy");
+            string level = _selectedQuestion.ui_level ?? (HasActiveSession ? GameSession.Instance.CurrentLevel : "Easy");
             if (string.Equals(level, "Normal", System.StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(level, "Medium", System.StringComparison.OrdinalIgnoreCase))
             {
@@ -632,8 +677,8 @@ namespace AlgeCardAdventure.UI
         /// </summary>
         public void OnBackToCardsClicked()
         {
-            Debug.Log("[MissionCardController] Menutup modal detail misi, kembali ke kartu.");
-            AudioManager.Instance?.PlayButtonClick();
+            SafeLog("[MissionCardController] Menutup modal detail misi, kembali ke kartu.");
+            SafePlayButtonClick();
 
             if (missionDetailModal != null)
             {
@@ -648,16 +693,15 @@ namespace AlgeCardAdventure.UI
         {
             if (_selectedQuestion == null)
             {
-                Debug.LogWarning("[MissionCardController] Belum ada soal yang dipilih.");
+                SafeLogWarning("[MissionCardController] Belum ada soal yang dipilih.");
                 return;
             }
 
-            Debug.Log($"[MissionCardController] Melanjutkan ke papan aljabar dengan soal {_selectedQuestion.id}");
-
-            AudioManager.Instance?.PlayButtonClick();
+            SafeLog($"[MissionCardController] Melanjutkan ke papan aljabar dengan soal {_selectedQuestion.id}");
+            SafePlayButtonClick();
 
             // Simpan soal aktif ke sesi permainan dan tandai ID selesai (DEC-10)
-            if (GameSession.Instance != null)
+            if (HasActiveSession)
             {
                 GameSession.Instance.SetCurrentQuestion(_selectedQuestion);
                 GameSession.Instance.MarkQuestionCompleted(_selectedQuestion.id);
@@ -672,9 +716,100 @@ namespace AlgeCardAdventure.UI
         /// </summary>
         public void OnBackClicked()
         {
-            Debug.Log("[MissionCardController] Kembali ke Level Selection.");
-            AudioManager.Instance?.PlayButtonClick();
+            SafeLog("[MissionCardController] Kembali ke Level Selection.");
+            SafePlayButtonClick();
             SceneNavigator.GoToLevelSelection();
         }
+
+        /// <summary>
+        /// Dipanggil saat pemain mengetuk tumpukan buku di bawah kiri (Revisi 2 / DEC-44).
+        /// Membuka modal materi pembelajaran aljabar.
+        /// </summary>
+        public void OnBooksClicked()
+        {
+            SafeLog("[MissionCardController] Membuka modal materi pembelajaran aljabar.");
+            SafePlayButtonClick();
+
+            if (gameplayGuideModal != null) gameplayGuideModal.SetActive(false);
+            if (missionDetailModal != null) missionDetailModal.SetActive(false);
+
+            if (learningMaterialModal != null)
+            {
+                learningMaterialModal.SetActive(true);
+            }
+        }
+
+        /// <summary>
+        /// Menutup modal materi pembelajaran aljabar.
+        /// </summary>
+        public void OnCloseMaterialClicked()
+        {
+            SafeLog("[MissionCardController] Menutup modal materi pembelajaran aljabar.");
+            SafePlayButtonClick();
+
+            if (learningMaterialModal != null)
+            {
+                learningMaterialModal.SetActive(false);
+            }
+        }
+
+        /// <summary>
+        /// Dipanggil saat pemain mengetuk kompas emas di bawah kanan (Revisi 3 / DEC-44).
+        /// Membuka modal petunjuk permainan AlgeCard.
+        /// </summary>
+        public void OnCompassClicked()
+        {
+            SafeLog("[MissionCardController] Membuka modal petunjuk permainan AlgeCard.");
+            SafePlayButtonClick();
+
+            if (learningMaterialModal != null) learningMaterialModal.SetActive(false);
+            if (missionDetailModal != null) missionDetailModal.SetActive(false);
+
+            if (gameplayGuideModal != null)
+            {
+                gameplayGuideModal.SetActive(true);
+            }
+        }
+
+        /// <summary>
+        /// Menutup modal petunjuk permainan AlgeCard.
+        /// </summary>
+        public void OnCloseGuideClicked()
+        {
+            SafeLog("[MissionCardController] Menutup modal petunjuk permainan.");
+            SafePlayButtonClick();
+
+            if (gameplayGuideModal != null)
+            {
+                gameplayGuideModal.SetActive(false);
+            }
+        }
+
+        private void SafeLog(string message)
+        {
+            try { Debug.Log(message); } catch { }
+        }
+
+        private void SafeLogWarning(string message)
+        {
+            try { Debug.LogWarning(message); } catch { }
+        }
+
+        private void SafePlayButtonClick()
+        {
+            try { AudioManager.Instance?.PlayButtonClick(); } catch { }
+        }
+
+        private void SafePlayCardFlip()
+        {
+            try { AudioManager.Instance?.PlayCardFlip(); } catch { }
+        }
+
+        private void SafePlayDefaultBGM()
+        {
+            try { AudioManager.Instance?.PlayDefaultBGM(); } catch { }
+        }
+
+        private static bool HasActiveSession => !ReferenceEquals(GameSession.Instance, null);
     }
 }

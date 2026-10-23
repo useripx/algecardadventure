@@ -44,12 +44,8 @@ namespace AlgeCardAdventure.Editor
             camData.renderPostProcessing = false;
             camGo.transform.position = new Vector3(0, 0, -10);
 
-            // 3. Global Light 2D untuk URP
-            var lightGo = new GameObject("Global Light 2D");
-            var light2D = lightGo.AddComponent<Light2D>();
-            light2D.lightType = Light2D.LightType.Global;
-            light2D.intensity = 1f;
-            light2D.color = Color.white;
+            // 3. (Global Light 2D dikelola langsung di scene — tidak dibuat via builder
+            //    agar tidak memerlukan dependency Unity.RenderPipelines.Universal.2D.Runtime)
 
             // 4. EventSystem untuk interaksi UI
             var eventGo = new GameObject("EventSystem");

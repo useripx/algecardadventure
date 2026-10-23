@@ -94,4 +94,15 @@ secrets.json
 *.key
 *.pem
 Docs/api/
+Docs/Ui Template/chatbot/api
+groq_config.json
+groq_config.json.meta
+Assets/Resources/groq_config.json
+Assets/Resources/groq_config.json.meta
 scratch/
+.utmp/
+apk/
+Assets/_Recovery/
+Assets/_Recovery.meta
+
+

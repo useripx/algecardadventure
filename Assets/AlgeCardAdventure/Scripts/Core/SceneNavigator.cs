@@ -28,20 +28,27 @@ namespace AlgeCardAdventure.Core
         {
             if (string.IsNullOrWhiteSpace(sceneName))
             {
-                Debug.LogError("[SceneNavigator] Nama scene tujuan tidak boleh kosong.");
+                try { Debug.LogError("[SceneNavigator] Nama scene tujuan tidak boleh kosong."); } catch { }
                 return;
             }
 
-            Debug.Log($"[SceneNavigator] Berpindah menuju scene: {sceneName}");
+            try { Debug.Log($"[SceneNavigator] Berpindah menuju scene: {sceneName}"); } catch { }
             OnBeforeSceneLoad?.Invoke(sceneName);
 
-            if (Application.CanStreamedLevelBeLoaded(sceneName))
+            try
             {
-                SceneManager.LoadScene(sceneName);
+                if (Application.CanStreamedLevelBeLoaded(sceneName))
+                {
+                    SceneManager.LoadScene(sceneName);
+                }
+                else
+                {
+                    Debug.LogWarning($"[SceneNavigator] Scene '{sceneName}' belum didaftarkan di Build Settings. Mengabaikan eksekusi runtime.");
+                }
             }
-            else
+            catch
             {
-                Debug.LogWarning($"[SceneNavigator] Scene '{sceneName}' belum didaftarkan di Build Settings. Mengabaikan eksekusi runtime.");
+                // Defensif untuk lingkungan non-Unity runtime/testing
             }
         }
 
@@ -79,5 +86,14 @@ namespace AlgeCardAdventure.Core
         {
             LoadScene(SceneCredits);
         }
+
+        // Aliases untuk konsistensi API navigasi
+        public static void LoadSplashScreen() => GoToSplashScreen();
+        public static void LoadLevelSelection() => GoToLevelSelection();
+        public static void LoadMissionCard() => GoToMissionCard();
+        public static void LoadAlgebraCardBoard() => GoToAlgebraCardBoard();
+        public static void LoadTrueOrFalse() => GoToTrueOrFalse();
+        public static void LoadScoreResults() => GoToScoreResults();
+        public static void LoadCredits() => GoToCredits();
     }
 }

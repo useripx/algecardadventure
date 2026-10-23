@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>AlgeCard Adventure - Math Companion Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="typography">
+    body {
+      font-family: 'Fredoka', cursive, 'Nunito', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .math-font {
+      font-family: 'Nunito', sans-serif;
+    }
+  </style>
+<style data-purpose="custom-game-theme">
+    /* Fantasy Wood and Parchment styling */
+    .bg-wood-pattern {
+      background: linear-gradient(180deg, #7c3f1d 0%, #56270e 100%);
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25), 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    .wood-border {
+      border: 3px solid #6b3414;
+      box-shadow: inset 0 1px 0 rgba(255, 230, 180, 0.4), 0 3px 6px rgba(0,0,0,0.3);
+    }
+
+    .parchment-bubble {
+      background: linear-gradient(180deg, #fffbf0 0%, #faedd0 100%);
+      border: 2px solid #e0c598;
+      box-shadow: 0 4px 6px -1px rgba(78, 44, 16, 0.15), inset 0 1px 0 #ffffff;
+    }
+
+    .user-bubble {
+      background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%);
+      border: 2px solid #0369a1;
+      box-shadow: 0 4px 6px -1px rgba(3, 105, 161, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    /* 3D Chunky Buttons */
+    .btn-3d-green {
+      background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
+      box-shadow: 0 4px 0 #15803d, 0 6px 8px rgba(0,0,0,0.25);
+    }
+    .btn-3d-green:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #15803d, 0 3px 4px rgba(0,0,0,0.2);
+    }
+
+    .btn-3d-blue {
+      background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+      box-shadow: 0 4px 0 #0369a1, 0 6px 8px rgba(0,0,0,0.25);
+    }
+    .btn-3d-blue:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0369a1, 0 3px 4px rgba(0,0,0,0.2);
+    }
+
+    .btn-3d-amber {
+      background: linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%);
+      box-shadow: 0 4px 0 #b45309, 0 5px 6px rgba(0,0,0,0.2);
+    }
+
+    /* Custom Scrollbar for chips & chat stream */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Ambient Forest Background Overlay */
+    .forest-ambient-bg {
+      background-color: #2b6623;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(134, 239, 172, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(253, 224, 71, 0.12) 0%, transparent 50%),
+        linear-gradient(180deg, #74b341 0%, #2e661c 60%, #1c4210 100%);
+    }
+  </style>
+</head>
+<body class="bg-stone-900 flex justify-center items-center min-h-screen p-0 sm:p-4">
+<!-- BEGIN: MobileDeviceFrame -->
+<main class="w-full max-w-[430px] h-[100dvh] sm:h-[880px] sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border-0 sm:border-[8px] sm:border-[#381e0d] forest-ambient-bg">
+<!-- Decorative Vines & Nature Backdrop details -->
+<div class="absolute inset-0 pointer-events-none opacity-25 z-0" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- BEGIN: MainHeader -->
+<header class="relative z-20 flex-shrink-0 bg-wood-pattern border-b-[3px] border-[#3f1d0b] px-3 pt-3 pb-2.5 text-white">
+<!-- Top Bar: Logo & Navigation / Game Controls -->
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<!-- Back Button -->
+<button aria-label="Go back" class="w-10 h-10 rounded-xl bg-gradient-to-b from-amber-400 to-amber-600 border-2 border-[#78350f] shadow-[0_3px_0_#451a03] flex items-center justify-center active:translate-y-0.5 transition-transform" id="backBtn" title="Return to Quest">
+<svg class="w-6 h-6 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Centered Adventure Mini-Logo Banner -->
+<div class="flex-1 flex justify-center items-center max-h-9 overflow-hidden">
+<img alt="AlgeCard Adventure Logo" class="h-10 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5_4j46w4SCoZJsFRSVKQoPk-EuptlejoP_xKuNGDe-PRksa9suWTvj7pK2TebI8_X3q8Z2pWLrnmBGs27GiWvsYSu-Cj6boSi_neHwOYba7Mp__PweeKBlz0LjLQR2s3owmwtowSauq822LB-QUffMfQjuvcC0Y3afErtJFUS7GyhxfLrEyMejar1_wo30NI2wNwwO96hqkBHm815PsozTogUypV7IEbYWN3YFJ28gJLH18LVXv5q5oII5LliPWflug"/>
+</div>
+<!-- Utility Action Buttons: Sound & Guide -->
+<div class="flex items-center gap-1.5">
+<button aria-label="Toggle Sound" class="w-9 h-9 rounded-lg bg-emerald-600 border-2 border-emerald-900 shadow-[0_2px_0_#064e3b] flex items-center justify-center active:scale-95 transition-transform" id="soundToggle">
+<svg class="w-5 h-5 text-amber-200" fill="currentColor" viewbox="0 0 20 20">
+<path d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414z"></path>
+</svg>
+</button>
+<button class="w-9 h-9 rounded-lg bg-amber-500 border-2 border-amber-900 shadow-[0_2px_0_#78350f] flex items-center justify-center font-bold text-lg text-white" title="Math Codex">
+            ?
+          </button>
+</div>
+</div>
+<!-- Character Helper Card Info Bar -->
+<div class="bg-[#381a0b]/80 border border-[#854d24] rounded-2xl px-3 py-1.5 flex items-center justify-between shadow-inner">
+<div class="flex items-center gap-2.5">
+<!-- Mascot Duo Avatars -->
+<div class="relative flex -space-x-2">
+<!-- Hopper (Green) -->
+<div class="w-8 h-8 rounded-full border-2 border-green-300 bg-emerald-500 flex items-center justify-center text-sm shadow overflow-hidden">
+              🦗
+            </div>
+<!-- Pip (Orange) -->
+<div class="w-8 h-8 rounded-full border-2 border-amber-300 bg-amber-500 flex items-center justify-center text-sm shadow overflow-hidden">
+              🐜
+            </div>
+<span class="absolute -bottom-0.5 right-0 w-3.5 h-3.5 bg-emerald-400 border-2 border-amber-950 rounded-full animate-pulse"></span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-extrabold text-sm text-amber-200 tracking-wide drop-shadow">Prof. Hopper &amp; Pip</span>
+<span class="bg-emerald-500/30 text-emerald-300 text-[10px] px-1.5 py-0.2 rounded-full border border-emerald-400/40 font-bold uppercase tracking-wider">Online</span>
+</div>
+<p class="text-[11px] text-amber-100/90 leading-tight">Ready to help with Algebra quests!</p>
+</div>
+</div>
+<!-- Quick Mission Target Badge -->
+<div class="bg-amber-100 text-stone-800 text-[10px] font-bold px-2 py-1 rounded-lg border border-amber-400 shadow-sm flex items-center gap-1">
+<span>📜</span>
+<span>Mission 1</span>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: ChatStream -->
+<div class="flex-1 overflow-y-auto px-3.5 py-4 space-y-4 no-scrollbar relative z-10 scroll-smooth" id="chatContainer">
+<!-- System Parchment Announcement -->
+<div class="flex justify-center" data-purpose="system-announcement">
+<div class="parchment-bubble max-w-[90%] rounded-2xl p-3 text-center border-2 border-[#d4af37] shadow-md relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-amber-950 text-[10px] font-black uppercase px-2 py-0.5 rounded-full border border-amber-200 tracking-wider shadow-sm">
+            ✨ Quest Guide Active
+          </div>
+<p class="text-xs text-amber-950 font-medium leading-relaxed mt-1">
+<span class="font-bold text-amber-900">Welcome Adventurer!</span> Need a hint on your equation, explanation on True/False questions, or math strategy? Ask us anything!
+          </p>
+</div>
+</div>
+<!-- BOT MESSAGE 1: Prof. Hopper -->
+<div class="flex items-start gap-2.5 max-w-[88%]" data-purpose="bot-message-hopper">
+<!-- Prof. Hopper Avatar -->
+<div class="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-b from-lime-400 to-emerald-600 border-2 border-emerald-900 shadow-md flex items-center justify-center text-xl">
+          🦗
+        </div>
+<!-- Bubble Content -->
+<div class="space-y-1">
+<span class="text-[11px] font-extrabold text-lime-200 ml-1 drop-shadow">Prof. Hopper</span>
+<div class="parchment-bubble rounded-2xl rounded-tl-sm p-3.5 text-stone-800 text-sm">
+<p class="leading-relaxed">
+              Ribbit! Hello adventurer! I saw you solved <strong class="text-emerald-700 bg-emerald-100/70 px-1 py-0.5 rounded math-font">3x + 5 = 20</strong> earlier!
+            </p>
+<!-- Equation Card Helper -->
+<div class="mt-2.5 bg-amber-50/80 rounded-xl p-2.5 border border-amber-200 shadow-inner">
+<div class="text-[11px] font-bold text-amber-800 flex items-center gap-1 mb-1">
+<span>💡</span> Isolation Secret:
+              </div>
+<p class="text-xs text-stone-700 font-medium leading-normal">
+                Whenever you see an addition like <span class="text-emerald-800 font-bold">+5</span>, isolate the variable by <span class="underline decoration-amber-500 font-semibold">subtracting 5</span> from both sides first!
+              </p>
+</div>
+<div class="text-[10px] text-stone-400 font-bold text-right mt-1.5">10:42 AM</div>
+</div>
+</div>
+</div>
+<!-- USER MESSAGE -->
+<div class="flex items-end justify-end gap-2 ml-auto max-w-[85%]" data-purpose="user-message">
+<div class="space-y-1 text-right">
+<div class="user-bubble rounded-2xl rounded-br-sm p-3 text-white text-sm shadow-md text-left font-medium">
+<p class="leading-relaxed drop-shadow-sm">
+              Can you give me a hint for solving linear equations with fractions?
+            </p>
+<div class="text-[10px] text-sky-200 font-semibold text-right mt-1">10:43 AM · Read</div>
+</div>
+</div>
+<!-- User Avatar -->
+<div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-b from-sky-400 to-blue-600 border border-sky-200 flex items-center justify-center text-white text-xs font-black shadow">
+          YOU
+        </div>
+</div>
+<!-- BOT MESSAGE 2: Pip (Orange Cricket Assistant) -->
+<div class="flex items-start gap-2.5 max-w-[92%]" data-purpose="bot-message-pip">
+<!-- Pip Avatar -->
+<div class="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-b from-amber-400 to-orange-600 border-2 border-amber-950 shadow-md flex items-center justify-center text-xl">
+          🐜
+        </div>
+<!-- Bubble Content -->
+<div class="space-y-1 w-full">
+<div class="flex items-center gap-1.5 ml-1">
+<span class="text-[11px] font-extrabold text-amber-300 drop-shadow">Pip (Apprentice)</span>
+<span class="bg-amber-400/30 text-amber-200 text-[9px] px-1 rounded font-bold">Fast Tips</span>
+</div>
+<div class="parchment-bubble rounded-2xl rounded-tl-sm p-3.5 text-stone-800 text-sm">
+<p class="font-semibold text-amber-900 leading-snug">
+              I love fraction equations! Here is our 2-step magic trick:
+            </p>
+<!-- Step by step visual adventure box -->
+<div class="mt-2.5 space-y-1.5">
+<div class="bg-white/80 rounded-lg p-2 border border-amber-300 flex items-start gap-2 shadow-xs">
+<span class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">1</span>
+<span class="text-xs text-stone-700">Find the <strong>Common Denominator (LCD)</strong> to bust the denominators.</span>
+</div>
+<div class="bg-white/80 rounded-lg p-2 border border-amber-300 flex items-start gap-2 shadow-xs">
+<span class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">2</span>
+<span class="text-xs text-stone-700">Multiply <strong>every single term</strong> on both sides by that LCD!</span>
+</div>
+</div>
+<!-- Mini Math Example Callout -->
+<div class="mt-2.5 bg-gradient-to-r from-amber-100 to-orange-50 border-2 border-dashed border-orange-300 rounded-xl p-2.5">
+<div class="text-[10px] font-bold uppercase text-orange-800 tracking-wider mb-1 flex items-center justify-between">
+<span>Quick Example</span>
+<span class="text-[9px] bg-orange-200 px-1.5 py-0.5 rounded text-orange-900">LCD = 2</span>
+</div>
+<div class="math-font text-xs text-stone-800 space-y-1">
+<div class="font-bold text-stone-900">x / 2 + 3 = 7</div>
+<div class="text-stone-600">Multiply by 2 ➔ <strong>x + 6 = 14</strong></div>
+<div class="text-emerald-700 font-extrabold flex items-center gap-1">
+<span>➔ x = 8</span>
+<span class="text-xs">🎉</span>
+</div>
+</div>
+</div>
+<div class="text-[10px] text-stone-400 font-bold text-right mt-1.5">10:44 AM</div>
+</div>
+</div>
+</div>
+<!-- Placeholder for dynamically injected messages -->
+<div class="space-y-4" id="dynamicMessages"></div>
+</div>
+<!-- END: ChatStream -->
+<!-- BEGIN: QuickReplySection -->
+<div class="relative z-20 flex-shrink-0 px-2 py-1.5 bg-[#254b17]/90 border-t border-emerald-600/40 backdrop-blur-xs">
+<div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5" id="chipsContainer">
+<button class="flex-shrink-0 text-xs font-bold text-amber-950 bg-gradient-to-b from-amber-200 to-amber-400 hover:from-amber-100 hover:to-amber-300 px-3 py-1.5 rounded-full border border-amber-600 shadow-sm active:scale-95 transition-all" onclick="handleQuickPrompt('💡 Hint for Current Quest')">
+          💡 Hint for Current Quest
+        </button>
+<button class="flex-shrink-0 text-xs font-bold text-stone-900 bg-gradient-to-b from-emerald-100 to-emerald-300 hover:from-emerald-50 hover:to-emerald-200 px-3 py-1.5 rounded-full border border-emerald-600 shadow-sm active:scale-95 transition-all" onclick="handleQuickPrompt('📖 Explain 3x + 5 = 20')">
+          📖 Explain 3x + 5 = 20
+        </button>
+<button class="flex-shrink-0 text-xs font-bold text-sky-950 bg-gradient-to-b from-sky-200 to-sky-400 hover:from-sky-100 hover:to-sky-300 px-3 py-1.5 rounded-full border border-sky-600 shadow-sm active:scale-95 transition-all" onclick="handleQuickPrompt('🎲 Give me a Practice Mission')">
+          🎲 Give me a Practice Mission
+        </button>
+<button class="flex-shrink-0 text-xs font-bold text-amber-950 bg-gradient-to-b from-yellow-200 to-amber-300 hover:from-yellow-100 hover:to-amber-200 px-3 py-1.5 rounded-full border border-yellow-600 shadow-sm active:scale-95 transition-all" onclick="handleQuickPrompt('🏆 How does Cumulative Score work?')">
+          🏆 How does Cumulative Score work?
+        </button>
+<button class="flex-shrink-0 text-xs font-bold text-stone-900 bg-white/90 hover:bg-white px-3 py-1.5 rounded-full border border-stone-400 shadow-sm active:scale-95 transition-all" onclick="handleQuickPrompt('🦗 Ask Prof. Hopper')">
+          🦗 Ask Prof. Hopper
+        </button>
+</div>
+</div>
+<!-- END: QuickReplySection -->
+<!-- BEGIN: MathSymbolsQuickBar (Expandable) -->
+<div class="hidden bg-[#45220f] border-t border-amber-700/60 px-3 py-1.5 flex items-center justify-between text-white text-sm font-bold transition-all" id="mathSymbolBar">
+<span class="text-[10px] uppercase text-amber-300 tracking-wider">Math Insert:</span>
+<div class="flex items-center gap-1.5">
+<button class="w-7 h-7 bg-amber-900/80 hover:bg-amber-800 rounded border border-amber-600 flex items-center justify-center" onclick="insertSymbol('+')">+</button>
+<button class="w-7 h-7 bg-amber-900/80 hover:bg-amber-800 rounded border border-amber-600 flex items-center justify-center" onclick="insertSymbol('-')">-</button>
+<button class="w-7 h-7 bg-amber-900/80 hover:bg-amber-800 rounded border border-amber-600 flex items-center justify-center" onclick="insertSymbol('×')">×</button>
+<button class="w-7 h-7 bg-amber-900/80 hover:bg-amber-800 rounded border border-amber-600 flex items-center justify-center" onclick="insertSymbol('÷')">÷</button>
+<button class="w-7 h-7 bg-amber-900/80 hover:bg-amber-800 rounded border border-amber-600 flex items-center justify-center" onclick="insertSymbol('=')">=</button>
+<button class="w-7 h-7 bg-amber-900/80 hover:bg-amber-800 rounded border border-amber-600 flex items-center justify-center math-font italic" onclick="insertSymbol('x')">x</button>
+<button class="w-7 h-7 bg-amber-900/80 hover:bg-amber-800 rounded border border-amber-600 flex items-center justify-center" onclick="insertSymbol('√')">√</button>
+</div>
+</div>
+<!-- END: MathSymbolsQuickBar -->
+<!-- BEGIN: ChatInputBar -->
+<footer class="relative z-20 flex-shrink-0 bg-wood-pattern border-t-[3px] border-[#381a0b] p-2.5 pb-3">
+<form class="flex items-center gap-2" id="chatForm" onsubmit="event.preventDefault(); sendMessage();">
+<!-- Toggle Math Symbol Toolbar -->
+<button class="w-10 h-10 rounded-xl bg-gradient-to-b from-amber-600 to-amber-800 border-2 border-[#381a0b] shadow-[0_2px_0_#2b1204] text-amber-200 hover:text-white flex items-center justify-center font-bold text-lg active:scale-95 transition-transform" id="symbolToggleBtn" title="Insert Math Symbols" type="button">
+          fx
+        </button>
+<!-- Input Box Field -->
+<div class="flex-1 relative flex items-center">
+<input autocomplete="off" class="w-full bg-[#fcf8ec] text-stone-900 placeholder:text-stone-400 text-xs sm:text-sm font-semibold rounded-2xl pl-3.5 pr-8 py-2.5 border-2 border-[#7a411f] focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-500 shadow-inner" id="chatInput" placeholder="Ask Prof. Hopper or Pip..." type="text"/>
+<!-- Voice / Emoji helper icon inside input -->
+<button class="absolute right-2.5 text-stone-400 hover:text-amber-700 transition-colors" onclick="triggerMicSim()" title="Speech to Math" type="button">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" fill-rule="evenodd"></path>
+</svg>
+</button>
+</div>
+<!-- 3D Chunky Send Button -->
+<button aria-label="Send message" class="w-11 h-10 rounded-2xl btn-3d-blue flex items-center justify-center text-white border border-sky-300 active:translate-y-1 transition-all" id="sendBtn" type="submit">
+<svg class="w-5 h-5 -rotate-45 ml-0.5 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</form>
+</footer>
+<!-- END: ChatInputBar -->
+</main>
+<!-- END: MobileDeviceFrame -->
+<!-- BEGIN: InteractiveHandlers -->
+<script data-purpose="chat-interactivity">
+    const chatContainer = document.getElementById('chatContainer');
+    const chatInput = document.getElementById('chatInput');
+    const dynamicMessages = document.getElementById('dynamicMessages');
+    const mathSymbolBar = document.getElementById('mathSymbolBar');
+    const symbolToggleBtn = document.getElementById('symbolToggleBtn');
+
+    // Toggle Math Symbol Bar
+    symbolToggleBtn.addEventListener('click', () => {
+      mathSymbolBar.classList.toggle('hidden');
+    });
+
+    function insertSymbol(symbol) {
+      chatInput.value += symbol;
+      chatInput.focus();
+    }
+
+    function scrollToBottom() {
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 50);
+    }
+
+    function triggerMicSim() {
+      chatInput.value = "How do I solve for x when 2x + 4 = 12?";
+      chatInput.focus();
+    }
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      // Append User Message
+      appendUserMessage(text);
+      chatInput.value = '';
+      scrollToBottom();
+
+      // Show Mascot typing & answer
+      simulateBotResponse(text);
+    }
+
+    function handleQuickPrompt(promptText) {
+      chatInput.value = promptText;
+      sendMessage();
+    }
+
+    function appendUserMessage(text) {
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const userHtml = `
+        <div class="flex items-end justify-end gap-2 ml-auto max-w-[85%] animate-fade-in" data-purpose="user-dynamic-message">
+          <div class="space-y-1 text-right">
+            <div class="user-bubble rounded-2xl rounded-br-sm p-3 text-white text-sm shadow-md text-left font-medium">
+              <p class="leading-relaxed drop-shadow-sm">${escapeHtml(text)}</p>
+              <div class="text-[10px] text-sky-200 font-semibold text-right mt-1">${timeStr} · Sent</div>
+            </div>
+          </div>
+          <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-b from-sky-400 to-blue-600 border border-sky-200 flex items-center justify-center text-white text-xs font-black shadow">
+            YOU
+          </div>
+        </div>
+      `;
+      dynamicMessages.insertAdjacentHTML('beforeend', userHtml);
+    }
+
+    function simulateBotResponse(userQuery) {
+      // Simulate typing indicator
+      const typingId = 'typing-' + Date.now();
+      const typingHtml = `
+        <div id="${typingId}" class="flex items-start gap-2.5 max-w-[85%]">
+          <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-base">🦗</div>
+          <div class="parchment-bubble rounded-2xl rounded-tl-sm px-3.5 py-2.5 text-xs text-amber-900 font-semibold flex items-center gap-1.5">
+            <span>Prof. Hopper is writing</span>
+            <span class="inline-flex gap-1">
+              <span class="w-1.5 h-1.5 bg-amber-800 rounded-full animate-bounce"></span>
+              <span class="w-1.5 h-1.5 bg-amber-800 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+              <span class="w-1.5 h-1.5 bg-amber-800 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+            </span>
+          </div>
+        </div>
+      `;
+      dynamicMessages.insertAdjacentHTML('beforeend', typingHtml);
+      scrollToBottom();
+
+      // Formulate response
+      setTimeout(() => {
+        const typingEl = document.getElementById(typingId);
+        if (typingEl) typingEl.remove();
+
+        let responseText = "";
+        let isHopper = true;
+
+        if (userQuery.includes("Hint") || userQuery.includes("Current Quest")) {
+          responseText = `
+            <strong>Quest Hint:</strong> For Question 1, remember:
+            <br>• Plug <span class="math-font text-emerald-800 font-bold">x = 2</span> into <span class="math-font text-emerald-800 font-bold">3(2) + 4</span>
+            <br>• <span class="math-font">3 × 2 = 6</span>, then <span class="math-font">6 + 4 = 10</span>!
+            <br><span class="text-emerald-700 font-bold">So the True/False card is TRUE!</span> ✅
+          `;
+          isHopper = true;
+        } else if (userQuery.includes("Score")) {
+          responseText = `
+            <strong>Adventure Scoring:</strong>
+            <br>Each correct answer gives +20 points. Speed bonus awards up to +10 extra! Try maintaining your streak to earn gold stars! ⭐
+          `;
+          isHopper = false;
+        } else if (userQuery.includes("Practice")) {
+          responseText = `
+            Here is a quick trial from Pip:
+            <br><em>Solve for y:</em> <span class="math-font font-bold text-amber-900">2y - 6 = 10</span>.
+            <br>Try adding 6 to both sides first! 🎯
+          `;
+          isHopper = false;
+        } else {
+          responseText = `
+            Excellent question! Always balance both sides of the equation like a scales of justice: whatever operation you perform on the left, repeat on the right! ⚖️
+          `;
+          isHopper = true;
+        }
+
+        const avatar = isHopper ? "🦗" : "🐜";
+        const name = isHopper ? "Prof. Hopper" : "Pip";
+        const colorClass = isHopper ? "from-lime-400 to-emerald-600 text-lime-200" : "from-amber-400 to-orange-600 text-amber-300";
+
+        const botMsgHtml = `
+          <div class="flex items-start gap-2.5 max-w-[90%]">
+            <div class="flex-shrink-0 w-9 h-9 rounded-2xl bg-gradient-to-b ${colorClass} border-2 border-stone-800 shadow-md flex items-center justify-center text-lg">
+              ${avatar}
+            </div>
+            <div class="space-y-1">
+              <span class="text-[11px] font-extrabold ${colorClass.split(' ')[2]} ml-1 drop-shadow">${name}</span>
+              <div class="parchment-bubble rounded-2xl rounded-tl-sm p-3.5 text-stone-800 text-xs sm:text-sm shadow-md leading-relaxed">
+                <p>${responseText}</p>
+                <div class="text-[10px] text-stone-400 font-bold text-right mt-1">Just now</div>
+              </div>
+            </div>
+          </div>
+        `;
+        dynamicMessages.insertAdjacentHTML('beforeend', botMsgHtml);
+        scrollToBottom();
+      }, 900);
+    }
+
+    function escapeHtml(string) {
+      return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+          '/': '&#x2F;',
+          '`': '&#x60;',
+          '=': '&#x3D;'
+        }[s];
+      });
+    }
+
+    // Back Button feedback
+    document.getElementById('backBtn').addEventListener('click', () => {
+      alert("Returning to Adventure Mission Map...");
+    });
+  </script>
+<!-- END: InteractiveHandlers -->
+</body></html>

@@ -12,6 +12,7 @@ namespace AlgeCardAdventure.UI
 {
     /// <summary>
     /// Representasi status satu slot kartu di papan aljabar.
+    /// Mendukung kartu statis (bagian persamaan awal) dan slot interaktif (yang diisi pemain).
     /// </summary>
     [Serializable]
     public class CardSlotView
@@ -20,6 +21,7 @@ namespace AlgeCardAdventure.UI
         public Image slotImage;
         public Text slotText;
         public string currentToken = "";
+        public bool isTargetSlot = true; // true jika slot kosong interaktif; false jika kartu statis
 
         public bool IsEmpty => string.IsNullOrEmpty(currentToken);
 
@@ -55,6 +57,8 @@ namespace AlgeCardAdventure.UI
 
     /// <summary>
     /// Baris tahap papan aljabar (Stage Row).
+    /// Memuat judul, ikon, instruksi, status badge (DONE, ACTIVE, LOCKED),
+    /// daftar slot kartu, target token, dan panah penghubung ke tahap berikutnya.
     /// </summary>
     [Serializable]
     public class BoardStageRow
@@ -62,8 +66,12 @@ namespace AlgeCardAdventure.UI
         public string stageName;
         public GameObject rowContainer;
         public Text stageTitleText;
+        public Text stageIconText;
         public Text stageInstructionText;
+        public Text badgeStatusText;
+        public Image badgeStatusImage;
         public Image rowBackground;
+        public GameObject stepArrowDown;
         public List<CardSlotView> slots = new List<CardSlotView>();
         public List<string> targetTokens = new List<string>();
         public bool isCompleted = false;
@@ -72,46 +80,96 @@ namespace AlgeCardAdventure.UI
 
     /// <summary>
     /// Controller utama untuk Layar 04 (Algebra Card Board).
-    /// Mengelola pemuatan dinamis soal, pembentukan 4 tahap langkah aljabar,
-    /// penempatan kartu dek (Tap-to-Slot), penghapusan slot (Tap-to-Clear),
-    /// tombol reset baris, validasi ekspresi per langkah, serta transisi ke layar berikutnya.
+    /// Sepenuhnya selaras dengan acuan prototype Docs/Ui Template/04_algebra_card_board/code.html:
+    /// - Top Header Bar (Back button, Logo AlgeCard Adventure, Mission Plaque).
+    /// - Question Banner (Bingkai kayu, ornamen daun, badge Prof. Bug, highlight formula).
+    /// - 4 Solving Stages (Ikon, Judul, Status Badge dinamis, Panah emas, Slot placeholder interaktif).
+    /// - Deck of Cards Sidebar (Number Cards 0-9 biru, Variable Cards hijau, Operators kuning, 3D CLEAR button, D-Pad Nav Pad).
+    /// - Kontrol Aksi Bawah (Tombol emas Continue/Complete Quest, Tombol cyan More Details / Review, Strip dekorasi petualangan).
+    /// - Adaptasi dinamis dari banksoal.json.
     /// </summary>
     public class AlgebraBoardController : MonoBehaviour
     {
-        [Header("Header & Info Soal")]
+        [Header("Top Header Bar")]
         [SerializeField] private Button backButton;
-        [SerializeField] private Text headerLevelText;
+        [SerializeField] private Image logoPlaqueImage;
+        [SerializeField] private Text missionPlaqueLevelText;
+
+        [Header("Question Plaque Banner")]
         [SerializeField] private Text questionBodyText;
+        [SerializeField] private Text questionHighlightedFormulaText;
 
         [Header("Papan Aljabar (4 Tahap)")]
-        [SerializeField] private List<BoardStageRow> stages = new List<BoardStageRow>();
+        [SerializeField] private ScrollRect mainScrollRect;
+        [SerializeField] private RectTransform scrollContent;
+        [SerializeField] public List<BoardStageRow> stages = new List<BoardStageRow>();
 
         [Header("Palet Dek Kartu (Deck of Cards)")]
-        [SerializeField] private Transform numberDeckContainer;
-        [SerializeField] private Transform variableDeckContainer;
-        [SerializeField] private Transform operatorDeckContainer;
         [SerializeField] private List<Button> numberButtons = new List<Button>();
         [SerializeField] private List<Button> variableButtons = new List<Button>();
         [SerializeField] private List<Button> operatorButtons = new List<Button>();
+        [SerializeField] private Button deleteOneButton;
+        [SerializeField] private Button clearButton;
+        [SerializeField] private Button clearAllButton;
 
-        [Header("Tombol Aksi Bawah")]
+        [Header("Adventure Compass D-Pad / NAV PAD")]
+        [SerializeField] private Button dpadUp;
+        [SerializeField] private Button dpadDown;
+        [SerializeField] private Button dpadLeft;
+        [SerializeField] private Button dpadRight;
+        [SerializeField] private Button dpadCenter;
+
+        [Header("Tombol Aksi Bawah (Footer)")]
         [SerializeField] private Button continueButton;
-        [SerializeField] private Text continueButtonText;
-        [SerializeField] private Button resetStepButton;
+        [SerializeField] private Text continueLabelText;
+        [SerializeField] private Text continueSubText;
+        [SerializeField] private Button moreDetailsButton;
+        [SerializeField] private Text moreDetailsSubText;
+        [SerializeField] private Button resetStepButton; // legacy fallback support
+
+        [Header("Aksesori & Feedback")]
+        [SerializeField] private GameObject feedbackBar;
         [SerializeField] private Text feedbackText;
+        [SerializeField] private Text levelBadgeText;
+        [SerializeField] private Text stageBadgeIndicatorText;
 
         [Header("Aset Visual Sprite")]
         [SerializeField] private Sprite emptySlotSprite;
         [SerializeField] private Sprite whiteTileSprite;
         [SerializeField] private Sprite orangeTileSprite;
         [SerializeField] private Sprite greenTileSprite;
+        [SerializeField] private Sprite badgeDoneSprite;
+        [SerializeField] private Sprite badgeActiveSprite;
+        [SerializeField] private Sprite badgeLockedSprite;
         [SerializeField] private Sprite panelNormalSprite;
         [SerializeField] private Sprite panelCompleteSprite;
+
+        // Button Accessor Properties for Testing & Scripting
+        public Button DeleteOneButton
+        {
+            get => deleteOneButton;
+            set => deleteOneButton = value;
+        }
+
+        public Button ClearAllButton
+        {
+            get => clearAllButton != null ? clearAllButton : clearButton;
+            set => clearAllButton = value;
+        }
+
+        public Button ClearButton
+        {
+            get => ClearAllButton;
+            set => clearButton = value;
+        }
 
         // State Runtime
         public int CurrentStageIndex { get; private set; } = 0;
         public QuestionModel ActiveQuestion { get; private set; }
         public bool IsAllStagesCompleted { get; private set; } = false;
+
+        private Coroutine _noticeCoroutine;
+        private Coroutine _pulseCoroutine;
 
         private void Start()
         {
@@ -131,31 +189,65 @@ namespace AlgeCardAdventure.UI
             }
 
             // Tampilkan info header
-            if (headerLevelText != null)
+            if (missionPlaqueLevelText != null)
             {
                 string lvl = !string.IsNullOrEmpty(ActiveQuestion.ui_level) ? ActiveQuestion.ui_level : "Easy";
-                headerLevelText.text = $"{lvl} - Variables & Algebra";
+                missionPlaqueLevelText.text = $"{lvl} · Variables";
+            }
+
+            if (levelBadgeText != null)
+            {
+                string lvl = !string.IsNullOrEmpty(ActiveQuestion.ui_level) ? ActiveQuestion.ui_level : "Level 1";
+                levelBadgeText.text = $"{lvl}";
+            }
+
+            // Tampilkan narasi soal dan formula
+            string formula = (ActiveQuestion.equation_model != null && ActiveQuestion.equation_model.Length > 0)
+                ? ActiveQuestion.equation_model[0]
+                : "3x + 5 = 20";
+
+            string targetVar = ExtractVariableFromQuestion(ActiveQuestion);
+            string varHint = GetVariableContextHint(ActiveQuestion);
+
+            if (questionHighlightedFormulaText != null)
+            {
+                questionHighlightedFormulaText.text = formula;
             }
 
             if (questionBodyText != null)
             {
-                questionBodyText.text = ActiveQuestion.question_text;
+                // Proteksi runtime anti-meluber frame (Catatan Revisi 1 Butir 4)
+                try
+                {
+                    questionBodyText.horizontalOverflow = HorizontalWrapMode.Wrap;
+                    questionBodyText.verticalOverflow = VerticalWrapMode.Truncate;
+                    questionBodyText.resizeTextForBestFit = true;
+                    questionBodyText.resizeTextMinSize = 13;
+                    questionBodyText.resizeTextMaxSize = 18;
+                }
+                catch { }
+
+                // Tampilkan soal cerita dan petunjuk variabel (Catatan Revisi 1 Butir 5 & 6)
+                if (!string.IsNullOrWhiteSpace(ActiveQuestion.question_text))
+                {
+                    questionBodyText.text = $"{ActiveQuestion.question_text}\n💡 <b>Petunjuk:</b> {varHint}";
+                }
+                else
+                {
+                    questionBodyText.text = $"Jika {formula}, tentukan nilai {targetVar}!\n💡 <b>Petunjuk:</b> {varHint}";
+                }
             }
 
-            // Bentuk target token 4 tahap dari soal aktif
+            // Bentuk target token dan struktur 4 tahap dari soal aktif
             FormulateStagesFromQuestion(ActiveQuestion);
 
             // Buka tahap pertama (Stage 0) dan kunci tahap lainnya
             SetStageActive(0);
 
             UpdateDeckInteractivity();
-            UpdateContinueButtonVisual();
+            UpdateActionButtonsVisual();
 
-            if (feedbackText != null)
-            {
-                feedbackText.text = "Arrange the cards according to the mission!";
-                feedbackText.color = new Color(0.2f, 0.2f, 0.2f, 1f);
-            }
+            ShowNotice("Arrange cards according to the mission!", true);
         }
 
         private void SetupButtonListeners()
@@ -172,44 +264,75 @@ namespace AlgeCardAdventure.UI
                 continueButton.onClick.AddListener(OnContinueClicked);
             }
 
+            if (moreDetailsButton != null)
+            {
+                moreDetailsButton.onClick.RemoveAllListeners();
+                moreDetailsButton.onClick.AddListener(OnMoreDetailsClicked);
+            }
+
+            if (deleteOneButton != null)
+            {
+                deleteOneButton.onClick.RemoveAllListeners();
+                deleteOneButton.onClick.AddListener(OnDeleteOneClicked);
+            }
+
+            if (clearAllButton != null)
+            {
+                clearAllButton.onClick.RemoveAllListeners();
+                clearAllButton.onClick.AddListener(OnClearClicked);
+            }
+
+            if (clearButton != null && clearButton != clearAllButton)
+            {
+                clearButton.onClick.RemoveAllListeners();
+                clearButton.onClick.AddListener(OnClearClicked);
+            }
+
             if (resetStepButton != null)
             {
                 resetStepButton.onClick.RemoveAllListeners();
-                resetStepButton.onClick.AddListener(OnResetStepClicked);
+                resetStepButton.onClick.AddListener(OnClearClicked);
             }
 
-            // Pasang listener Tap-to-Slot untuk tombol kartu dek angka
+            // D-Pad Compass Navigation listeners
+            if (dpadUp != null) dpadUp.onClick.AddListener(() => PanScrollView(new Vector2(0f, 120f)));
+            if (dpadDown != null) dpadDown.onClick.AddListener(() => PanScrollView(new Vector2(0f, -120f)));
+            if (dpadLeft != null) dpadLeft.onClick.AddListener(() => PanScrollView(new Vector2(-120f, 0f)));
+            if (dpadRight != null) dpadRight.onClick.AddListener(() => PanScrollView(new Vector2(120f, 0f)));
+            if (dpadCenter != null) dpadCenter.onClick.AddListener(OnDpadCenterClicked);
+
+            // Pasang listener Tap-to-Slot untuk tombol kartu dek angka (0..9)
             for (int i = 0; i < numberButtons.Count; i++)
             {
                 Button btn = numberButtons[i];
                 if (btn != null)
                 {
                     Text t = btn.GetComponentInChildren<Text>();
-                    string val = (t != null) ? t.text : i.ToString();
+                    string val = (t != null && !string.IsNullOrEmpty(t.text)) ? t.text : i.ToString();
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() => OnDeckCardClicked(val, "number"));
                 }
             }
 
-            // Pasang listener Tap-to-Slot untuk tombol variabel
+            // Pasang listener Tap-to-Slot untuk tombol variabel (x, and, a, b)
             foreach (var btn in variableButtons)
             {
                 if (btn != null)
                 {
                     Text t = btn.GetComponentInChildren<Text>();
-                    string val = (t != null) ? t.text : "x";
+                    string val = (t != null && !string.IsNullOrEmpty(t.text)) ? t.text : "x";
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() => OnDeckCardClicked(val, "variable"));
                 }
             }
 
-            // Pasang listener Tap-to-Slot untuk tombol operator
+            // Pasang listener Tap-to-Slot untuk tombol operator (+, -, ×, ÷)
             foreach (var btn in operatorButtons)
             {
                 if (btn != null)
                 {
                     Text t = btn.GetComponentInChildren<Text>();
-                    string val = (t != null) ? t.text : "+";
+                    string val = (t != null && !string.IsNullOrEmpty(t.text)) ? t.text : "+";
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() => OnDeckCardClicked(val, "operator"));
                 }
@@ -236,6 +359,11 @@ namespace AlgeCardAdventure.UI
         /// <summary>
         /// Mengekstrak target token untuk 4 tahap aljabar dari data soal.
         /// Mengadaptasi equation_model, solution_steps, dan final_answer.
+        /// Sesuai prototype code.html:
+        /// - Stage 1 (Arrange the Equations): Persamaan awal dengan kartu statis + slot kosong target.
+        /// - Stage 2 (Step 1): Operasi pertama (pengurangan/pemindahan konstanta).
+        /// - Stage 3 (Step 2): Operasi kedua (penyederhanaan/pembagian).
+        /// - Stage 4 (Card Arrangement Results): Hasil akhir variabel x = 5.
         /// </summary>
         public void FormulateStagesFromQuestion(QuestionModel question)
         {
@@ -247,80 +375,97 @@ namespace AlgeCardAdventure.UI
                 stages.Add(new BoardStageRow());
             }
 
-            // Stage 0: Persamaan Awal (Card Board: Arrange the Equations)
+            string varName = ExtractVariableFromQuestion(question);
+
+            // ==========================================
+            // STAGE 0 (Stage 1): Card Board: Arrange the Equations
+            // ==========================================
             stages[0].stageName = "Arrange the Equations";
             if (stages[0].stageTitleText != null) stages[0].stageTitleText.text = "Card Board: Arrange the Equations";
-            if (stages[0].stageInstructionText != null) stages[0].stageInstructionText.text = "Arrange the number and variable cards to form an equation.";
+            if (stages[0].stageIconText != null) stages[0].stageIconText.text = "📖";
+            if (stages[0].stageInstructionText != null) stages[0].stageInstructionText.text = "Arrange cards to form the initial equation.";
             
             string eq0 = (question.equation_model != null && question.equation_model.Length > 0)
                 ? question.equation_model[0]
                 : "3x + 5 = 20";
             stages[0].targetTokens = TokenizeExpression(eq0);
 
-            // Stage 1: Langkah Solusi 1
+            // ==========================================
+            // STAGE 1 (Stage 2): Card Board: Step 1
+            // ==========================================
             stages[1].stageName = "Step 1";
             if (stages[1].stageTitleText != null) stages[1].stageTitleText.text = "Card Board: Step 1";
+            if (stages[1].stageIconText != null) stages[1].stageIconText.text = "💡";
+
             string step1Desc = "Move the cards to subtract from both sides.";
             string step1Eq = "";
 
             if (question.solution_steps != null && question.solution_steps.Length > 2)
             {
-                // Biasanya solution_steps[2] adalah operasi aljabar pertama misal "x = 25000 - 10000"
                 step1Eq = question.solution_steps[2];
-                step1Desc = question.solution_steps[1];
+                if (question.solution_steps.Length > 1 && !string.IsNullOrWhiteSpace(question.solution_steps[1]))
+                {
+                    step1Desc = question.solution_steps[1];
+                }
             }
             else
             {
-                step1Eq = "3x = 20 - 5";
+                step1Eq = $"3{varName} = 20 - 5";
+                step1Desc = "Move the cards to subtract 5 from both sides.";
             }
             if (stages[1].stageInstructionText != null) stages[1].stageInstructionText.text = step1Desc;
             stages[1].targetTokens = TokenizeExpression(step1Eq);
 
-            // Stage 2: Langkah Solusi 2 (Penyederhanaan atau pembagian)
+            // ==========================================
+            // STAGE 2 (Stage 3): Card Board: Step 2
+            // ==========================================
             stages[2].stageName = "Step 2";
             if (stages[2].stageTitleText != null) stages[2].stageTitleText.text = "Card Board: Step 2";
-            string step2Desc = "Simplify the expression.";
+            if (stages[2].stageIconText != null) stages[2].stageIconText.text = "🔍";
+
+            string step2Desc = "Simplify the expression to divide both sides.";
             string step2Eq = "";
 
             if (question.solution_steps != null && question.solution_steps.Length > 3)
             {
                 step2Eq = question.solution_steps[3];
-                step2Desc = "Simplify to resolve the variable.";
+                step2Desc = "Simplify the expression.";
             }
             else
             {
-                step2Eq = "3x = 15 / 3";
+                step2Eq = $"3{varName} = 15 / 3";
+                step2Desc = "Move the cards to divide both sides by 3.";
             }
             if (stages[2].stageInstructionText != null) stages[2].stageInstructionText.text = step2Desc;
             stages[2].targetTokens = TokenizeExpression(step2Eq);
 
-            // Stage 3: Hasil Akhir (Final Variable Result)
+            // ==========================================
+            // STAGE 3 (Stage 4): Card Arrangement Results
+            // ==========================================
             stages[3].stageName = "Card Arrangement Results";
             if (stages[3].stageTitleText != null) stages[3].stageTitleText.text = "Card Arrangement Results";
+            if (stages[3].stageIconText != null) stages[3].stageIconText.text = "⭐";
             if (stages[3].stageInstructionText != null) stages[3].stageInstructionText.text = "The final result after the variables are resolved.";
 
             string finalAnswer = !string.IsNullOrEmpty(question.final_answer) ? question.final_answer : "5";
-            // Normalisasi final answer ke format variable = answer
-            string varName = ExtractVariableFromQuestion(question);
-            string cleanAnswerDigits = System.Text.RegularExpressions.Regex.Replace(finalAnswer, @"[^\d]", "");
-            if (string.IsNullOrEmpty(cleanAnswerDigits)) cleanAnswerDigits = finalAnswer.Trim();
-            
-            string finalExpr = $"{varName} = {cleanAnswerDigits}";
+            string cleanDigits = System.Text.RegularExpressions.Regex.Replace(finalAnswer, @"[^\d]", "");
+            if (string.IsNullOrEmpty(cleanDigits)) cleanDigits = finalAnswer.Trim();
+
+            string finalExpr = $"{varName} = {cleanDigits}";
             stages[3].targetTokens = TokenizeExpression(finalExpr);
 
-            // Sesuaikan ketersediaan slot dengan jumlah target tokens
+            // Pastikan seluruh 7 slot selalu aktif dan terbuka di semua tahap (Pilar 1 Zero Code Approved Plan)
             for (int s = 0; s < stages.Count; s++)
             {
                 var stage = stages[s];
                 if (stage.slots == null) stage.slots = new List<CardSlotView>();
                 for (int i = 0; i < stage.slots.Count; i++)
                 {
-                    bool isActiveSlot = (i < stage.targetTokens.Count);
                     if (stage.slots[i] != null)
                     {
                         if (stage.slots[i].slotButton != null)
                         {
-                            stage.slots[i].slotButton.gameObject.SetActive(isActiveSlot);
+                            stage.slots[i].slotButton.gameObject.SetActive(true);
                         }
                         stage.slots[i].Clear(emptySlotSprite);
                     }
@@ -338,15 +483,13 @@ namespace AlgeCardAdventure.UI
             var tokens = new List<string>();
             if (string.IsNullOrWhiteSpace(expr)) return tokens;
 
-            // Bersihkan teks ekstra jika ada awalan kata
             int eqPos = expr.IndexOf('=');
             if (eqPos >= 0)
             {
-                // Ambil ekspresi seputar tanda sama dengan
                 int start = 0;
                 for (int i = eqPos - 1; i >= 0; i--)
                 {
-                    if (char.IsLetterOrDigit(expr[i]) || expr[i] == '+' || expr[i] == '-' || expr[i] == '*' || expr[i] == '/' || expr[i] == ' ')
+                    if (char.IsLetterOrDigit(expr[i]) || expr[i] == '+' || expr[i] == '-' || expr[i] == '*' || expr[i] == '/' || expr[i] == '×' || expr[i] == '÷' || expr[i] == '(' || expr[i] == ')' || expr[i] == ' ')
                     {
                         start = i;
                     }
@@ -365,9 +508,12 @@ namespace AlgeCardAdventure.UI
                     continue;
                 }
 
-                if (c == '+' || c == '-' || c == '=' || c == '/' || c == '*')
+                if (c == '+' || c == '-' || c == '=' || c == '/' || c == '*' || c == '×' || c == '÷')
                 {
-                    tokens.Add(c.ToString());
+                    string op = c.ToString();
+                    if (c == '×') op = "*";
+                    if (c == '÷') op = "/";
+                    tokens.Add(op);
                     idx++;
                     continue;
                 }
@@ -396,9 +542,9 @@ namespace AlgeCardAdventure.UI
             return tokens;
         }
 
-        private string ExtractVariableFromQuestion(QuestionModel q)
+        public static string ExtractVariableFromQuestion(QuestionModel q)
         {
-            if (q.equation_model != null && q.equation_model.Length > 0)
+            if (q != null && q.equation_model != null && q.equation_model.Length > 0)
             {
                 foreach (char c in q.equation_model[0])
                 {
@@ -408,6 +554,46 @@ namespace AlgeCardAdventure.UI
             return "x";
         }
 
+        /// <summary>
+        /// Menghasilkan petunjuk variabel konkret dan ramah anak sesuai variabel dan konteks soal.
+        /// Memenuhi Catatan Revisi 1 Butir 5 & 6 (b = boneka, a = anggur, p = pensil, dll.).
+        /// </summary>
+        public static string GetVariableContextHint(QuestionModel question)
+        {
+            string varName = ExtractVariableFromQuestion(question).ToLower();
+            string qText = (question != null && !string.IsNullOrEmpty(question.question_text))
+                ? question.question_text.ToLower()
+                : "";
+
+            switch (varName)
+            {
+                case "b":
+                    return "b = banyak boneka 🧸";
+                case "a":
+                    return "a = buah anggur 🍇";
+                case "p":
+                    return "p = batang pensil ✏️";
+                case "y":
+                    return "y = kartu misteri 🃏";
+                case "x":
+                    if (qText.Contains("saving") || qText.Contains("money") || qText.Contains("tabungan") || qText.Contains("uang") || qText.Contains("rp"))
+                    {
+                        return "x = jumlah uang tabungan 💰";
+                    }
+                    if (qText.Contains("age") || qText.Contains("umur") || qText.Contains("tahun"))
+                    {
+                        return "x = usia / umur 🎂";
+                    }
+                    if (qText.Contains("book") || qText.Contains("buku"))
+                    {
+                        return "x = jumlah buku 📚";
+                    }
+                    return "x = kotak misteri yang dicari 📦";
+                default:
+                    return $"{varName} = nilai misteri yang dicari 🔍";
+            }
+        }
+
         private QuestionModel CreateFallbackQuestion()
         {
             return new QuestionModel
@@ -415,7 +601,7 @@ namespace AlgeCardAdventure.UI
                 id = "DEFAULT-04",
                 ui_level = "Easy",
                 title = "Card Board Mission",
-                question_text = "If 3x + 5 = 20, find the value of x. Use number and variable cards to create equations and solve them.",
+                question_text = "If 3x + 5 = 20, find the value of x. Tap cards from the deck to fill the empty slot.",
                 equation_model = new string[] { "3x + 5 = 20" },
                 solution_steps = new string[] { "Let variable be x", "Subtract 5 from both sides", "3x = 20 - 5", "3x = 15 / 3" },
                 final_answer = "5"
@@ -424,13 +610,13 @@ namespace AlgeCardAdventure.UI
 
         /// <summary>
         /// Mengatur tahap aktif (0, 1, 2, atau 3).
-        /// Tahap sebelum stageIndex dikunci dengan status selesai (hijau/emas).
-        /// Tahap setelah stageIndex dikunci (transparan/terkunci).
+        /// Memperbarui visual badge (DONE ✓, ACTIVE, LOCKED), status interaktivitas baris,
+        /// panah penghubung, label tombol continue, serta memusatkan tampilan ke tahap aktif.
         /// </summary>
         public void SetStageActive(int stageIndex)
         {
             if (stages == null) stages = new List<BoardStageRow>();
-            CurrentStageIndex = stageIndex;
+            CurrentStageIndex = Mathf.Clamp(stageIndex, 0, stages.Count);
             IsAllStagesCompleted = (CurrentStageIndex >= stages.Count);
 
             for (int i = 0; i < stages.Count; i++)
@@ -438,27 +624,62 @@ namespace AlgeCardAdventure.UI
                 var stage = stages[i];
                 if (stage == null) continue;
 
-                if (i < stageIndex)
+                if (i < CurrentStageIndex)
                 {
+                    // Tahap Selesai (Completed)
                     stage.isCompleted = true;
                     stage.isUnlocked = true;
-                    SetRowInteractable(stage, false, new Color(0.95f, 1f, 0.95f, 1f));
+                    SetRowInteractable(stage, false, new Color(0.92f, 1f, 0.92f, 1f));
+
+                    if (stage.badgeStatusText != null) stage.badgeStatusText.text = "DONE ✓";
+                    if (stage.badgeStatusImage != null && badgeDoneSprite != null)
+                    {
+                        stage.badgeStatusImage.sprite = badgeDoneSprite;
+                        stage.badgeStatusImage.color = Color.white;
+                    }
+                    if (stage.stepArrowDown != null) stage.stepArrowDown.SetActive(true);
                 }
-                else if (i == stageIndex)
+                else if (i == CurrentStageIndex && !IsAllStagesCompleted)
                 {
+                    // Tahap Aktif (Active)
                     stage.isCompleted = false;
                     stage.isUnlocked = true;
                     SetRowInteractable(stage, true, Color.white);
+
+                    if (stage.badgeStatusText != null) stage.badgeStatusText.text = "ACTIVE";
+                    if (stage.badgeStatusImage != null && badgeActiveSprite != null)
+                    {
+                        stage.badgeStatusImage.sprite = badgeActiveSprite;
+                        stage.badgeStatusImage.color = Color.white;
+                    }
+                    if (stage.stepArrowDown != null) stage.stepArrowDown.SetActive(true);
                 }
                 else
                 {
+                    // Tahap Terkunci (Locked)
                     stage.isCompleted = false;
                     stage.isUnlocked = false;
-                    SetRowInteractable(stage, false, new Color(0.7f, 0.7f, 0.7f, 0.5f));
+                    SetRowInteractable(stage, false, new Color(0.65f, 0.65f, 0.65f, 0.65f));
+
+                    if (stage.badgeStatusText != null) stage.badgeStatusText.text = "LOCKED";
+                    if (stage.badgeStatusImage != null && badgeLockedSprite != null)
+                    {
+                        stage.badgeStatusImage.sprite = badgeLockedSprite;
+                        stage.badgeStatusImage.color = new Color(1f, 1f, 1f, 0.8f);
+                    }
+                    if (stage.stepArrowDown != null) stage.stepArrowDown.SetActive(false);
                 }
             }
 
-            UpdateContinueButtonVisual();
+            // Perbarui indikator tahap footer
+            if (stageBadgeIndicatorText != null)
+            {
+                int displayStage = Mathf.Min(CurrentStageIndex + 1, stages.Count);
+                stageBadgeIndicatorText.text = $"Stage {displayStage} of {stages.Count}";
+            }
+
+            UpdateActionButtonsVisual();
+            AutoScrollToActiveStage(CurrentStageIndex);
         }
 
         private void SetRowInteractable(BoardStageRow stage, bool interactable, Color tint)
@@ -483,8 +704,10 @@ namespace AlgeCardAdventure.UI
         }
 
         /// <summary>
+        /// <summary>
+        /// <summary>
         /// Handler saat kartu pada dek diklik (Tap-to-Slot).
-        /// Mengisi slot kosong pertama pada tahap aktif.
+        /// Mengisi slot kosong pertama pada tahap aktif sesuai jumlah target token.
         /// </summary>
         public void OnDeckCardClicked(string token, string cardType)
         {
@@ -493,7 +716,6 @@ namespace AlgeCardAdventure.UI
             var currentStage = stages[CurrentStageIndex];
             int maxSlots = currentStage.targetTokens.Count;
 
-            // Cari slot kosong pertama
             CardSlotView emptySlot = null;
             for (int i = 0; i < maxSlots && i < currentStage.slots.Count; i++)
             {
@@ -521,20 +743,23 @@ namespace AlgeCardAdventure.UI
                 }
 
                 emptySlot.SetToken(token, tileSprite, textColor);
-                AudioManager.Instance.PlayCardFlip();
+                SafePlayCardFlip();
 
-                // Cek jika seluruh slot telah terisi
+                ShowNotice($"Placed card [{token}]!", true);
                 CheckIfRowIsComplete(currentStage);
+            }
+            else
+            {
+                ShowNotice("Current slots are already filled. Press CLEAR or tap a card to edit.", false);
             }
         }
 
         /// <summary>
         /// Handler saat slot kartu pada papan diklik (Tap-to-Clear).
-        /// Sesuai instruksi Yogi Ario: fitur menghapus angka/kartu dan mengembalikan slot menjadi kosong.
+        /// Mengosongkan slot yang bersangkutan kembali ke status empty slot.
         /// </summary>
         public void OnSlotClicked(int stageIndex, int slotIndex)
         {
-            // Hanya izinkan mengosongkan slot pada tahap yang sedang aktif
             if (stageIndex != CurrentStageIndex || IsAllStagesCompleted) return;
 
             var stage = stages[stageIndex];
@@ -544,38 +769,62 @@ namespace AlgeCardAdventure.UI
                 if (!slot.IsEmpty)
                 {
                     slot.Clear(emptySlotSprite);
-                    AudioManager.Instance.PlayButtonClick();
-
-                    if (feedbackText != null)
-                    {
-                        feedbackText.text = "Card removed. Choose another card!";
-                        feedbackText.color = new Color(0.3f, 0.3f, 0.3f, 1f);
-                    }
+                    SafePlayButtonClick();
+                    ShowNotice("Card removed. Tap a card from the deck!", true);
                 }
             }
         }
 
         /// <summary>
-        /// Handler tombol Reset Step / Clear Baris Aktif.
-        /// Mengosongkan seluruh slot pada tahap aktif.
+        /// Handler tombol Hapus 1 Kartu (⌫).
+        /// Menghapus satu kartu terisi paling kanan (slot indeks tertinggi) pada tahap aktif.
         /// </summary>
-        public void OnResetStepClicked()
+        public void OnDeleteOneClicked()
         {
             if (IsAllStagesCompleted || CurrentStageIndex >= stages.Count) return;
 
             var currentStage = stages[CurrentStageIndex];
-            foreach (var slot in currentStage.slots)
+            if (currentStage == null || currentStage.slots == null) return;
+
+            // Cari kartu terisi dari slot paling kanan (indeks tertinggi) ke kiri
+            for (int i = currentStage.slots.Count - 1; i >= 0; i--)
             {
-                slot.Clear(emptySlotSprite);
+                var slot = currentStage.slots[i];
+                if (slot != null && !slot.IsEmpty)
+                {
+                    string removedToken = slot.currentToken;
+                    slot.Clear(emptySlotSprite);
+                    SafePlayButtonClick();
+                    ShowNotice($"Kartu [{removedToken}] dihapus.", true);
+                    return;
+                }
             }
 
-            AudioManager.Instance.PlayButtonClick();
+            ShowNotice("Papan aljabar sudah kosong.", false);
+        }
 
-            if (feedbackText != null)
+        /// <summary>
+        /// Handler tombol 3D CLEAR / HAPUS SEMUA 🗑️.
+        /// Mengosongkan seluruh slot pada tahap aktif secara instan.
+        /// </summary>
+        public void OnClearClicked()
+        {
+            if (IsAllStagesCompleted || CurrentStageIndex >= stages.Count) return;
+
+            var currentStage = stages[CurrentStageIndex];
+            if (currentStage != null && currentStage.slots != null)
             {
-                feedbackText.text = "Step cleared. Arrange your cards!";
-                feedbackText.color = new Color(0.3f, 0.3f, 0.3f, 1f);
+                foreach (var slot in currentStage.slots)
+                {
+                    if (slot != null)
+                    {
+                        slot.Clear(emptySlotSprite);
+                    }
+                }
             }
+
+            SafePlayButtonClick();
+            ShowNotice("Seluruh kartu pada tahap aktif dihapus.", true);
         }
 
         private void CheckIfRowIsComplete(BoardStageRow stage)
@@ -590,32 +839,25 @@ namespace AlgeCardAdventure.UI
 
             if (filledCount == totalNeeded)
             {
-                if (feedbackText != null)
-                {
-                    feedbackText.text = "Row complete! Press 'Continue' to verify.";
-                    feedbackText.color = new Color(0.05f, 0.45f, 0.15f, 1f);
-                }
+                ShowNotice("Row filled! Tap 'Continue' to verify.", true);
             }
         }
 
         /// <summary>
         /// Handler tombol Continue > (Verifikasi jawaban langkah aktif, atau lanjut ke layar berikutnya).
+        /// Pemain harus menyusun kartu dengan benar sesuai rumus di setiap tahap agar dapat melangkah maju ("harus pas").
         /// </summary>
         public void OnContinueClicked()
         {
-            AudioManager.Instance.PlayButtonClick();
+            SafePlayButtonClick();
 
             if (IsAllStagesCompleted)
             {
-                // Navigasi ke Layar 05 (True or False) atau Layar 06 (Score Results)
-                if (ActiveQuestion != null && ActiveQuestion.HasTrueFalseReady)
+                if (GameSession.Instance != null)
                 {
-                    SceneNavigator.LoadScene(SceneNavigator.SceneTrueOrFalse);
+                    GameSession.Instance.LastBoardSolutionCorrect = true;
                 }
-                else
-                {
-                    SceneNavigator.LoadScene(SceneNavigator.SceneScoreResults);
-                }
+                SceneNavigator.LoadScene(SceneNavigator.SceneTrueOrFalse);
                 return;
             }
 
@@ -624,50 +866,160 @@ namespace AlgeCardAdventure.UI
 
             if (isCorrect)
             {
-                AudioManager.Instance.PlayCorrect();
+                SafePlayCorrect();
 
-                if (feedbackText != null)
-                {
-                    feedbackText.text = "Great job! Step verified!";
-                    feedbackText.color = new Color(0.05f, 0.55f, 0.15f, 1f);
-                }
-
-                // Kunci baris saat ini dengan sukses
                 currentStage.isCompleted = true;
                 if (panelCompleteSprite != null && currentStage.rowBackground != null)
                 {
                     currentStage.rowBackground.sprite = panelCompleteSprite;
                 }
 
-                // Maju ke tahap berikutnya
                 int nextStage = CurrentStageIndex + 1;
-                SetStageActive(nextStage);
 
                 if (nextStage >= stages.Count)
                 {
                     IsAllStagesCompleted = true;
-                    if (feedbackText != null)
-                    {
-                        feedbackText.text = "All steps solved! Tap 'Continue' to finish!";
-                        feedbackText.color = new Color(0.75f, 0.45f, 0.05f, 1f);
-                    }
-                    UpdateContinueButtonVisual();
+                    SetStageActive(nextStage);
+                    ShowNotice("🎉 Quest Complete! You solved the equation with Professor Bug!", true);
+                }
+                else
+                {
+                    ShowNotice($"Step completed! Moving to Stage {nextStage + 1}", true);
+                    SetStageActive(nextStage);
                 }
             }
             else
             {
-                AudioManager.Instance.PlayWrong();
-
-                if (feedbackText != null)
-                {
-                    feedbackText.text = "Cards don't match the target equation. Tap card to clear and try again!";
-                    feedbackText.color = new Color(0.8f, 0.15f, 0.1f, 1f);
-                }
+                SafePlayWrong();
+                ShowNotice("Cards don't match the equation. Tap a card to clear and try again!", false);
             }
         }
 
         /// <summary>
+        /// Handler tombol More Details 🔄 (Review / Step Back).
+        /// Mengizinkan pemain kembali ke tahap sebelumnya tanpa menghilangkan susunan kartu valid.
+        /// </summary>
+        public void OnMoreDetailsClicked()
+        {
+            SafePlayButtonClick();
+
+            if (CurrentStageIndex > 0)
+            {
+                IsAllStagesCompleted = false;
+                int prevStage = CurrentStageIndex - 1;
+                SetStageActive(prevStage);
+                ShowNotice($"Returned to Stage {prevStage + 1}", true);
+            }
+            else
+            {
+                ShowNotice("Already at the first stage!", false);
+            }
+        }
+
+        /// <summary>
+        /// Mengevaluasi kebenaran seluruh pengerjaan aljabar di papan.
+        /// Memeriksa ketepatan hasil akhir di Stage 3 dan kesesuaian formula aljabar.
+        /// Hasil disimpan di GameSession.Instance.LastBoardSolutionCorrect untuk ditampilkan di Layar 05 (True or False).
+        /// </summary>
+        public bool EvaluateOverallBoardSolution()
+        {
+            if (stages == null || stages.Count == 0) return true;
+
+            // 1. Evaluasi Stage 3 (Card Arrangement Results)
+            if (stages.Count > 3 && stages[3] != null)
+            {
+                var stage3 = stages[3];
+                var tokens3 = GetFilledTokens(stage3);
+
+                if (tokens3.Count == 0) return false;
+
+                var target3 = stage3.targetTokens ?? new List<string>();
+                string expectedAnswer = "";
+                if (target3.Count > 0)
+                {
+                    expectedAnswer = NormalizeTokenStatic(target3[target3.Count - 1]);
+                }
+
+                bool matchesExact = TokensMatch(tokens3, target3);
+                bool matchesLastDigit = false;
+                for (int i = 0; i < tokens3.Count; i++)
+                {
+                    if (NormalizeTokenStatic(tokens3[i]) == expectedAnswer)
+                    {
+                        matchesLastDigit = true;
+                        break;
+                    }
+                }
+
+                if (!matchesExact && !matchesLastDigit)
+                {
+                    return false;
+                }
+            }
+
+            // 2. Evaluasi Stage 0 (Arrange the Equations): jika diisi, tidak boleh bertentangan
+            if (stages.Count > 0 && stages[0] != null)
+            {
+                var stage0 = stages[0];
+                var tokens0 = GetFilledTokens(stage0);
+                if (tokens0.Count > 0 && stage0.targetTokens != null && stage0.targetTokens.Count > 0)
+                {
+                    int compareCount = Mathf.Min(tokens0.Count, stage0.targetTokens.Count);
+                    for (int i = 0; i < compareCount; i++)
+                    {
+                        if (!string.Equals(NormalizeTokenStatic(tokens0[i]), NormalizeTokenStatic(stage0.targetTokens[i]), StringComparison.OrdinalIgnoreCase))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static List<string> GetFilledTokens(BoardStageRow stage)
+        {
+            var list = new List<string>();
+            if (stage == null || stage.slots == null) return list;
+            foreach (var slot in stage.slots)
+            {
+                if (slot != null && !string.IsNullOrWhiteSpace(slot.currentToken))
+                {
+                    list.Add(slot.currentToken.Trim());
+                }
+            }
+            return list;
+        }
+
+        public static bool TokensMatch(List<string> a, List<string> b)
+        {
+            if (a == null || b == null) return false;
+            if (a.Count != b.Count) return false;
+            for (int i = 0; i < a.Count; i++)
+            {
+                string normA = NormalizeTokenStatic(a[i]);
+                string normB = NormalizeTokenStatic(b[i]);
+                if (!string.Equals(normA, normB, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static string NormalizeTokenStatic(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token)) return "";
+            string t = token.Trim().ToLower();
+            if (t == "×") return "*";
+            if (t == "÷") return "/";
+            return t;
+        }
+
+        /// <summary>
         /// Memvalidasi susunan kartu di tahap tertentu dengan target tokens.
+        /// Mendukung normalisasi simbol matematika (* dengan ×, / dengan ÷).
         /// </summary>
         public bool ValidateStage(BoardStageRow stage)
         {
@@ -677,10 +1029,10 @@ namespace AlgeCardAdventure.UI
             for (int i = 0; i < targetCount; i++)
             {
                 if (i >= stage.slots.Count) return false;
-                string playerToken = stage.slots[i].currentToken;
-                string targetToken = stage.targetTokens[i];
+                string playerToken = NormalizeToken(stage.slots[i].currentToken);
+                string targetToken = NormalizeToken(stage.targetTokens[i]);
 
-                if (!string.Equals(playerToken.Trim(), targetToken.Trim(), StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(playerToken, targetToken, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
@@ -689,33 +1041,147 @@ namespace AlgeCardAdventure.UI
             return true;
         }
 
+        private string NormalizeToken(string token)
+        {
+            return NormalizeTokenStatic(token);
+        }
+
         public void OnBackClicked()
         {
-            AudioManager.Instance.PlayButtonClick();
+            SafePlayButtonClick();
             SceneNavigator.GoToMissionCard();
         }
 
-        private void UpdateContinueButtonVisual()
+        private void UpdateActionButtonsVisual()
         {
-            if (continueButtonText != null)
+            if (continueLabelText != null)
             {
-                if (IsAllStagesCompleted)
-                {
-                    continueButtonText.text = "Next Stage  >";
-                }
-                else
-                {
-                    continueButtonText.text = "Continue  >";
-                }
+                continueLabelText.text = IsAllStagesCompleted ? "Complete Quest" : "Continue";
+            }
+
+            if (continueSubText != null)
+            {
+                continueSubText.text = IsAllStagesCompleted ? "Verify final equation" : "Verify answers";
+            }
+
+            if (moreDetailsButton != null)
+            {
+                moreDetailsButton.interactable = (CurrentStageIndex > 0);
             }
         }
 
         private void UpdateDeckInteractivity()
         {
-            // Pastikan semua tombol dek aktif untuk interaksi
             foreach (var b in numberButtons) if (b != null) b.interactable = true;
             foreach (var b in variableButtons) if (b != null) b.interactable = true;
             foreach (var b in operatorButtons) if (b != null) b.interactable = true;
+        }
+
+        /// <summary>
+        /// Menampilkan feedback notice bar melayang selama 2.5 detik sesuai code.html.
+        /// </summary>
+        public void ShowNotice(string message, bool isSuccess = true)
+        {
+            if (feedbackText != null)
+            {
+                feedbackText.text = message;
+                feedbackText.color = isSuccess
+                    ? new Color(0.04f, 0.35f, 0.15f, 1f) // Dark emerald
+                    : new Color(0.45f, 0.20f, 0.02f, 1f); // Dark amber
+            }
+
+            if (feedbackBar != null)
+            {
+                Image bg = feedbackBar.GetComponent<Image>();
+                if (bg != null)
+                {
+                    bg.color = isSuccess
+                        ? new Color(0.2f, 0.85f, 0.55f, 0.95f)
+                        : new Color(0.98f, 0.75f, 0.25f, 0.95f);
+                }
+
+                feedbackBar.SetActive(true);
+
+                if (_noticeCoroutine != null) StopCoroutine(_noticeCoroutine);
+                _noticeCoroutine = StartCoroutine(HideNoticeRoutine(2.5f));
+            }
+        }
+
+        private IEnumerator HideNoticeRoutine(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            if (feedbackBar != null)
+            {
+                feedbackBar.SetActive(false);
+            }
+        }
+
+        private void PanScrollView(Vector2 delta)
+        {
+            if (mainScrollRect != null && scrollContent != null)
+            {
+                Vector2 pos = scrollContent.anchoredPosition;
+                pos += delta;
+                scrollContent.anchoredPosition = pos;
+                SafePlayButtonClick();
+            }
+        }
+
+        private void OnDpadCenterClicked()
+        {
+            SafePlayButtonClick();
+            AutoScrollToActiveStage(CurrentStageIndex);
+            ShowNotice("Centered on active stage.", true);
+        }
+
+        private void AutoScrollToActiveStage(int stageIdx)
+        {
+            if (scrollContent != null)
+            {
+                // Tiap stage berjarak vertikal sekitar 260 px
+                float targetY = Mathf.Clamp(stageIdx * 240f, 0f, 600f);
+                StartCoroutine(SmoothScrollRoutine(targetY));
+            }
+        }
+
+        private IEnumerator SmoothScrollRoutine(float targetY)
+        {
+            if (scrollContent == null) yield break;
+
+            Vector2 startPos = scrollContent.anchoredPosition;
+            Vector2 endPos = new Vector2(startPos.x, targetY);
+            float elapsed = 0f;
+            float duration = 0.25f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+                scrollContent.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
+                yield return null;
+            }
+
+            scrollContent.anchoredPosition = endPos;
+        }
+
+        private void SafePlayButtonClick()
+        {
+            try { AudioManager.Instance?.PlayButtonClick(); } catch { }
+        }
+
+        private void SafePlayCardFlip()
+        {
+            try { AudioManager.Instance?.PlayCardFlip(); } catch { }
+        }
+
+        private void SafePlayCorrect()
+        {
+            try { AudioManager.Instance?.PlayCorrect(); } catch { }
+        }
+
+        private void SafePlayWrong()
+        {
+            try { AudioManager.Instance?.PlayWrong(); } catch { }
         }
     }
 }

@@ -71,12 +71,103 @@
 | **TC-MISSION-08** | `MissionCardController` | Eksekusi deal kartu awal | Mengaktifkan formasi kipas dan menandai `HasDealt` bernilai true | **PASS** |
 | **TC-MISSION-09** | `MissionCardController` | Eksekusi `OnShuffleClicked` | Memulai urutan kocok, menandai `IsShuffling = true`, dan mengunci interaksi tombol | **PASS** |
 
+### Batch 18: Screen 06 Score Results, Loop Sesi & Credits Scene
+- **Tanggal:** 18 Oktober 2026 10:20 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 10.0 / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_SRES_01** | `ScoreResultsController` | Kalkulasi persentase skor DEC-09 | Pembagian tepat dan pembulatan bulat (`Round((C/T)*100)`) | **PASS** |
+| **TC_SRES_02** | `ScoreResultsController` | Rincian breakdown statistik | Jawaban benar + salah persis sama dengan total dijawab | **PASS** |
+| **TC_SRES_03** | `ScoreResultsController` | Format waktu sesi (detik ke MM:SS) | Menghasilkan string waktu 2 digit yang rapi (`02:35`, `00:45`) | **PASS** |
+| **TC_SRES_04** | `ScoreResultsController` | Feedback Tier Tinggi (Skor >= 80) | Headline "Very good!" & subtitle bernada pujian "Outstanding" | **PASS** |
+| **TC_SRES_05** | `ScoreResultsController` | Feedback Tier Sedang (Skor 60-79) | Headline "Good job!" & subtitle "Keep practicing" | **PASS** |
+| **TC_SRES_06** | `ScoreResultsController` | Feedback Tier Rendah (Skor < 60) | Headline "Nice effort!" & subtitle dorongan "Don't give up" | **PASS** |
+| **TC_SRES_07** | `ScoreResultsController` | Percabangan tombol: < 10 soal | Mengonfigurasi tombol "CONTINUE QUESTION" untuk menambah poin | **PASS** |
+| **TC_SRES_08** | `ScoreResultsController` | Percabangan tombol: >= 10 soal | Batas DEC-08 terpenuhi, tombol menjadi "PLAY AGAIN" | **PASS** |
+| **TC_SRES_09** | `ScoreResultsController` | Atribusi formal Credits modal DEC-15 | Memvalidasi 4 entitas resmi (Yogi Ario, Nisa Aprilia Wati, Dr. Resty Wulanningrum, UNP Kediri) | **PASS** |
+| **TC_SRES_10** | `ScoreResultsController` | Penutupan Credits & Reset State | Sesi dibersihkan dan siap kembali ke Splash Screen | **PASS** |
+
+### Batch 32: Dual Clear & Delete Buttons Layar 04 (Catatan Revisi Butir 7)
+- **Tanggal:** 23 Oktober 2026 14:00 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_BOARD_14** | `AlgebraBoardController` | Menghapus kartu satu per satu (`OnDeleteOneClicked`) | Hanya slot terisi paling kanan (indeks tertinggi) yang dikosongkan berturut-turut; slot di sebelah kiri tetap utuh; aman dipanggil saat papan kosong tanpa exception | **PASS** |
+| **TC_BOARD_15** | `AlgebraBoardController` | Menghapus seluruh kartu aktif (`OnClearClicked`) | Seluruh slot pada baris aktif langsung dikosongkan seketika; slot pada baris lain tidak terganggu | **PASS** |
+
+### Batch 33: Integrasi Universal Runtime & UI Prosedural Easter Egg AI Chatbot Companion
+- **Tanggal:** 23 Oktober 2026 14:35 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_CHAT_01** | `LogoLongPressTrigger` | Tahan pointer sentuh >= 3.0 detik | Event `OnUniversalChatbotTriggered` berhasil memicu dan `CurrentHoldTime` reset | **PASS** |
+| **TC_CHAT_02** | `LogoLongPressTrigger` | Lepas sentuhan lebih awal (< 3.0 detik) | Timer batal/reset, event chatbot tidak terpicu, klik biasa beroperasi normal | **PASS** |
+| **TC_CHAT_03** | `GroqApiClient` | Struktur serialisasi payload JSON Groq API | Menyertakan model `llama-3.3-70b-versatile`, temperature `0.6`, dan array pesan | **PASS** |
+| **TC_CHAT_04** | `ChatSessionManager` | Rolling window kapasitas memori percakapan | Membatasi percakapan maksimal 6 pesan tanpa kehilangan system prompt persona | **PASS** |
+| **TC_CHAT_05** | `ChatSessionManager` | Graceful Offline Fallback pedagogis | Menyajikan tips pindah ruas / variabel tanpa crash saat internet terputus | **PASS** |
+| **TC_CHAT_06** | `GroqConfigManager` | Pembacaan konfigurasi kredensial Groq API | Memuat API Key berawalan `gsk_` dari JSON terenkripsi/terlindungi `.gitignore` | **PASS** |
+| **TC_CHAT_07** | `ChatbotRuntimeBootstrap` | Deteksi objek Logo di seluruh 6 scene aktif | Mengenali nama-nama logo resmi (`Logo`, `LogoImage`, `LogoPlaque`, `TOP_LOGO_TITLE`) dan menautkan trigger otomatis | **PASS** |
+| **TC_CHAT_08** | `ChatbotUIController` | Konstruksi UI prosedural & status IsChatOpen | Membuka dan menutup modal obrolan secara mulus dengan transisi state IsChatOpen yang akurat | **PASS** |
+
+### Batch 34: Resolusi Dobel Logo Bertumpuk pada Layar 01 Splash Screen
+- **Tanggal:** 23 Oktober 2026 14:50 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_SPLASH_01** | `01_SplashScreen.unity` | Eliminasi logo visual bertumpuk ganda | Komponen `Image` objek `Logo` memiliki `m_Sprite: null` dan `m_Color.a = 0`, tidak merender gambar kedua di atas `splash_bg.png` | **PASS** |
+| **TC_SPLASH_02** | `LogoLongPressTrigger` | Retensi Easter Egg touch target Splash Screen | Objek `Logo` tetap aktif dengan `raycastTarget: true` (860x287 px), klik dan tahan 3 detik tetap memicu modal obrolan AI | **PASS** |
+
+### Batch 35: Integrasi Soal Cerita Kontekstual, Petunjuk Variabel Ramah Anak, & Proteksi Frame Layar 04
+- **Tanggal:** 23 Oktober 2026 15:20 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_BOARD_16** | `AlgebraBoardController` | Format soal cerita naratif & petunjuk variabel konkret | Menampilkan soal cerita asli, menyisipkan petunjuk variabel ramah anak (contoh: $b = \text{banyak boneka}$, $a = \text{buah anggur}$), dan mengaktifkan UGUI BestFit (13–18px) | **PASS** |
+
+### Batch 36: Integrasi Pembahasan Langkah-demi-Langkah Solusi Aljabar Asli Layar 05
+- **Tanggal:** 23 Oktober 2026 15:45 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_TF_11** | `TrueFalseController` | Integrasi langkah solusi aljabar nyata (`solution_steps`) | Memetakan formula awal (`Equation`), operasi invers / pindah ruas (`Operation`), dan nilai solusi akhir (`Solution`) dari `banksoal.json` secara akurat | **PASS** |
+
+### Batch 37: Kalibrasi Tata Letak Vertikal Tombol Hapus Layar 04
+- **Tanggal:** 23 Oktober 2026 16:00 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_BOARD_14** | `AlgebraBoardController` | Eksekusi tombol Hapus 1 Kartu (`DeleteOneButton`) | Menghapus kartu terisi paling kanan di posisi baru $y = -105$ tanpa gangguan visual ke kartu operator | **PASS** |
+| **TC_BOARD_15** | `AlgebraBoardController` | Eksekusi tombol Hapus Semua (`ClearAllButton`) | Mengosongkan seluruh slot aktif di posisi baru $y = -157$ dengan layout proporsional | **PASS** |
+
 ---
 
-## 📋 Ringkasan Hasil Pengujian Terakhir
+## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 37)
 
-- **Total Kasus Uji:** 39
-- **Lulus (PASS):** 39 (100%)
+- **Total Test Suite Mandiri Proyek:** 5 Runner
+  - `BoardTestRunner`: **16/16 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_16`)
+  - `TFTestRunner`: **11/11 PASS** (`TC_TF_01` s.d. `TC_TF_11`)
+  - `ChatbotTestRunner`: **8/8 PASS** (`TC_CHAT_01` s.d. `TC_CHAT_08`)
+  - `MissionTestRunner`: **14/14 PASS** (`TC_MISSION_01` s.d. `TC_MISSION_14`)
+  - `ScoreTestRunner`: **10/10 PASS** (`TC_SRES_01` s.d. `TC_SRES_10`)
+- **Total Kasus Uji Terverifikasi:** 59 Test
+- **Lulus (PASS):** 59 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)
+
+
+

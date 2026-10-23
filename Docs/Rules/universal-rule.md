@@ -12,6 +12,18 @@
 
 Dokumen ini adalah **pedoman tata kelola universal (Universal Governance Framework)** yang dirancang untuk menjaga kualitas, keamanan, transparansi, dan kerapian pengerjaan software engineering dari awal hingga rilis produksi.
 
+### 🧭 Core Philosophy: Consistent Standards, Variable Intelligence
+
+> **"AI may vary in intelligence. Project standards must remain consistent."**
+
+Kualitas penalaran, kemampuan mempertahankan konteks, dan keandalan eksekusi setiap AI Agent dapat berbeda-beda. Karena itu, proses pengembangan tidak boleh bergantung pada asumsi bahwa AI Agent akan selalu memahami instruksi atau menghasilkan pekerjaan dengan kualitas yang sama. **Standar kerja, gerbang persetujuan, dokumentasi, dan bukti pengujian harus tetap konsisten**, siapa pun AI Agent atau pengembang yang mengerjakannya.
+
+Prinsip operasional yang menjadi dasar kerangka ini:
+
+- **No Plan, No Code.** Rencana tertulis harus tersedia sebelum perubahan dilakukan.
+- **No Approval, No Code.** Perubahan yang memerlukan persetujuan tidak boleh dijalankan sebelum persetujuan eksplisit diberikan.
+- **No Evidence, No Completion.** Pekerjaan tidak boleh dinyatakan selesai tanpa bukti verifikasi yang sesuai.
+
 Setiap AI Agent atau pengembang yang memulai sesi pada repositori yang mengadopsi dokumen ini **WAJIB membaca, memahami, dan mematuhi 8 Pilar Standar Kerja** berikut tanpa terkecuali.
 
 ---
@@ -35,7 +47,7 @@ graph TD
 
 ### 🛑 Pilar 1: ZERO-CODE Sebelum Persetujuan Rencana (Approval Gate)
 
-**Prinsip Inti:** *No Plan, No Code. No Approval, No Code.*
+**Prinsip Inti:** *No Plan, No Code. No Approval, No Code. No Evidence, No Completion.*
 
 1. **Dilarang Keras Menyentuh Kode Terlebih Dahulu:**
    - Jangan pernah membuat, mengedit, atau menghapus file kode aplikasi sebelum menyusun rencana kerja tertulis dan memperoleh **persetujuan eksplisit** dari Yogi Ario.
@@ -46,7 +58,7 @@ graph TD
    - **Daftar File Target:** File mana yang akan dibuat, dimodifikasi, atau diuji.
    - **Alur Pengujian:** Bagaimana cara membuktikan bahwa fitur bekerja dan bebas regresi.
 3. **Gerbang Persetujuan (Approval Gate):**
-   - AI Agent wajib berhenti dan menunggu konfirmasi Yogi Ario(misal: pesan "Oke disetujui", "Lanjut", atau respon positif serupa) sebelum menyentuh kode.
+   - AI Agent wajib berhenti dan menunggu konfirmasi Yogi Ario (misal: pesan "Oke disetujui", "Lanjut", atau respon positif serupa) sebelum menyentuh kode.
 
 ---
 
@@ -224,7 +236,7 @@ Sebelum AI Agent melaporkan suatu tugas selesai kepada Yogi, lakukan verifikasi 
 - [ ]  Apakah `Docs/Task_Status.md` dan `Docs/Decision_Log.md` telah diperbarui? (**Pilar 5**)
 - [ ]  Apakah changelog bertimestamp (`changelog/<dd/bb/yyyy/jam/menit>.md`) sudah dibuat? (**Pilar 5**)
 - [ ]  Apakah suite pengujian telah dijalankan dan terbukti **100% PASS**? (**Pilar 6**)
-- [ ]  Apakah di setiap akhir respon telah bertanya kepada Yogi untuk mencadangkan riwayat chat (`Docs/riwayat<ddmmyyyy>.md`)? (catatan ini per hari jika tanggal berubah maka akan buat markdown lagi) (**Pilar 8**)
+- [ ]  Apakah di akhir respons telah menanyakan apakah Yogi ingin mencadangkan riwayat chat ke `Docs/chat/riwayat<ddmmyyyy>.md`? (**Pilar 8**)
 
 ---
 

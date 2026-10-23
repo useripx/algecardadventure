@@ -256,5 +256,121 @@ namespace AlgeCardAdventure.Tests
                 Object.DestroyImmediate(controllerGo);
             }
         }
+
+        [Test]
+        public void TC_MISSION_11_BooksButton_OpensLearningMaterialModal()
+        {
+            var controllerGo = new GameObject("TestMissionController");
+            var controller = controllerGo.AddComponent<MissionCardController>();
+
+            var materialModalGo = new GameObject("LearningMaterialModal");
+            materialModalGo.SetActive(false);
+
+            var guideModalGo = new GameObject("GameplayGuideModal");
+            guideModalGo.SetActive(true);
+
+            var fieldMaterial = typeof(MissionCardController).GetField("learningMaterialModal", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            fieldMaterial.SetValue(controller, materialModalGo);
+
+            var fieldGuide = typeof(MissionCardController).GetField("gameplayGuideModal", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            fieldGuide.SetValue(controller, guideModalGo);
+
+            try
+            {
+                Assert.IsFalse(materialModalGo.activeSelf);
+                controller.OnBooksClicked();
+                Assert.IsTrue(materialModalGo.activeSelf, "Modal materi pembelajaran harus terbuka saat tombol buku diklik.");
+                Assert.IsFalse(guideModalGo.activeSelf, "Modal petunjuk permainan harus tertutup saat modal materi dibuka.");
+            }
+            finally
+            {
+                Object.DestroyImmediate(materialModalGo);
+                Object.DestroyImmediate(guideModalGo);
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
+
+        [Test]
+        public void TC_MISSION_12_CloseMaterialButton_HidesLearningMaterialModal()
+        {
+            var controllerGo = new GameObject("TestMissionController");
+            var controller = controllerGo.AddComponent<MissionCardController>();
+
+            var materialModalGo = new GameObject("LearningMaterialModal");
+            materialModalGo.SetActive(true);
+
+            var fieldMaterial = typeof(MissionCardController).GetField("learningMaterialModal", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            fieldMaterial.SetValue(controller, materialModalGo);
+
+            try
+            {
+                Assert.IsTrue(materialModalGo.activeSelf);
+                controller.OnCloseMaterialClicked();
+                Assert.IsFalse(materialModalGo.activeSelf, "Modal materi pembelajaran harus tertutup setelah OnCloseMaterialClicked dipanggil.");
+            }
+            finally
+            {
+                Object.DestroyImmediate(materialModalGo);
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
+
+        [Test]
+        public void TC_MISSION_13_CompassButton_OpensGameplayGuideModal()
+        {
+            var controllerGo = new GameObject("TestMissionController");
+            var controller = controllerGo.AddComponent<MissionCardController>();
+
+            var materialModalGo = new GameObject("LearningMaterialModal");
+            materialModalGo.SetActive(true);
+
+            var guideModalGo = new GameObject("GameplayGuideModal");
+            guideModalGo.SetActive(false);
+
+            var fieldMaterial = typeof(MissionCardController).GetField("learningMaterialModal", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            fieldMaterial.SetValue(controller, materialModalGo);
+
+            var fieldGuide = typeof(MissionCardController).GetField("gameplayGuideModal", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            fieldGuide.SetValue(controller, guideModalGo);
+
+            try
+            {
+                Assert.IsFalse(guideModalGo.activeSelf);
+                controller.OnCompassClicked();
+                Assert.IsTrue(guideModalGo.activeSelf, "Modal petunjuk permainan harus terbuka saat tombol kompas diklik.");
+                Assert.IsFalse(materialModalGo.activeSelf, "Modal materi harus tertutup saat modal petunjuk permainan dibuka.");
+            }
+            finally
+            {
+                Object.DestroyImmediate(materialModalGo);
+                Object.DestroyImmediate(guideModalGo);
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
+
+        [Test]
+        public void TC_MISSION_14_CloseGuideButton_HidesGameplayGuideModal()
+        {
+            var controllerGo = new GameObject("TestMissionController");
+            var controller = controllerGo.AddComponent<MissionCardController>();
+
+            var guideModalGo = new GameObject("GameplayGuideModal");
+            guideModalGo.SetActive(true);
+
+            var fieldGuide = typeof(MissionCardController).GetField("gameplayGuideModal", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            fieldGuide.SetValue(controller, guideModalGo);
+
+            try
+            {
+                Assert.IsTrue(guideModalGo.activeSelf);
+                controller.OnCloseGuideClicked();
+                Assert.IsFalse(guideModalGo.activeSelf, "Modal petunjuk permainan harus tertutup setelah OnCloseGuideClicked dipanggil.");
+            }
+            finally
+            {
+                Object.DestroyImmediate(guideModalGo);
+                Object.DestroyImmediate(controllerGo);
+            }
+        }
     }
 }

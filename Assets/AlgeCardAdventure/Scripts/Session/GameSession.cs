@@ -20,29 +20,50 @@ namespace AlgeCardAdventure.Session
         {
             get
             {
-                if (_instance == null)
+                if (ReferenceEquals(_instance, null))
                 {
-                    _instance = FindAnyObjectByType<GameSession>();
-                    if (_instance == null)
-                    {
-                        GameObject go = new GameObject("GameSession");
-                        _instance = go.AddComponent<GameSession>();
-                        if (Application.isPlaying)
-                        {
-                            DontDestroyOnLoad(go);
-                        }
-                    }
+                    TryResolveUnityInstance();
                 }
                 return _instance;
+            }
+            set => _instance = value;
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+        private static void TryResolveUnityInstance()
+        {
+            try
+            {
+                _instance = FindAnyObjectByType<GameSession>();
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("GameSession");
+                    _instance = go.AddComponent<GameSession>();
+                    if (Application.isPlaying)
+                    {
+                        DontDestroyOnLoad(go);
+                    }
+                }
+            }
+            catch
+            {
+                // Defensif untuk lingkungan non-Unity runtime/testing
             }
         }
 
         public string CurrentLevel { get; private set; } = "Easy";
         public int TotalAnswered { get; private set; } = 0;
         public int CorrectCount { get; private set; } = 0;
+        public int TotalCorrect => CorrectCount;
+        public int TotalWrong => Mathf.Max(0, TotalAnswered - CorrectCount);
+        public float SessionTimeSeconds => Application.isPlaying ? Mathf.Max(0f, Time.time - _sessionStartTime) : 0f;
+        public int CurrentStreak { get; private set; } = 0;
+        public bool LastBoardSolutionCorrect { get; set; } = true;
         public QuestionModel CurrentQuestion { get; private set; }
         public bool IsSessionActive { get; private set; } = false;
         public List<string> CompletedQuestionIds { get; } = new List<string>();
+
+        private float _sessionStartTime;
 
         public event Action<string> OnSessionStarted;
         public event Action<int, int> OnAnswerRecorded;
@@ -94,6 +115,7 @@ namespace AlgeCardAdventure.Session
             CurrentQuestion = null;
             CompletedQuestionIds.Clear();
             IsSessionActive = true;
+            _sessionStartTime = Application.isPlaying ? Time.time : 0f;
 
             Debug.Log($"[GameSession] Sesi baru dimulai untuk level: {CurrentLevel}");
             OnSessionStarted?.Invoke(CurrentLevel);
@@ -130,6 +152,11 @@ namespace AlgeCardAdventure.Session
             if (isCorrect)
             {
                 CorrectCount++;
+                CurrentStreak++;
+            }
+            else
+            {
+                CurrentStreak = 0;
             }
 
             OnAnswerRecorded?.Invoke(TotalAnswered, CorrectCount);
@@ -158,9 +185,12 @@ namespace AlgeCardAdventure.Session
         {
             TotalAnswered = 0;
             CorrectCount = 0;
+            CurrentStreak = 0;
+            LastBoardSolutionCorrect = true;
             CurrentQuestion = null;
             CompletedQuestionIds.Clear();
             IsSessionActive = false;
+            _sessionStartTime = 0f;
 
             OnSessionReset?.Invoke();
         }

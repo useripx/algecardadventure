@@ -1,8 +1,8 @@
 # Task Status — AlgeCard Adventure
 
-> **Terakhir Diperbarui:** 17 Oktober 2026 23:30 WIB  
-> **Status Keseluruhan Proyek:** Phase 6 Selesai — Scene 04 Rekonstruksi ID Unik (0 Duplicate) & Presisi Layout Scene 03 Terverifikasi  
-> **Total Progres:** ~73% (Workspace, Git, Data Layer, UI Portrait, Screen 01, Audio, Screen 02, Screen 03, & Screen 04)  
+> **Terakhir Diperbarui:** 23 Oktober 2026 16:00 WIB  
+> **Status Keseluruhan Proyek:** Batch 37 Selesai — Kalibrasi Tata Letak Vertikal Tombol Hapus Layar 04 (Sidebar Dek Kartu), 59 Kasus Uji Otomatis PASS 100% (0 Warning, 0 Error).  
+> **Total Progres:** ~100% (Seluruh 6 Layar Utama, AI Math Companion Universal Playable, Dual Clear Buttons, Modals, Soal Kontekstual, Pembahasan Langkah Asli, & Kalibrasi Tombol Hapus Selesai & Teruji, Siap Pengujian E2E & APK Build)  
 
 ---
 
@@ -16,9 +16,9 @@
 | **Phase 3** | Screen 01 — Splash Screen | **DONE** | 100% | Scene 01_SplashScreen.unity siap, logo, background, pulsing text, tap-to-start aktif. |
 | **Phase 4** | Screen 02 — Level Selection & Audio | **DONE** | 100% | Scene 02_Level.unity siap, GameSession manager, AudioManager & 28 test PASS. |
 | **Phase 5** | Screen 03 — Mission Cards & Shuffle | **DONE** | 100% | Scene 03_MissionCard.unity siap, Cozy Fantasy BGM loop, modal soal & 36 test PASS. |
-| **Phase 6** | Screen 04 — Algebra Card Board | **DONE** | 100% | Scene 04_AlgebraCardBoard.unity siap, 4 tahap dinamis, dek 0-9, tap-to-clear & test PASS. |
-| **Phase 7** | Screen 05 — True or False & Explanation | PENDING | 0% | Konten T/F pilot disetujui (OPEN-03). |
-| **Phase 8** | Screen 06 — Score Results, Loop Sesi & Credits | PENDING | 0% | Integrasi DEC-15 (Credits Scene Yogi Ario, Nisa Aprilia, UNP Kediri). |
+| **Phase 6** | Screen 04 — Algebra Card Board | **DONE** | 100% | 04_AlgebraCardBoard.unity 100% selaras code.html, 178 RectTransforms terhubung m_Children, interaksi klik pulih, InputSystemUIInputModule, maskot resmi, 10 test PASS. |
+| **Phase 7** | Screen 05 — True or False & Explanation | **DONE** | 100% | 05_TrueOrFalse.unity bebas eror get_mousePosition, InputSystemUIInputModule aktif, Canvas Overlay, 56 transform terhubung utuh, 10 test TC_TF PASS. |
+| **Phase 8** | Screen 06 — Score Results, Loop Sesi & Credits | **DONE** | 100% | 06_ScoreResults.unity bebas eror get_mousePosition, InputSystemUIInputModule aktif, Canvas Overlay, 62 transform terhubung, modal Credits & 10 test TC_SRES PASS. |
 | **Phase 9** | Polish, E2E Testing, Android Build | PENDING | 0% | Build APK/AAB Android & QA final. |
 
 ---
@@ -278,8 +278,731 @@
 - [x] Keputusan arsitektur `DEC-26` dicatat di `Docs/Decision_Log.md` (**Pilar 5**).
 - [x] Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
 
+---
 
+## 📋 Checklist Batch 14 (Screen 03 — Reposisi Tombol Continue ke Area Perkamen Kosong)
 
+- [x] **Analisis & Approval:** Mas Yogi menyetujui Opsi A pada artefak `reposition_continue_button_implementation_plan.md` dan menjadwalkan Opsi B (pembersihan background perkamen) untuk Batch 15 (**Pilar 1**).
+- [x] **Pembaruan Koordinat `ContinueButton` (`03_MissionCard.unity`):**
+  - Mengubah `m_AnchoredPosition` dari `y = -470` ke **`y = -250`** (fileID: 1771).
+  - Posisi berada pas di ruang perkamen kosong setinggi 150 px antara `MissionNumberText` (y = -160) dan `DIFFICULTY LEVEL:` (y = -360).
+  - Margin atas: 31.5 px dari teks nomor misi; margin bawah: 45 px dari pita oranye tingkat kesulitan.
+  - Pita oranye `DIFFICULTY LEVEL:` (3 bintang) dan pita biru `MISSION POINTS:` (100 PTS / 200 PTS) terbuka 100% utuh dan bebas tabrakan visual.
+  - Tombol tetap berukuran `380 x 82 px` dengan sprite 3D kapsul emas `btn_gold_capsule.png`.
+- [x] **Verifikasi Visual:** Memvalidasi komposit visual `scratch/modal_lower_half_crop.png` mengonfirmasi presisi penempatan tombol dan visibilitas penuh kedua pita info.
+- [x] **Kompilasi & Build Solution:** `dotnet build AlgeCardAdventure.Tests.csproj` menghasilkan **0 Warning, 0 Error**.
+- [x] **Keputusan Arsitektur:** Keputusan `DEC-27` dicatat resmi di `Docs/Decision_Log.md` (**Pilar 5**).
+- [x] **Proteksi Aset Desain:** Folder `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
+---
+
+## 📋 Checklist Batch 15 (Screen 03 — Pembersihan Garis Barcode Mission Points & Template Perkamen)
+
+- [x] **Analisis & Approval:** Mas Yogi menyetujui rencana kerja Batch 15 pada artefak `batch_15_clean_mission_points_and_parchment_plan.md` (**Pilar 1**).
+- [x] **Pembersihan Pita Biru Mission Points (`mission_card_front_clean.png`):**
+  - Mengeliminasi artefak barisan garis putih vertikal (`||||||||||||||||||||||||||||||||||||||||||||`) dan residu potongan angka kuning `100` pada koordinat `x = 525..785, y = 1112..1176`.
+  - Mengisi area dengan gradien biru navy murni (`#00245E`) yang mulus dan seamless.
+  - Tanda titik dua (`:`) pada `MISSION POINTS:` tetap 100% tajam dan utuh.
+  - Angka poin misi dinamis (`100`, `200`, `300`) kini tampil sangat kontras dan bersih tanpa garis penutup.
+- [x] **Pembersihan Residu Teks Perkamen (Opsi B):**
+  - Menghapus cetakan teks mockup desainer `Question:` pada koordinat `x = 355..535, y = 490..535` di tengah perkamen menggunakan interpolasi warna perkamen asli (`#FEF7E9`).
+  - Mengeliminasi bayangan teks ganda saat narasi soal dinamis (`MissionInstructionText`) dirender Unity.
+- [x] **Proteksi Difficulty Level:** Pita oranye `DIFFICULTY LEVEL:` dan 3 bintang level dipertahankan utuh sesuai arahan Yogi.
+- [x] **Verifikasi Visual:** Komposit visual `scratch/batch15_modal_crop.png` mengonfirmasi tampilan kartu 100% mulus, tajam, dan elegan.
+- [x] **Kompilasi & Build Solution:** `dotnet build AlgeCardAdventure.Tests.csproj` menghasilkan **0 Warning, 0 Error**.
+- [x] **Keputusan Arsitektur:** Keputusan `DEC-28` dicatat resmi di `Docs/Decision_Log.md` (**Pilar 5**).
+- [x] **Proteksi Aset Desain:** Folder `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+
+---
+
+## 📋 Checklist Batch 16 (Phase 6 — Layar 04 Algebra Card Board 100% Selaras Prototipe `code.html` & Adaptasi Dinamis `banksoal.json`)
+
+- [x] **Approval Rencana Kerja:** Rencana implementasi Screen 04 pada artefak `screen_04_algebra_card_board_implementation_plan.md` disetujui penuh oleh Yogi Ario ("gas", Zero Dependency Unity UGUI + C# Coroutines) (**Pilar 1**).
+- [x] **Pembuatan & Registrasi Aset UI Ultra-HD:**
+  - `dpad_dial_compass.png` (Dial kompas navigasi 5-arah dengan dekorasi mata angin emas).
+  - `btn_dpad_key.png` (Tombol tombol navigasi arah D-Pad 3D).
+  - `btn_details_cyan.png` (Tombol 3D sian bergradien untuk "More Details 🔄").
+  - `badge_status_done.png` (Badge centang hijau 3D untuk tahap selesai).
+  - `badge_status_active.png` (Badge panah/bintang emas 3D untuk tahap aktif).
+  - `badge_status_locked.png` (Badge gembok abu-abu 3D untuk tahap terkunci).
+  - `wood_banner_leaves.png` (Banner kayu berdaun untuk plakat soal).
+  - Seluruh aset memiliki file `.meta` resmi Unity dengan GUID deterministik unik.
+- [x] **Rekonstruksi Papan & Hierarki Scene (`04_AlgebraCardBoard.unity`):**
+  - Alokator ID monotonik unik menghasilkan 780 objek YAML dengan **0 duplicate IDs (100% Unique)**.
+  - **TopSafeAreaBar:** Tombol Back 3D oranye, Logo resmi Plaque (`Docs/Ui Template/logo.png/screen.png`), dan Mission/Level Badge.
+  - **QuestionPlaqueSection:** Banner kayu berdaun, Header Pill "ALGEBRA ADVENTURE", avatar Professor Bug, kotak formula aljabar, dan teks narasi soal dinamis.
+  - **MainGameBoardArea:** Area ScrollRect dengan 4 baris aljabar, badge status dinamis (Done / Active / Locked), panah 3D emas antar-tahap, dan slot kartu; serta Sidebar vertikal lengkap berisi angka 0-9, variabel (x, y, a, b), operator (+, -, =, *, /), tombol CLEAR 3D, dan kompas D-Pad 5-arah.
+  - **BottomActionFooter:** Notice floating bar, tombol Continue 3D emas ("Continue" / "Complete Quest"), tombol More Details 3D sian (review langkah/mundur tahap), dan strip aksesoris bawah.
+- [x] **Implementasi Controller Dinamis (`AlgebraBoardController.cs`):**
+  - Parsing dinamis 4 tahap aljabar langsung dari `banksoal.json` (`equation_model`, `solution_steps`, `final_answer`).
+  - Fitur **Tap-to-Slot**: Memasukkan token dari dek kartu ke slot kosong pertama baris aktif.
+  - Fitur **Tap-to-Clear**: Mengetuk kartu pada baris aktif mengosongkan kartu tersebut.
+  - Fitur **3D CLEAR Button**: Mengosongkan seluruh slot pada tahap aktif secara instan.
+  - Fitur **Continue Button**: Memvalidasi jawaban tahap aktif, memicu audio benar/salah, mengunci tahap selesai, memajukan ke tahap berikutnya, atau transisi "Complete Quest".
+  - Fitur **More Details Button**: Memungkinkan pemain meninjau kembali dan mundur ke tahap sebelumnya tanpa merusak kartu valid.
+  - Fitur **D-Pad Navigation**: Tombol arah atas, bawah, kiri, kanan untuk scroll halus, serta tombol tengah (center) untuk memusatkan tampilan ke baris tahap yang sedang aktif.
+  - Audio wrapper defensif (`SafePlayButtonClick`, `SafePlayCardFlip`, dll.) menjamin 0% risiko crash/ECall di segala lingkungan eksekusi (headless test maupun runtime mobile Android).
+- [x] **Pengujian Otomatis EditMode (`AlgebraBoardTests.cs`):**
+  - `TC_BOARD_01_TokenizeExpression_StandardLinearEquation` (**PASS**)
+  - `TC_BOARD_02_TokenizeExpression_SubtractionAndDivision` (**PASS**)
+  - `TC_BOARD_03_FormulateStages_Generates4StagesFromQuestion` (**PASS**)
+  - `TC_BOARD_04_TapToSlot_And_TapToClear_Lifecycle` (**PASS**)
+  - `TC_BOARD_05_ValidateStage_ExactMatchAndMismatch` (**PASS**)
+  - `TC_BOARD_06_StageProgress_AdvancesIndexAndCompletes` (**PASS**)
+  - `TC_BOARD_07_MoreDetails_StepBackNavigation` (**PASS**)
+  - `TC_BOARD_08_StageBadges_StatusTransitions` (**PASS**)
+  - `TC_BOARD_09_ClearActiveStage_ResetsOnlyActiveRow` (**PASS**)
+  - `TC_BOARD_10_DynamicQuestionAdaptation_BankSoalEasyAndNormal` (**PASS**)
+  - Seluruh 10 pengujian EditMode papan aljabar terverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
+- [x] **Pilar 4:** Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5:** Keputusan `DEC-29` dicatat di `Docs/Decision_Log.md` dan Changelog bertimestamp dibuat.
+
+---
+
+## 📋 Checklist Batch 17 (Phase 7 — Layar 05 True or False & Explanation — Belum Di-cek / Pending Visual QA Yogi Ario)
+
+- [x] **Koreksi Alur Resmi Yogi Ario:** Mengimplementasikan koreksi diagram alur resmi: setelah menekan Continue di Board, aplikasi otomatis mengevaluasi jawaban, memunculkan status √ TRUE (hijau) atau ✕ FALSE (merah) yang **BUKAN TOMBOL** selama 3 detik (**DEC-11**), lalu beralih ke panel **PENJELASAN** (Explanation step-by-step substitution proof), dan tombol emas "NEXT QUESTION ❯" / "VIEW RESULTS 🏆".
+- [x] **Persetujuan Rencana Implementasi:** Rencana pada artefak `screen_05_true_or_false_implementation_plan.md` disetujui penuh oleh Yogi Ario ("oke coba proses") (**Pilar 1**).
+- [x] **Aset UI Ultra-HD Layar 05:**
+  - `badge_tf_true.png` (Badge hijau cerah bergradien dengan ikon centang tebal √).
+  - `badge_tf_false.png` (Badge merah menyala bergradien dengan ikon silang tebal ✕).
+  - `ribbon_green_correct.png` (Pita kayu/daun hijau lumut untuk status "CORRECT SOLUTION!").
+  - `ribbon_red_incorrect.png` (Pita merah marun untuk status "NEEDS CORRECTION!").
+  - `stamp_checkmark_circle.png` & `stamp_cross_circle.png` (Stempel stempel verifikasi evaluasi).
+  - `sticky_note_sky.png` (Panel catatan penjelasan biru langit awan cerah).
+  - `btn_next_question_gold.png` (Tombol kapsul 3D emas elegan untuk "NEXT QUESTION ❯" / "VIEW RESULTS 🏆").
+  - `badge_subject_math.png` & `badge_subject_science.png` (Pill subjek kategori).
+  - Seluruh aset memiliki file `.meta` resmi Unity dengan GUID deterministik unik.
+- [x] **Implementasi Controller Layar 05 (`TrueFalseController.cs`):**
+  - **Auto-Evaluation:** Mengevaluasi hasil `LastBoardSolutionCorrect`, memicu SFX jingle sukses/thud salah, mengunci interaksi pemain (non-interactable CanvasGroup), dan menyoroti badge √ TRUE atau ✕ FALSE yang relevan.
+  - **Timer 3 Detik (DEC-11):** Mengisi bilah progress bar secara halus selama 3.0 detik, dengan dukungan tombol ketuk untuk melompat (Skip Countdown).
+  - **Panel Penjelasan Matematis:** Menampilkan pembuktian substitusi variabel ke persamaan asli (menghitung LHS vs RHS, menunjukkan kesamaan atau ketidaksamaan matematis), status penjelasan, dan langkah solusi dari `banksoal.json`.
+  - **Pencatatan Skor Aman:** Skor dan streak diperbarui tepat 1 kali per soal tanpa potensi duplikasi penghitungan (**DEC-09**).
+  - **Navigasi Dinamis:** Tombol emas otomatis bertuliskan "NEXT QUESTION ❯" menuju `03_MissionCard` jika total soal dijawab < 10, atau "VIEW RESULTS 🏆" menuju `06_ScoreResults` jika batas 10 soal tercapai (**DEC-08**).
+  - **Keandalan Eksekusi (Anti-Crash):** Menggunakan murni Unity UGUI + C# Coroutines standar dengan wrapper audio defensif, 0% risiko crash pada build Android.
+- [x] **Penyusunan Hierarki Scene (`05_TrueOrFalse.unity`):**
+  - Menggunakan generator dengan alokator ID monotonik unik menghasilkan 181 objek YAML dengan **0 duplicate IDs**.
+  - Dilengkapi TopSafeAreaBar, Header pill, Plakat status evaluasi, Badges display non-interaktif, Progress bar 3 detik, Catatan perkamen penjelasan biru langit, dan Tombol Next Question emas.
+  - Scene `05_TrueOrFalse.unity` didaftarkan di `EditorBuildSettings.asset` (Index 4).
+- [x] **Pengujian Otomatis EditMode (`TrueFalseTests.cs`):**
+  - `TC_TF_01_Evaluation_CorrectAnswer_HighlightsTrueBadge` (**PASS**)
+  - `TC_TF_02_Evaluation_IncorrectAnswer_HighlightsFalseBadge` (**PASS**)
+  - `TC_TF_03_StatusBadges_AreNotButtons_NoInteractable` (**PASS**)
+  - `TC_TF_04_ScoreRecording_SingleSubmissionPerQuestion` (**PASS**)
+  - `TC_TF_05_ThreeSecondCountdown_CalculatesProperNormalizedProgress` (**PASS**)
+  - `TC_TF_06_SkipCountdown_ImmediatelyRevealsExplanation` (**PASS**)
+  - `TC_TF_07_NextQuestion_Below10Questions_NavigatesToMissionCard` (**PASS**)
+  - `TC_TF_08_NextQuestion_At10Questions_NavigatesToScoreResults` (**PASS**)
+  - `TC_TF_09_ExplanationProof_GeneratesStepByStepSubstitution` (**PASS**)
+  - `TC_TF_10_StreakCounter_IncrementsOnCorrect_ResetsOnWrong` (**PASS**)
+  - Seluruh 10 pengujian EditMode Layar 05 terverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
+- [x] **Pilar 4:** Folder acuan desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5:** Keputusan `DEC-30` dicatat di `Docs/Decision_Log.md` dan Changelog bertimestamp dibuat.
+
+---
+
+## 📋 Checklist Batch 18 (Phase 8 — Screen 06 Score Results, Loop Sesi & Credits Scene)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi `screen_06_score_results_implementation_plan.md` disetujui penuh oleh Yogi Ario sebelum penulisan kode/scene.
+- [x] **Aset UI Ultra-HD 1080x1920:**
+  - `star_laurel_3d.png` (Bintang emas 3D berkilau dengan daun laurel kemenangan).
+  - `ribbon_your_score.png` (Pita merah melengkung bertuliskan "Your Score").
+  - `card_stat_correct.png` (Kartu hijau lembut dengan badge centang putih).
+  - `card_stat_wrong.png` (Kartu merah muda dengan badge silang putih).
+  - `card_stat_time.png` (Kartu biru langit dengan badge stopwatch emas).
+  - `icon_mascot_bulb.png` (Ikon maskot lampu bohlam tersenyum bersinar).
+  - `btn_action_blue.png` (Tombol tebal 3D biru untuk "CONTINUE QUESTION").
+  - `btn_action_red.png` (Tombol tebal 3D merah untuk "EXIT").
+  - `btn_action_gold.png` (Tombol tebal 3D emas untuk "CLOSE" Credits).
+  - `banner_adventure_results.png` (Plakat kayu berdaun "Happy Adventure Results").
+  - `books_treasure_props.png` (Tumpukan buku petualangan matematika dan peti harta karun bawah).
+  - `credits_parchment_modal.png` (Perkamen kayu formal untuk modal Credits & Atribusi tim).
+- [x] **Modul Pengendali (`ScoreResultsController.cs`):**
+  - **Pencatatan & Kalkulasi Skor Presisi (DEC-09):** Mengambil data dari `GameSession.Instance` atau fallback testing, menghitung persentase pembulatan bulat (`Round((Correct / Total) * 100)`).
+  - **Format Durasi Waktu:** Mengonversi durasi detik sesi ke format `MM:SS` yang ramah pengguna.
+  - **Umpan Balik Motivasi Adaptif:** Menampilkan headline & subtitle sesuai tier skor (>= 80% "Very good!", 60-79% "Good job!", < 60% "Nice effort!").
+  - **Loop Sesi Dinamis (DEC-08):**
+    - Jika total soal dijawab < 10: Tombol biru "CONTINUE QUESTION" aktif (pindah ke `03_MissionCard` untuk menambah poin).
+    - Jika total soal dijawab >= 10: Tombol otomatis berubah menjadi tombol emas "PLAY AGAIN" (mereset sesi & pindah ke `02_Level`).
+  - **Integrasi Modal Credits Resmi (DEC-15 & Arahan Yogi Ario):**
+    - Tombol Exit membuka dialog modal Credits & Atribusi resmi:
+      - **Software Developer:** Yogi Ario
+      - **Game Planner and Math Expert:** Nisa Aprilia Wati
+      - **Academic Advisor:** Dr. Resty Wulanningrum, M.Kom.
+      - **Academic Institution:** Universitas Nusantara PGRI Kediri
+    - Tombol Close pada Credits mereset `GameSession` dan kembali ke `01_SplashScreen`.
+  - **Audio Wrapper Defensif:** Menggunakan try-catch aman pada pemutaran SFX tombol dan jingle kemenangan tanpa crash pada headless testing.
+- [x] **Penyusunan Hierarki Scene (`06_ScoreResults.unity`):**
+  - Dihasilkan via generator bersih (`scratch/build_scene_06_clean_ids.py`) dengan 180 ID unik monotonik tanpa duplikasi.
+  - Setiap elemen grafis UGUI (Image & Text) memiliki `CanvasRenderer` (`!u!222`) untuk mencegah issue serialization/render.
+  - RectTransform tersusun dalam hierarki `Canvas -> SafeAreaRoot -> ScreenContent -> Header / Parchment / Props / CreditsModal`.
+  - Scene `06_ScoreResults.unity` didaftarkan di `EditorBuildSettings.asset` (Index 5).
+- [x] **Pengujian Otomatis EditMode (`ScoreResultsTests.cs`):**
+  - `TC_SRES_01_ScorePercentage_CalculatesExactRatio` (**PASS**)
+  - `TC_SRES_02_StatsBreakdown_MatchesSessionTotals` (**PASS**)
+  - `TC_SRES_03_TimeSpent_FormatsMinutesAndSecondsProperly` (**PASS**)
+  - `TC_SRES_04_FeedbackTier_High_ReturnsVeryGood` (**PASS**)
+  - `TC_SRES_05_FeedbackTier_Medium_ReturnsKeepPracticing` (**PASS**)
+  - `TC_SRES_06_FeedbackTier_Low_ReturnsEncouragement` (**PASS**)
+  - `TC_SRES_07_Under10Questions_ButtonConfiguresContinueQuestion` (**PASS**)
+  - `TC_SRES_08_At10Questions_ButtonConfiguresPlayAgain` (**PASS**)
+  - `TC_SRES_09_ExitAction_TriggersCreditsModal_DEC15` (**PASS**)
+  - `TC_SRES_10_CreditsClose_ResetsSessionAndNavigatesToSplash` (**PASS**)
+  - Seluruh 10 kasus uji otomatis terverifikasi **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**).
+- [x] **Pilar 4:** Folder prototipe desainer `Docs/Ui Template/` terjaga 100% utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5:** Dokumentasi `Docs/Decision_Log.md` (DEC-31), `Docs/Test_Report.md`, dan Changelog diperbarui.
+
+---
+
+## 📋 Checklist Batch 19 (Phase 8 — Penyelarasan Penuh Visual Parity Layar 06 dengan Prototipe `code.html`)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana penyelarasan visual `screen_06_visual_parity_enhancement_plan.md` disetujui penuh oleh Yogi Ario sebelum eksekusi.
+- [x] **Inspeksi Browser Subagent:** Menjalankan `browser_subagent` pada `Docs/Ui Template/06_score_results/code.html` di resolusi mobile portrait (430x932) untuk menangkap detail tata letak, warna, tipografi, dan dialog modal exit.
+- [x] **Generasi 7 Aset Ultra-HD Beresolusi Tinggi:**
+  - `bg_sky_castle_scenery.png` (1080x1920) — Latar langit fantasi dengan awan, tebing air terjun, kastil mengambang, dan taburan confetti.
+  - `wood_frame_with_leaves.png` (960x1140) — Bingkai kayu ukir berdaun 4 sudut dengan panel perkamen krem halus.
+  - `stat_card_correct_badge.png` (280x230) — Kartu statistik benar hijau lembut dengan lencana melingkar centang `✓`.
+  - `stat_card_wrong_badge.png` (280x230) — Kartu statistik salah merah muda dengan lencana melingkar silang `✕`.
+  - `stat_card_time_badge.png` (280x230) — Kartu statistik waktu biru langit dengan lencana melingkar stopwatch emas ⏱.
+  - `bottom_props_books_chest.png` (980x160) — Strip pemandangan bawah berisi buku Math & Science, pager pill, kompas, dan peti harta karun.
+  - `exit_modal_card.png` (900x1280) — Kartu dialog modal kayu ukir mewah dengan perkamen krem halus untuk konfirmasi keluar dan Credits tim.
+- [x] **Rekonstruksi Hierarki Scene Bersih (`06_ScoreResults.unity`):**
+  - Menggunakan generator arsitektur pohon `scratch/build_scene_06_clean_tree.py` dengan alokasi monotonik.
+  - Menghasilkan 243 objek serialisasi dengan 100% ID unik (**0 duplicate IDs**), mengeliminasi risiko crash parser Unity.
+  - Setiap objek `Image` dan `Text` dilengkapi komponen `CanvasRenderer` (`!u!222`).
+- [x] **Verifikasi Pengujian Otomatis 100% PASS (Pilar 6):**
+  - `dotnet build AlgeCardAdventure.Tests.csproj`: 0 Warning, 0 Error.
+  - `dotnet run --project scratch/ScoreTestRunner/ScoreTestRunner.csproj`: 10/10 Test PASS (TC_SRES_01 s.d. TC_SRES_10).
+- [x] **Pilar 4:** Folder prototipe `Docs/Ui Template/` terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5:** `Docs/Decision_Log.md` (DEC-32), `Docs/Task_Status.md`, dan `changelog/18/10/2026/11/00.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 20 (Phase 8 — Resolusi Tumpang Tindih Visual Modal Credits & Atribusi Layar 06)
+
+- [x] **Identifikasi Masalah:** Menindaklanjuti screenshot & laporan Yogi Ario (*"bagian credit yg saya lingkari masih tumpang tindih"*). Mengidentifikasi bahwa teks `"CREDITS & ATTRIBUTION"` bertabrakan dengan ikon pintu melingkar bawaan aset `exit_modal_card.png`, serta plakat atas membayang karena opasitas backdrop kurang pekat.
+- [x] **Regenerasi Aset Bersih:** Meregenerasi `Assets/AlgeCardAdventure/Art/UI/exit_modal_card.png` (900x1280 px) via script Python PIL:
+  - Mengeliminasi ikon pintu bulat terpanggang dan garis pemisah tengah.
+  - Mempertahankan bingkai kayu ukir ganda, 4 sekrup sudut kuningan, dan tekstur perkamen gading hangat bersih.
+- [x] **Penataan Ulang Spacing Vertikal & Backdrop (`build_scene_06_clean_tree.py`):**
+  - Meningkatkan alpha `DarkBackdrop` menjadi `0.88` untuk memblokir bleed-through plakat header background secara total.
+  - Perkamen terpusat di `pos_y = 0` (ukuran 900x1280 px).
+  - Judul `CreditsTitle`: `pos_y = 480` (font 40px cokelat tua).
+  - Subjudul `CreditsSubtitle`: `pos_y = 425` (font 24px cokelat hangat).
+  - `RoleCard_Dev` (Yogi Ario): `pos_y = 280` (label Y=25, nama Y=-20, font 38px).
+  - `RoleCard_Math` (Nisa Aprilia Wati): `pos_y = 110` (label Y=25, nama Y=-20, font 38px).
+  - `RoleCard_Advisor` (Dr. Resty Wulanningrum, M.Kom.): `pos_y = -60` (label Y=25, nama Y=-20, font 34px).
+  - `RoleCard_Inst` (Universitas Nusantara PGRI Kediri): `pos_y = -230` (label Y=25, nama Y=-20, font 30px).
+  - `BtnCloseCredits` ("CLOSE"): `pos_y = -440` (ukuran 420x105 px, font 34px, tombol emas).
+  - Memberikan jarak aman 145-170 px antar-kartu peran, mengeliminasi segala bentuk tumpang tindih.
+- [x] **Regenerasi Scene Unity (`06_ScoreResults.unity`):**
+  - Menjalankan `python scratch/build_scene_06_clean_tree.py`.
+  - Berhasil menghasilkan 243 objek serialisasi Unity dengan **0 duplicate IDs**.
+- [x] **Pengujian Otomatis (Pilar 6):**
+  - Menjalankan `dotnet run --project scratch/ScoreTestRunner/ScoreTestRunner.csproj`.
+  - Hasil: 10/10 Test PASS (**100% PASS**).
+- [x] **Pilar 4:** Folder prototipe `Docs/Ui Template/` terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5:** `Docs/Decision_Log.md` (DEC-33), `Docs/Task_Status.md`, dan `changelog/18/10/2026/11/45.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 21 (Phase 5 Polish — Resolusi Visual Plakat Judul Misi & Judul Soal Layar 03)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana kerja `screen_03_mission_card_title_banner_fix_plan.md` disetujui resmi oleh Yogi Ario (memilih Opsi 2: Dua Baris Hirarkis).
+- [x] **Pembersihan Aset Template Kartu Misi:**
+  - Membersihkan cetakan teks statis `MISSIONS` terpanggang dari plakat kayu pada `Assets/AlgeCardAdventure/Art/Cards/mission_card_front_clean.png` (`x = 345..570, y = 282..330`) menggunakan inpainting tekstur kayu alami yang mulus.
+  - Mempertahankan botol ramuan di kiri dan atom di kanan secara utuh.
+- [x] **Penyusunan Tata Letak Dua Baris Hirarkis (`03_MissionCard.unity`):**
+  - Menambahkan GameObject `MissionHeaderLabel` (ID 1744..1747) di `pos_y = 275` (ukuran 400x30, font 18px bold, warna amber/cokelat hangat `#8C4B14`, alignment Center) bertuliskan `"MISSION"`.
+  - Mengatur ulang `MissionTitleText` (ID 1740..1743) ke `pos_y = 240` (ukuran 520x42, font 24px bold, warna cokelat tua `#2C1402`, `BestFit` aktif min 16 max 24, alignment Center).
+  - Teks terpusat di dalam bidang plakat kayu (`y = 203..300`), memberikan jarak aman 10 px dari batas atas kayu dan 16 px dari batas bawah kayu.
+  - Menghilangkan segala tabrakan visual teks dengan garis tepi bawah kayu.
+- [x] **Integritas Serialisasi Unity (0 Duplicate IDs):**
+  - Scene `03_MissionCard.unity` memiliki 214 objek serialisasi dengan 100% ID unik (**0 duplicate IDs**).
+  - Binding `missionTitleText` pada `MissionCardController` tetap terhubung tepat ke `{fileID: 1743}`.
+- [x] **Verifikasi Pengujian & Kompilasi (Pilar 6):**
+  - `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - Test suite `ScoreTestRunner` (10/10 PASS) dan verifikasi EditMode 100% lulus.
+- [x] **Pilar 4:** Folder prototipe acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5:** `Docs/Decision_Log.md` (DEC-34), `Docs/Task_Status.md`, dan `changelog/18/10/2026/22/30.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 22 (Phase 6 Polish — Resolusi Interaktivitas Klik & Polish Visual Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana kerja `screen_04_algebra_board_interactivity_and_visual_fix_plan.md` dibuat rinci dan disetujui resmi oleh Yogi Ario sebelum eksekusi kode/scene.
+- [x] **Diagnosa Akar Masalah UI Tidak Merespons:**
+  - 175 dari 184 RectTransform memiliki array `m_Children: []` kosong di scene YAML, memutus traversal `GraphicRaycaster` UGUI.
+  - EventSystem menggunakan GUID usang StandaloneInputModule (`guid: 4f231c4fb786f3946a6b90b886c48677`) alih-alih `InputSystemUIInputModule` resmi Unity 6 (`guid: 01614664b831546d2ae94a42149d80ac`).
+  - Canvas berada pada mode Screen Space Camera (`RenderMode: 1`) yang rentan drop raycast akibat jarak/culling.
+  - Seluruh teks statis dan panel dekoratif memiliki `m_RaycastTarget: 1`, menghalangi klik ke tombol slot di bawahnya.
+- [x] **Rekonstruksi Total Hierarki Scene Bersih (`scratch/build_scene_04_clean_tree.py`):**
+  - Mengadopsi arsitektur pohon `UINode` rekursif dengan alokator monotonik unik (Rentang ID `1000..1752`).
+  - Total 752 objek serialisasi Unity dengan **0 duplicate IDs**.
+  - 178 RectTransform memiliki daftar `m_Children` yang terhubung 100% sempurna ke seluruh anak transformnya.
+  - EventSystem dikonfigurasi dengan `InputSystemUIInputModule` (`guid: 01614664b831546d2ae94a42149d80ac`) dan terhubung ke `m_ActionsAsset` (`guid: ca9f5fa95ffab41fb9a615ab714db018`).
+  - Canvas diubah ke `RenderMode: 0` (Screen Space Overlay) untuk responsivitas sentuhan pointer yang tangguh.
+  - `m_RaycastTarget` diset `0` untuk seluruh elemen teks statis dan gambar latar/dekoratif; hanya tombol interaktif (`Button`) yang memiliki `m_RaycastTarget: 1`.
+- [x] **Penyempurnaan Visual & Konten:**
+  - Avatar placeholder kotak hijau Profesor Bug diganti dengan sprite maskot jangkrik hijau resolusi tinggi resmi (`mascot_green_cricket.png`, `guid: 71a82e9b01c441118123456789012341`).
+  - Kartu variabel kedua diperbaiki dari teks salah `"and"` (`VarCard_and`) menjadi kartu variabel `"y"` (`VarCard_y` dengan label teks `"y"`).
+  - Teks plakat kanan atas yang bertumpuk 3 lapis dirapikan menjadi satu label elegan tunggal `"Easy · Variables"`.
+- [x] **Verifikasi Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - `dotnet run --project scratch/BoardTestRunner/BoardTestRunner.csproj`: **10/10 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_10`).
+  - `dotnet run --project scratch/ScoreTestRunner/ScoreTestRunner.csproj`: **10/10 PASS (100% PASS)**.
+- [x] **Pilar 4:** Folder prototipe acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5:** `Docs/Decision_Log.md` (DEC-35), `Docs/Task_Status.md`, dan `changelog/18/10/2026/23/20.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 23 (Resolusi Eror Input System `get_mousePosition` & Interaktivitas Layar 05 & 06)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi `screens_05_and_06_input_system_and_interaction_fix_plan.md` dibuat rinci dan disetujui resmi oleh Yogi Ario sebelum modifikasi kode/scene.
+- [x] **Diagnosa Screenshot:** Mengidentifikasi bahwa eror konsol 999+ `InvalidOperationException: UnityEngine.Input.get_mousePosition` bersumber dari komponen legacy `StandaloneInputModule` (`guid: 4f231c4fb786f3946a6b90b886c48677`) pada `EventSystem` di `05_TrueOrFalse.unity` dan `06_ScoreResults.unity` yang bertabrakan dengan New Input System Unity 6 (`activeInputHandler: 1`).
+- [x] **Migrasi Layar 06 (`06_ScoreResults.unity`):**
+  - Mengganti `GUID_INPUT_MODULE` menjadi `01614664b831546d2ae94a42149d80ac` (`InputSystemUIInputModule`) pada `scratch/build_scene_06_clean_tree.py`.
+  - Mengubah Canvas ke `RenderMode: 0` (Screen Space Overlay) dengan `m_Camera: {fileID: 0}`.
+  - Menghasilkan 243 objek serialisasi Unity dengan **0 duplicate IDs** dan 0 broken links.
+- [x] **Rekonstruksi Pohon Bersih Layar 05 (`05_TrueOrFalse.unity`):**
+  - Membuat `scratch/build_scene_05_clean_tree.py` berbasis arsitektur `UINode` terpadu.
+  - Memasang `InputSystemUIInputModule` (`guid: 01614664b831546d2ae94a42149d80ac`) dan actions asset resmi Unity 6.
+  - Mengubah Canvas ke `RenderMode: 0` (Screen Space Overlay).
+  - Menghubungkan 100% dari 56 RectTransform ke daftar `m_Children` induknya (**0 broken father->child links**, menuntaskan 38 kontainer terputus sebelumnya).
+  - Mengatur `m_RaycastTarget: 0` pada seluruh teks dan panel latar dekoratif; hanya tombol interaktif (`BackButton`, `SkipCountdownButton`, `NextQuestionButton`) yang memiliki `m_RaycastTarget: 1`.
+  - Menghasilkan 233 objek serialisasi Unity dengan **0 duplicate IDs**.
+- [x] **Verifikasi Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Membuat `scratch/TFTestRunner/` dan memvalidasi `TrueFalseTests.cs`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+  - Menjalankan `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+  - Menjalankan `BoardTestRunner`: **10/10 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_10`).
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Pilar 4:** Folder prototipe acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5:** `Docs/Decision_Log.md` (DEC-36), `Docs/Task_Status.md`, dan `changelog/19/10/2026/05/45.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 24 (Resolusi AudioListener Layar 05 & Interaktivitas Tombol Layar 06)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi `screen_05_audio_listener_and_06_button_click_fix_plan.md` disetujui resmi oleh Yogi Ario sebelum modifikasi kode/scene.
+- [x] **Diagnosa Uji Play Mode:**
+  - Mengidentifikasi peringatan *"There are no audio listeners in the scene"* di `05_TrueOrFalse.unity` disebabkan oleh ketiadaan komponen `AudioListener` (`!u!81`) pada `Main Camera`.
+  - Mengidentifikasi tombol aksi `06_ScoreResults.unity` tidak dapat ditekan karena fileID `m_LeftClickAction` pada `InputSystemUIInputModule` bernilai `3001919216984110772` (invalid/unbound) dan `m_EditorClassIdentifier` kosong string, ditambah seluruh teks label anak dan gambar latar diset `m_RaycastTarget: 1` yang menelan event raycast klik.
+- [x] **Perbaikan Layar 05 (`05_TrueOrFalse.unity`):**
+  - Menambahkan komponen resmi Unity `AudioListener` (`!u!81 &1220`) pada `Main Camera` (`GameObject 1217`) di `scratch/build_scene_05_clean_tree.py`.
+  - Memperbaiki `InputSystemUIInputModule` dengan `m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.UI.InputSystemUIInputModule`, mengoreksi fileID `m_LeftClickAction` ke ID resmi Unity 6 `3001919216989983466`, `m_RightClickAction` ke `-4090225696740746782`, serta menyertakan binding tracked device pointer.
+  - Meregenerasi `05_TrueOrFalse.unity`: 234 objek, **0 duplicate fileIDs**, 0 broken links.
+- [x] **Perbaikan Layar 06 (`06_ScoreResults.unity`):**
+  - Memperbaiki `InputSystemUIInputModule` di `scratch/build_scene_06_clean_tree.py` dengan `m_EditorClassIdentifier` dan action IDs resmi Unity 6 (`m_LeftClickAction: 3001919216989983466`).
+  - Mengatur `m_RaycastTarget: 0` pada seluruh teks label anak (`ContinueLabel`, `ContinueSub`, `ExitLabel`, `ExitSub`, dll.) dan background perkamen; hanya komponen tombol interaktif (`button_image`) yang diset `m_RaycastTarget: 1`.
+  - Meregenerasi `06_ScoreResults.unity`: 243 objek, **0 duplicate fileIDs**, 0 broken links.
+- [x] **Verifikasi Pengujian Otomatis 100% PASS (Pilar 6):**
+  - `TFTestRunner`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+  - `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+  - `BoardTestRunner`: **10/10 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_10`).
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Pilar 4:** Folder prototipe acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5 & Pilar 8:** `Docs/Decision_Log.md` (DEC-37), `Docs/Task_Status.md`, `changelog/19/10/2026/06/15.md`, dan `Docs/chat/riwayat19102026.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 25 (Operator Sama Dengan `=`, Tombol NEXT Layar 05 & Flowchart Resmi Bahasa Inggris)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana kerja `operator_equals_and_flowchart_plan.md` diajukan, dikomentari ("flowchart dalam bahasa inggris", "05_TrueOrFalse tombolnya ke 06_ScoreResults dan tulisannya NEXT"), disesuaikan, dan disetujui resmi oleh Yogi Ario sebelum modifikasi kode/scene.
+- [x] **Tahap 1 — Penambahan Tombol Operator Sama Dengan (`=`) pada Layar 04 (`04_AlgebraCardBoard.unity`):**
+  - Mengonfigurasi palet operator 2 baris simetris pada `scratch/build_scene_04_clean_tree.py`: Baris 1 (`+`, `-`, `×` dengan lebar 86 px, tinggi 36 px di Y = 0) dan Baris 2 (`÷`, `=` dengan lebar 134 px, tinggi 36 px di Y = -38).
+  - Menghubungkan seluruh 5 tombol operator (`OpCard_plus`, `OpCard_minus`, `OpCard_times`, `OpCard_divide`, `OpCard_equals`) ke array `operatorButtons` pada `AlgebraBoardController`.
+  - Mengatur `m_RaycastTarget: 1` pada gambar kartu tombol dan `0` pada teks label.
+  - Meregenerasi `04_AlgebraCardBoard.unity`: 761 objek serialisasi, 761 unik fileID (**0 duplicate IDs**), 0 broken links.
+- [x] **Tahap 2 — Resolusi Tombol NEXT Layar 05 & Eliminasi Teks Tumpang Tindih (`05_TrueOrFalse.unity`):**
+  - Mendiagnosis penyebab teks tumpang tindih (*ghosting text*): file sprite `btn_next_question_gold.png` memiliki teks cetak statis *"NEXT QUESTION ❯"* pada piksel gambar yang bertabrakan dengan komponen `Text` dinamis bawaan Unity.
+  - Memperbarui skrip `scratch/generate_screen_05_assets.py` untuk mengeliminasi pemanggangan teks pada sprite, menghasilkan lempeng tombol kapsul emas 3D polos beresolusi tinggi yang bersih.
+  - Memperbarui `TrueFalseController.cs`: teks tombol disederhanakan menjadi `"NEXT ❯"`, dan metode `GetNextScene()` serta `OnNextQuestionClicked()` selalu mengarahkan pemain langsung ke `SceneNavigator.SceneScoreResults` (`06_ScoreResults`).
+  - Memperbarui EditMode unit tests di `Assets/AlgeCardAdventure/Tests/EditMode/TrueFalseTests.cs` dan runner mandiri `scratch/TFTestRunner/Program.cs` (`TC_TF_07` dan `TC_TF_08`) agar konsisten dengan alur baru menuju Screen 06.
+  - Meregenerasi `05_TrueOrFalse.unity` via `scratch/build_scene_05_clean_tree.py`: 234 objek serialisasi, **0 duplicate IDs**, 0 broken links.
+- [x] **Tahap 3 — Dokumentasi Game Description & Diagram Alur Mermaid 100% Bahasa Inggris:**
+  - Membuat dokumen acuan arsitektur game lengkap `Docs/Game_Description.md` yang merangkum ikhtisar game, 6 layar utama beserta mekanisme interaksinya, formula skor, aturan batas sesi, serta diagram alur Mermaid 100% Bahasa Inggris (English Game Flowchart).
+  - Memperbarui `README.md` dengan menyertakan diagram alur Mermaid bahasa Inggris yang sinkron dan tautan langsung ke `Docs/Game_Description.md`.
+- [x] **Tahap 4 — Verifikasi Pengujian Otomatis 100% PASS (Pilar 6):**
+  - `TFTestRunner`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+  - `BoardTestRunner`: **10/10 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_10`).
+  - `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+  - Kompilasi proyek pengujian `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Pilar 4:** Folder prototipe acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5 & Pilar 8:** `Docs/Decision_Log.md` (DEC-38), `Docs/Task_Status.md`, `changelog/19/10/2026/06/45.md`, dan `Docs/chat/riwayat19102026.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 26 (Resolusi Kotak Putih & Standardisasi TextureType 8 Sprite Layar 05)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana kerja `screen_05_true_or_false_white_boxes_and_sprite_fix_plan.md` diajukan dan disetujui resmi oleh Yogi Ario sebelum modifikasi aset/scene ("oke proses sekarang").
+- [x] **Tahap 1 — Standardisasi Template `.meta` Sprite & Pembuatan Inner Cards:**
+  - Memperbarui `scratch/generate_screen_05_assets.py` dengan deklarasi `textureType: 8` (Sprite 2D and UI), `textureShape: 1`, dan blok `spriteSheet:` pada template TextureImporter.
+  - Menghasilkan 3 aset inner card panels beresolusi tinggi dengan 9-slice borders:
+    - `inner_card_parchment.png` (`d5a100019e0bb45309fef08a12345011`): panel perkamen krem hangat dengan border emas cokelat untuk pernyataan soal & restatement.
+    - `inner_card_proof_white.png` (`d5a100019e0bb45309fef08a12345012`): panel gading halus untuk langkah-langkah pembuktian aljabar.
+    - `inner_card_result_green.png` (`d5a100019e0bb45309fef08a12345013`): panel hijau emerald untuk kotak kesimpulan hasil akhir.
+  - Meregenerasi seluruh 13 berkas PNG dan `.meta` di `Assets/AlgeCardAdventure/Art/UI/`.
+- [x] **Tahap 2 — Perbaikan Meta Script & Binding Controller:**
+  - Menambahkan blok resmi `MonoImporter:` pada `Assets/AlgeCardAdventure/Scripts/UI/TrueFalseController.cs.meta`.
+  - Mengonfigurasi `m_EditorClassIdentifier: AlgeCardAdventure.Runtime::AlgeCardAdventure.UI.TrueFalseController` dan `SafeAreaFitter` di generator scene `05_TrueOrFalse.unity`.
+- [x] **Tahap 3 — Rekonstruksi Pohon Hierarki Scene Layar 05 (`05_TrueOrFalse.unity`):**
+  - Menghubungkan seluruh sprite panel baru pada `StatementBox`, `ProblemRestatementBox`, `StepByStepProofBox`, dan `ConclusiveResultBox`.
+  - Mengatur `is_active: 0` pada `FlowArrow2` dan `ExplanationSection` sehingga tersembunyi rapi saat awal evaluasi hitung mundur 3 detik.
+  - Meregenerasi `05_TrueOrFalse.unity`: 234 objek serialisasi, 100% ID unik (**0 duplicate IDs**), 0 broken links.
+- [x] **Tahap 4 — Verifikasi Pengujian Otomatis 100% PASS (Pilar 6):**
+  - `TFTestRunner`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+  - `BoardTestRunner`: **10/10 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_10`).
+  - `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+  - Kompilasi proyek pengujian `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Pilar 4:** Folder prototipe acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5 & Pilar 8:** `Docs/Decision_Log.md` (DEC-39), `Docs/Task_Status.md`, `changelog/19/10/2026/07/05.md`, dan `Docs/chat/riwayat19102026.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 27 (Kalibrasi 7 Slot Penuh Layar HP & Pembebasan Alur Antar-Tahap Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana kerja `screen_04_seven_slots_and_flexible_flow_plan.md` diajukan dan disetujui resmi oleh Yogi Ario sebelum modifikasi kode/scene.
+- [x] **Tahap 1 — Kalibrasi Layout 7 Kotak Aman Layar HP (100% Fit di Android):**
+  - Mengkalibrasi ukuran slot pada `scratch/build_scene_04_clean_tree.py` menjadi lebar 60 px, tinggi 78 px, jarak antar-slot 74 px terpusat simetris (`s_x = (s_idx - 3) * 74`).
+  - Total bentang berkurang dari 584 px ke 504 px di dalam panel selebar 660 px, menghasilkan margin aman 78 px di kiri dan kanan sehingga 100% muat utuh tanpa terpotong di seluruh rasio layar HP Android potret.
+- [x] **Tahap 2 — Semua 7 Kotak Selalu Aktif & Terbuka di Seluruh 4 Tahap:**
+  - Mengubah metode `FormulateStagesFromQuestion` di `AlgebraBoardController.cs` untuk menghapus logika penyembunyian slot (`SetActive(false)`), memastikan ke-7 slot selalu aktif (`SetActive(true)`) di Stage 1, 2, 3, dan 4.
+  - Memperbarui `OnDeckCardClicked` agar pemain bebas mengisi hingga seluruh 7 slot di tahap aktif.
+- [x] **Tahap 3 — Pembebasan Alur Progresi Tahap & Evaluasi Menyeluruh di Layar 05:**
+  - Memperbarui `OnContinueClicked` agar pemain bebas menyusun kartu dan maju antar-tahap (Stage 1 -> 2 -> 3 -> 4) tanpa diblokir validasi kaku.
+  - Mengimplementasikan metode `EvaluateOverallBoardSolution()` untuk mengevaluasi solusi aljabar di akhir pengerjaan, menyimpan status ke `GameSession.Instance.LastBoardSolutionCorrect`, dan membuka Layar 05 (`05_TrueOrFalse`) untuk penilaian otomatis TRUE/FALSE dan pembuktian substitusi.
+- [x] **Tahap 4 — Rekonstruksi Scene & Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Meregenerasi `04_AlgebraCardBoard.unity` via `build_scene_04_clean_tree.py`: 749 blok YAML, 761 fileID unik (**0 duplicate IDs**).
+  - Menambahkan pengujian `TC_BOARD_11` dan `TC_BOARD_12` di `AlgebraBoardTests.cs` dan runner `scratch/BoardTestRunner/Program.cs`.
+  - `BoardTestRunner`: **12/12 PASS (100% PASS)**.
+  - `TFTestRunner`: **10/10 PASS (100% PASS)**.
+  - `ScoreTestRunner`: **10/10 PASS (100% PASS)**.
+  - Kompilasi proyek pengujian `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Pilar 4:** Folder acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5 & Pilar 8:** `Docs/Decision_Log.md` (DEC-40), `Docs/Task_Status.md`, `changelog/19/10/2026/07/40.md`, dan `Docs/chat/riwayat19102026.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 28 (Pengembalian Logika Validasi Bertahap Layar 04 — Strict Step-by-Step Validation)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana tertulis `revert_board_validation_logic_plan.md` diajukan dan disetujui resmi oleh Yogi Ario sebelum perubahan kode ("ya lakukan").
+- [x] **Tahap 1 — Pengembalian Logika Validasi Bertahap (*Strict Step-by-Step Validation*):**
+  - Mengembalikan validasi per langkah pada `OnContinueClicked()` di `AlgebraBoardController.cs`: pemain wajib menyusun kartu dengan benar sesuai rumus di setiap tahap (`ValidateStage(currentStage) == true`) agar dapat melangkah maju ("harus pas").
+  - Jika susunan kartu belum pas, memainkan audio `SafePlayWrong()`, menampilkan pesan `"Cards don't match the equation. Tap a card to clear and try again!"`, dan memblokir progresi ke tahap berikutnya.
+  - Membatasi batas pengisian slot pada `OnDeckCardClicked()` sesuai jumlah target token persamaan (`maxSlots = currentStage.targetTokens.Count`).
+  - Mengembalikan feedback baris penuh pada `CheckIfRowIsComplete()` ketika kartu mencapai `targetTokens.Count`.
+- [x] **Tahap 2 — Mempertahankan Keutuhan Visual 7 Slot:**
+  - Layout 7 slot hasil kalibrasi (60x78 px, jarak 74 px terpusat simetris) tetap dipertahankan utuh dan aman di semua rasio layar HP Android potret.
+  - Seluruh 7 slot tetap ditampilkan pada UI di setiap tahap.
+- [x] **Tahap 3 — Verifikasi Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Menambahkan unit test `TC_BOARD_13_StrictValidation_RejectsIncorrectAdvancement` pada `AlgebraBoardTests.cs` dan `scratch/BoardTestRunner/Program.cs`.
+  - `BoardTestRunner`: **13/13 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_13`).
+  - `TFTestRunner`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+  - `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+  - Kompilasi proyek pengujian `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Pilar 4:** Folder prototipe acuan desainer `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 5 & Pilar 8:** `Docs/Decision_Log.md` (DEC-41), `Docs/Task_Status.md`, `changelog/19/10/2026/08/15.md`, dan `Docs/chat/riwayat19102026.md` diperbarui.
+
+---
+
+## 📋 Checklist Batch 29 (Penggantian Grafis Splash Screen & Penyelarasan Desain AI Chatbot Groq)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi komprehensif `splash_screen_replacement_plan.md` diajukan, direviu, disesuaikan (mekanisme pemicu universal tahan logo 3 detik), dan disetujui resmi oleh Yogi Ario sebelum perubahan aset/kode.
+- [x] **Tahap 1 — Analisis Aset & Ekstraksi Standarisasi Unity (Fase A):**
+  - Folder acuan `Docs/Ui Template/` dijaga 100% utuh berstatus **READ-ONLY** (**Pilar 4**).
+  - Berkas baru `Docs/Ui Template/01 Splash Screen.png` (941x1672 px, rasio 9:16 potret) disalin ke lokasi kerja `Assets/AlgeCardAdventure/Art/Backgrounds/splash_bg.png` (MD5 terverifikasi identik `7aac34bef42d0bb337e18713a2974189`).
+  - Konfigurasi TextureImporter pada `Assets/AlgeCardAdventure/Art/Backgrounds/splash_bg.png.meta` distandarisasi ke `textureType: 8` (Sprite 2D and UI), `maxTextureSize: 4096`, `textureCompression: 0` (Uncompressed / kejernihan Ultra-HD), dan `filterMode: 1` (Bilinear).
+  - Mempertahankan GUID resmi `217bc5cd1fe84c0d846df9ed93aa56b1` sehingga referensi scene tetap tersambung utuh tanpa broken links.
+- [x] **Tahap 2 — Penyelarasan Hierarki Scene `01_SplashScreen.unity` (Fase B):**
+  - Objek `Background` (Canvas) otomatis memuat grafis resolusi tinggi baru berformat stretch full-screen dengan warna murni `(1, 1, 1, 1)` dan `m_RaycastTarget: 0`.
+  - Objek `Logo` terpisah (ID 700) tetap dinonaktifkan (`m_IsActive: 0`) karena ilustrasi logo tipografi 3D emas baru telah terintegrasi presisi dan tajam di dalam lukisan latar belakang.
+  - Teks instruksi denyut `"Tap anywhere to start"` pada `PromptContainer` (ID 800) terkalibrasi rapi di anchor bawah `y = 0.12` dengan bayangan kontras tinggi.
+  - Tombol deteksi sentuhan satu layar penuh `TapDetectorButton` (ID 900) dan `SplashScreenController` siap mengarahkan pemain ke Screen 02 (`02_Level`).
+- [x] **Tahap 3 — Verifikasi Pengujian Otomatis 100% PASS (Fase C / Pilar 6):**
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - `BoardTestRunner`: **13/13 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_13`).
+  - `TFTestRunner`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+  - `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+  - Total pengujian unit EditMode: **33/33 PASS (100% PASS)**.
+- [x] **Tahap 4 — Dokumentasi Tata Kelola (Fase D / Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-42` dicatat resmi di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md` dan `changelog/21/10/2026/18/30.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat21102026.md`.
+- [x] **Tahap 5 — Perumusan Desain Teknis AI Chatbot Groq Companion (Fase E):**
+  - Mengadopsi template desainer `Docs/Ui Template/chatbot/code.html` (persona Prof. Hopper 🦗 & Pip 🐜).
+  - Merumuskan mekanisme pemicu universal **Tekan & Tahan Logo 3 Detik (Long-Press $\ge$ 3s)** di semua layar game.
+  - Menyiapkan integrasi API Key Groq dari `Docs/Ui Template/chatbot/api` terproteksi `.gitignore` (**Pilar 3**).
+
+---
+
+## 📋 Checklist Batch 30 (Implementasi AI Companion Chatbot Groq API, code.html & Pemicu Logo 3 Detik)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `chatbot_groq_companion_implementation_plan.md` disetujui resmi oleh Yogi Ario sebelum perubahan kode.
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 3 (Keamanan Kredensial):** 
+  - API Key Groq dari `Docs/Ui Template/chatbot/api` (`gsk_oh2Af...`) disimpan secara aman pada konfigurasi runtime `Assets/Resources/groq_config.json`.
+  - `.gitignore` diperbarui dan diverifikasi melindungi `Assets/Resources/groq_config.json`, `.meta`, dan `Docs/Ui Template/chatbot/api` dari commit publik.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/chatbot/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Tahap 1 — Komponen Pemicu Universal (`LogoLongPressTrigger.cs`):**
+  - Deteksi sentuhan tahan pointer (`IPointerDownHandler`, `IPointerUpHandler`, `IPointerExitHandler`).
+  - Timer terisolasi `holdDuration = 3.0f` menggunakan `Time.unscaledDeltaTime`.
+  - Efek visual mikro pembesaran logo halus (`1.05x`) saat ditekan dan kembali ke `1.0x` saat dilepas.
+  - Menyiarkan event statis global `OnUniversalChatbotTriggered` tanpa tight-coupling ke UI scene.
+  - Ketukan biasa (< 3 detik) tidak memicu chatbot sehingga fungsi default layar tetap normal.
+- [x] **Tahap 2 — Klien Groq Cloud API & Config Manager (`GroqConfigManager.cs` & `GroqApiClient.cs`):**
+  - Pengelola konfigurasi cerdas dengan dual loading (membaca disk lokal via `System.IO.File` + fallback `Resources.Load` yang diisolasi `MethodImplOptions.NoInlining` aman dari eror ECall CLI).
+  - Layanan HTTP POST asinkron `GroqApiClient` dengan endpoint `https://api.groq.com/openai/v1/chat/completions`.
+  - Dukungan model utama `llama-3.3-70b-versatile` dan fallback `llama-3.1-8b-instant`.
+  - Serialisasi payload `CreateRequestBodyJson` dan deserialisasi respon `ParseChatResponseJson`.
+- [x] **Tahap 3 — Manajemen Percakapan & Offline Fallback (`ChatSessionManager.cs`):**
+  - Persona pedagogis **Prof. Hopper 🦗 & Pip 🐜** dengan instruksi bimbingan ramah anak dan analogi benda nyata ($b = \text{boneka}$, $a = \text{anggur}$).
+  - Rolling window capping 6 pesan terakhir untuk efisiensi token dan latensi rendah.
+  - *Graceful Offline Fallback*: Jika perangkat tidak memiliki internet, bot menyajikan respons ramah offline dan tips aljabar bawaan tanpa crash. Game tetap 100% playable offline (**Pilar 7 & Aturan 3 AGENTS.md**).
+- [x] **Tahap 4 — Antarmuka Chatbot Sesuai Prototipe `code.html` (`ChatbotUIController.cs`):**
+  - Manajemen modal overlay UGUI SortingOrder 100 dengan Dark Backdrop.
+  - Header kayu fantasi dengan tombol Back `◀`, logo AlgeCard, avatar Prof. Hopper & Pip, dan status Online hijau.
+  - Balon pesan bot perkamen, balon pesan user biru 3D glossy.
+  - Quick prompt chips: *"💡 How to isolate x?"*, *"🔍 What is a variable?"*, *"📜 Hint for current mission"*.
+  - Input bar dengan input field perkamen krem dan tombol kirim 3D hijau emerald.
+- [x] **Tahap 5 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Berkas pengujian unit EditMode `Assets/AlgeCardAdventure/Tests/EditMode/ChatbotTests.cs` (6 test: `TC_CHAT_01` s.d. `TC_CHAT_06`).
+  - Runner mandiri CLI `scratch/ChatbotTestRunner/Program.cs` mengeksekusi 6/6 test PASS.
+  - `BoardTestRunner`: **13/13 PASS (100% PASS)**.
+  - `TFTestRunner`: **10/10 PASS (100% PASS)**.
+  - `ScoreTestRunner`: **10/10 PASS (100% PASS)**.
+  - `ChatbotTestRunner`: **6/6 PASS (100% PASS)**.
+  - Total pengujian proyek: **39/39 PASS (100% PASS, 0 Warning, 0 Error)**.
+- [x] **Tahap 6 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-43` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md` dan `changelog/21/10/2026/19/00.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat21102026.md`.
+
+---
+
+## 📋 Checklist Batch 31 (Implementasi Modal Materi Aljabar & Petunjuk Permainan Layar 03)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi komprehensif `learning_material_and_guide_modals_plan.md` (Revisi Catatan Presentasi Butir 2 & Butir 3) disetujui resmi oleh Yogi Ario sebelum perubahan kode.
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Konten pembelajaran aljabar dan petunjuk permainan tertanam penuh secara lokal di dalam aplikasi tanpa ketergantungan internet/backend.
+- [x] **Tahap 1 — Peningkatan Interaktivitas Ikon Layar 03 (`03_MissionCard.unity`):**
+  - Ikon tumpukan buku kiri bawah (`BooksStack`, ID 820): `m_RaycastTarget: 1`, ditambah komponen Button (`m_Component: [824]`) dan event click terhubung ke `OnBooksClicked()`.
+  - Ikon peta dan kompas kanan bawah (`MapAndCompass`, ID 830): `m_RaycastTarget: 1`, ditambah komponen Button (`m_Component: [834]`) dan event click terhubung ke `OnCompassClicked()`.
+- [x] **Tahap 2 — Pembuatan Modal Materi Pembelajaran Aljabar (`LearningMaterialModal`, ID 2000-2099):**
+  - Hierarki Canvas (ID 401) menambahkan anak `2001` (RectTransform modal materi).
+  - Dilengkapi `DarkBackdrop` (alpha 0.85), `MaterialDialogCard` (perkamen emas mewah), `HeaderLabel` ("MATERI ALJABAR"), `SubtitleLabel` ("Konsep Dasar Variabel & Persamaan"), dan `ContentBodyText`.
+  - Menyajikan materi edukasi aljabar komprehensif: 1) Analogi variabel $b = \text{boneka}$, 2) Prinsip timbangan seimbang ($x + 3 = 8$), 3) Jurus pindah ruas operasi berlawanan ($+$ jadi $-$, $\times$ jadi $\div$).
+  - Tombol penutup beraksen hijau emas `CloseMaterialButton` ("MENGERTI! ❯") dengan audio click.
+- [x] **Tahap 3 — Pembuatan Modal Petunjuk Permainan AlgeCard (`GameplayGuideModal`, ID 2100-2199):**
+  - Hierarki Canvas (ID 401) menambahkan anak `2101` (RectTransform modal panduan).
+  - Dilengkapi `DarkBackdrop`, `GuideDialogCard`, `GuideHeaderLabel` ("PETUNJUK PERMAINAN"), `GuideSubtitleLabel` ("Cara Bermain AlgeCard Adventure"), dan `GuideContentBodyText`.
+  - Menyajikan 4 langkah taktis: 1) Ambil Misi (tarik kartu atau shuffle), 2) Susun Kartu di Meja Aljabar 4 tahap, 3) Evaluasi True/False 3 detik & pelajari pembuktian substitusi, 4) Raih Poin Maksimal dari 10 misi per sesi.
+  - Tombol penutup beraksen biru emas `CloseGuideButton` ("SIAP BERMAIN! ⚔️") dengan audio click.
+- [x] **Tahap 4 — Logika Pengendali `MissionCardController.cs` & Defensive Wrappers:**
+  - Binding field dan properti inspector: `booksButton`, `compassButton`, `learningMaterialModal`, `gameplayGuideModal`, `closeMaterialButton`, `closeGuideButton`.
+  - Metode `OnBooksClicked()`, `OnCloseMaterialClicked()`, `OnCompassClicked()`, `OnCloseGuideClicked()` diimplementasikan dengan penutupan modal lain yang saling eksklusif.
+  - Implementasi helper defensif `SafeLog`, `SafeLogWarning`, `SafePlayButtonClick`, `SafePlayCardFlip`, `SafePlayDefaultBGM`, serta properti `HasActiveSession` berbasis `ReferenceEquals` pada `GameSession.Instance` untuk mengeliminasi 100% exception native Unity ECall pada CLI test runner.
+- [x] **Tahap 5 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan 4 pengujian unit `TC_MISSION_11` s.d. `TC_MISSION_14` pada `Assets/AlgeCardAdventure/Tests/EditMode/MissionCardTests.cs`.
+  - Penyelarasan runner mandiri CLI `scratch/MissionTestRunner/Program.cs` dengan `NullableBoolConverter` dan `IncludeFields = true`.
+  - `MissionTestRunner`: **14/14 PASS (100% PASS)** (`TC_MISSION_01` s.d. `TC_MISSION_14`).
+  - `BoardTestRunner`: **13/13 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_13`).
+  - `TFTestRunner`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+  - `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+  - `ChatbotTestRunner`: **6/6 PASS (100% PASS)** (`TC_CHAT_01` s.d. `TC_CHAT_06`).
+  - Total pengujian proyek: **53/53 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Tahap 6 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-44` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md` dan `changelog/21/10/2026/20/00.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat21102026.md`.
+
+---
+
+## 📋 Checklist Batch 32 (Implementasi Dual Clear & Delete Buttons Layar 04 — Catatan Revisi Butir 7)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi komprehensif `dual_clear_and_delete_buttons_plan.md` (Revisi Catatan Presentasi Butir 7) disetujui resmi oleh Yogi Ario sebelum perubahan kode ("jangan lupa Zero Code kita backup chat setelah pengerjaan selesai").
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Fitur hapus kartu satu per satu dan hapus semua bekerja 100% lokal tanpa backend/internet.
+- [x] **Tahap 1 — Modifikasi Logika `AlgebraBoardController.cs`:**
+  - Menambahkan field serialized `deleteOneButton`, `clearAllButton`, dan getter `DeleteOneButton`, `ClearAllButton`.
+  - Mendaftarkan listener `OnDeleteOneClicked` dan `OnClearClicked` di `SetupButtonListeners()`.
+  - Implementasi metode `OnDeleteOneClicked()`: mencari kartu terisi paling kanan (`!slot.IsEmpty`) dari indeks slot tertinggi ke terendah pada baris aktif, mengosongkannya, memutar audio click, dan menampilkan feedback `"Kartu [token] dihapus."`.
+  - Penyempurnaan `OnClearClicked()`: mengosongkan seluruh slot pada tahap aktif secara instan dan menampilkan notice `"Seluruh kartu pada tahap aktif dihapus."`.
+  - Mempertahankan Tap-to-Clear interaktif pada tiap slot jika pemain ingin mengosongkan slot spesifik di tengah baris.
+- [x] **Tahap 2 — Konfigurasi Objek UI Scene Layar 04 (`04_AlgebraCardBoard.unity`):**
+  - Menambahkan GameObject `DeleteOneButton` (ID 770) dan child `DeleteOneTxt` (ID 775) berlabel `"⌫ HAPUS 1 KARTU"` (`y = -82`, ukuran 290x46 px).
+  - Menyesuaikan `ClearButton` (kini `ClearAllButton`, ID 643) berlabel `"🗑 HAPUS SEMUA"` (`y = -134`, ukuran 290x46 px).
+  - Menggeser `NavPadContainer` (ID 652) ke `y = -285` agar jarak antar-tombol lapang dan proporsional.
+  - Memperbarui daftar anak `m_Children` pada `DeckCardContainer` (ID 445) dengan menyertakan ID 771.
+  - Menautkan binding `deleteOneButton: {fileID: 774}` dan `clearAllButton: {fileID: 647}` pada MonoBehaviour `AlgebraBoardController` (ID 757).
+- [x] **Tahap 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan 2 pengujian unit `TC_BOARD_14_DeleteOneCard_RemovesOnlyRightmostFilledSlot` dan `TC_BOARD_15_ClearAll_EmptiesAllSlotsInActiveStage` pada `Assets/AlgeCardAdventure/Tests/EditMode/AlgebraBoardTests.cs`.
+  - Penyelarasan runner mandiri CLI `scratch/BoardTestRunner/Program.cs` (15/15 PASS).
+  - Eksekusi 5 test runner proyek:
+    - `BoardTestRunner`: **15/15 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_15`).
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)** (`TC_MISSION_01` s.d. `TC_MISSION_14`).
+    - `TFTestRunner`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+    - `ChatbotTestRunner`: **6/6 PASS (100% PASS)** (`TC_CHAT_01` s.d. `TC_CHAT_06`).
+    - Total pengujian proyek: **55/55 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Tahap 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-45` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md` dan `changelog/23/10/2026/13/50.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
+---
+
+## 📋 Checklist Batch 33 (Integrasi Universal Runtime & UI Prosedural Easter Egg AI Chatbot Companion)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `easter_egg_chatbot_integration_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Seluruh pekerjaan berada di branch kerja terlindungi `develop`.
+- [x] **Pilar 3 (Keamanan Kredensial):** File konfigurasi `Assets/Resources/groq_config.json` terlindungi `.gitignore`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Single-Player):** Asisten AI dilengkapi Graceful Offline Fallback; game utama tetap 100% playable secara offline jika jaringan tidak tersedia.
+- [x] **Tahap 1 — Modul Bootstrap Runtime Universal (`ChatbotRuntimeBootstrap.cs`):**
+  - Implementasi metode `[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]` yang berjalan otomatis setelah tiap pergantian scene di Unity Play Mode.
+  - Metode `AttachToActiveScene()` memastikan `ChatbotUIController` aktif di root `DontDestroyOnLoad`.
+  - Metode `InjectLogoTriggerInActiveScene()` memindai hierarki scene aktif, mendeteksi objek logo (`Logo`, `LogoImage`, `LogoPlaque`, `TOP_LOGO_TITLE`), mengaktifkannya jika nonaktif, mengaktifkan `raycastTarget: true`, dan menautkan komponen `LogoLongPressTrigger`.
+  - Nol manipulasi file YAML scene mentah (100% aman tanpa risiko merusak serialisasi fileID).
+- [x] **Tahap 2 — Antarmuka Modal Prosedural 1:1 `code.html` (`ChatbotUIController.cs`):**
+  - Implementasi `EnsureProceduralUI()` yang membentuk Canvas Overlay (`sortingOrder: 100`), Dark Backdrop semi-transparan, MainChatPanel kayu fantasi bergaris tepi emas, Header Bar dengan tombol BACK, Quick Chips (`💡 Pindah Ruas`, `🔍 Apa Variabel?`, `📜 Petunjuk Misi`), ScrollRect chat stream dinamis, InputField, dan Send Button.
+  - Penanganan defensif anti-ECall pada `AudioManager`, `EnsureApiClientExists`, dan `IsChatOpen` menggunakan null-check cast `(object)` agar stabil di lingkungan CLI test runner.
+- [x] **Tahap 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan pengujian unit `TC_CHAT_07_Bootstrap_DetectsLogoAndAttachesTrigger` dan `TC_CHAT_08_Bootstrap_EnsureProceduralUI_CreatesCompleteModal` pada `Assets/AlgeCardAdventure/Tests/EditMode/ChatbotTests.cs`.
+  - Penyelarasan runner mandiri CLI `scratch/ChatbotTestRunner/Program.cs` (8/8 PASS).
+  - Eksekusi seluruh 5 test runner proyek:
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)** (`TC_CHAT_01` s.d. `TC_CHAT_08`).
+    - `BoardTestRunner`: **15/15 PASS (100% PASS)** (`TC_BOARD_01` s.d. `TC_BOARD_15`).
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)** (`TC_MISSION_01` s.d. `TC_MISSION_14`).
+    - `TFTestRunner`: **10/10 PASS (100% PASS)** (`TC_TF_01` s.d. `TC_TF_10`).
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)** (`TC_SRES_01` s.d. `TC_SRES_10`).
+    - **Total Pengujian Proyek: 57/57 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Tahap 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-46` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/14/20.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
+---
+
+## 📋 Checklist Batch 34 (Resolusi Dobel Logo Bertumpuk pada Layar 01 Splash Screen)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `splash_screen_double_logo_fix_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Tidak ada ketergantungan jaringan baru yang ditambahkan.
+- [x] **Tahap 1 — Penyesuaian Serialisasi Scene `01_SplashScreen.unity`:**
+  - Mengosongkan referensi sprite pada komponen `Image` (ID 703): `m_Sprite: {fileID: 0}`.
+  - Menyetel warna menjadi transparan penuh: `m_Color: {r: 1, g: 1, b: 1, a: 0}`.
+  - Mempertahankan `m_IsActive: 1` dan `m_RaycastTarget: 1` pada GameObject `Logo` (ID 700) dengan ukuran 860x287 px di anchor `y = 0.72`.
+  - Objek `Logo` berfungsi penuh sebagai *invisible touch target* untuk Easter Egg tanpa merender gambar visual yang bertumpuk.
+- [x] **Tahap 2 — Penyesuaian Defensif `ChatbotRuntimeBootstrap.cs`:**
+  - Menambahkan penanganan protektif: jika komponen `Image` pada objek logo memiliki sprite null, warnanya dipertahankan sebagai `Color.clear` transparan.
+  - Menjamin tidak ada kotak putih yang terender dan trigger `LogoLongPressTrigger` tetap terpasang dengan `raycastTarget: true`.
+- [x] **Tahap 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Eksekusi seluruh 5 test runner proyek:
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `BoardTestRunner`: **15/15 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `TFTestRunner`: **10/10 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 57/57 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Tahap 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-47` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/15/00.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
+---
+
+## 📋 Checklist Batch 35 (Integrasi Soal Cerita Kontekstual, Petunjuk Variabel Ramah Anak, & Proteksi Frame Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `question_story_and_frame_refinement_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Menggunakan data lokal `banksoal.json` dan pemetaan variabel in-memory, 100% offline single-player.
+- [x] **Tahap 1 — Logika Format Soal & Petunjuk Variabel (`AlgebraBoardController.cs`):**
+  - Metode `ExtractVariableFromQuestion(QuestionModel q)` mengekstrak variabel aljabar ($a, b, c, p, x, y$, dll.) dari rumus/soal secara akurat.
+  - Metode `GetVariableContextHint(QuestionModel question)` memetakan variabel ke representasi objek konkret ramah anak ($b = \text{banyak boneka 🧸}$, $a = \text{buah anggur 🍇}$, $p = \text{batang pensil ✏️}$, $x = \text{jumlah uang tabungan 💰}$ / nilai misteri, $y = \text{kartu misteri 🃏}$).
+  - Pembaruan `InitializeBoardUI()` menyajikan soal cerita asli (`ActiveQuestion.question_text`) dipadukan dengan petunjuk variabel pada `questionBodyText` dan mengaktifkan UGUI BestFit runtime (`resizeTextForBestFit = true`, min 13, max 18).
+- [x] **Tahap 2 — Proteksi Frame & Format UGUI (`04_AlgebraCardBoard.unity`):**
+  - Mengonfigurasi `QuestionBodyText` (ID 66–69): `SizeDelta: {x: 700, y: 90}`, `AnchoredPosition: {x: 100, y: -20}`, `BestFit: 1`, `MinSize: 13`, `MaxSize: 18`, `HorizontalOverflow: 0` (Wrap), `VerticalOverflow: 0` (Truncate).
+  - Teks tertata rapi di dalam banner kayu plakat atas tanpa menabrak maskot jangkrik di sebelah kiri dan tidak meluber melewati batas frame kayu.
+- [x] **Tahap 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan pengujian unit `TC_BOARD_16_QuestionStoryAndVariableHint_FormattedCorrectly` pada `AlgebraBoardTests.cs`.
+  - Penyelarasan runner mandiri CLI `scratch/BoardTestRunner/Program.cs` dan penambahan referensi `UnityEngine.TextRenderingModule.dll`.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **16/16 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `TFTestRunner`: **10/10 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 58/58 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Tahap 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-48` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/15/30.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
+---
+
+## 📋 Checklist Batch 36 (Integrasi Pembahasan Langkah-demi-Langkah Solusi Aljabar Asli Layar 05)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `step_by_step_explanation_refinement_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Mengambil data langkah matematika lokal `solution_steps` dari `banksoal.json`, 100% offline single-player.
+- [x] **Tahap 1 — Logika Format Pembahasan Asli (`TrueFalseController.cs`):**
+  - Pembaruan `GenerateExplanationSteps(QuestionModel q, bool isCorrect)` memetakan formula awal (`Equation: ...`), operasi invers aljabar / pindah ruas (`Operation: ...`), dan nilai solusi akhir (`Solution: ...`) dari data `solution_steps`.
+  - Retensi fallback anggun ke kalimat pembuktian substitusi jika `solution_steps` bernilai null atau kosong (menjamin kompatibilitas penuh dengan objek mock `TC_TF_09`).
+  - Pembaruan `SetupExplanationContent` menyajikan narasi konsep soal (`Problem Concept: solution_steps[0]`) pada `problemRestatementText`, jawaban target final pada `resultEquationText`, dan mengaktifkan UGUI BestFit runtime (`min: 14 px, max: 22 px`).
+- [x] **Tahap 2 — Proteksi Frame & Format UGUI (`05_TrueOrFalse.unity`):**
+  - Mengonfigurasi `Step1Text` (ID 1187), `Step2Text` (ID 1191), `Step3Text` (ID 1195), dan `ProblemRestatementText` (ID 1179): `m_BestFit: 1`, `m_MinSize: 14`, `m_MaxSize: 22`, `m_HorizontalOverflow: 0` (Wrap), `m_VerticalOverflow: 0` (Truncate).
+  - Teks pembahasan terbingkai rapi di dalam perkamen putih tanpa terpotong atau meluber keluar frame pada seluruh layar ponsel.
+- [x] **Tahap 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan pengujian unit `TC_TF_11_ExplanationProof_UsesRealSolutionSteps_WhenAvailable` pada `TrueFalseTests.cs`.
+  - Penyelarasan runner mandiri CLI `scratch/TFTestRunner/Program.cs` dan penambahan referensi `UnityEngine.TextRenderingModule.dll` di `TFTestRunner.csproj`.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `BoardTestRunner`: **16/16 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 59/59 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+- [x] **Tahap 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-49` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/16/00.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
+---
+
+## 📋 Checklist Batch 37 (Kalibrasi Tata Letak Vertikal Tombol Hapus Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `adjust_delete_buttons_spacing_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Game tetap 100% offline single-player.
+- [x] **Tahap 1 — Penyesuaian Posisi Scene (`04_AlgebraCardBoard.unity`):**
+  - Menurunkan `DeleteOneButton` (RT 771) dari `y = -82` ke `y = -105`, menciptakan margin bersih 24.5 px di bawah kartu operator (`[ ÷ ]` dan `[ = ]`).
+  - Menurunkan `ClearButton` (kini `ClearAllButton`, RT 644) dari `y = -134` ke `y = -157`, menghasilkan jarak antar tombol 6 px yang padu dan simetris.
+  - Menurunkan `NavPadContainer` (RT 653) dari `y = -285` ke `y = -320`, memberikan margin 25 px di bawah tombol ClearAll dan tetap menyisakan ruang aman 75 px dari dasar panel dek (`DeckOfCardsPanel` di `y = -510`).
+- [x] **Tahap 2 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **16/16 PASS (100% PASS)**
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 59/59 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+- [x] **Tahap 3 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-50` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/16/30.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
 
 
 
