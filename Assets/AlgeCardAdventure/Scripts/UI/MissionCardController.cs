@@ -598,6 +598,14 @@ namespace AlgeCardAdventure.UI
 
             if (missionInstructionText != null)
             {
+                try
+                {
+                    missionInstructionText.resizeTextForBestFit = true;
+                    missionInstructionText.resizeTextMinSize = 13;
+                    missionInstructionText.resizeTextMaxSize = 22;
+                }
+                catch { }
+
                 missionInstructionText.text = _selectedQuestion.question_text ?? "Simplify the following algebraic expressions.";
             }
 

@@ -1070,5 +1070,41 @@
   - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/17/30.md` diperbarui.
   - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
 
+---
+
+## 📋 Checklist Batch 40 (Resolusi Teks Kartu Misi Meluber, Sanitasi Nominal Bank Soal, & Perbaikan Bug Kotak Terakhir Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `fix_card_overflow_banksoal_and_last_slot_bug_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Data 60 soal lokal di `banksoal.json` dan evaluasi permainan berjalan 100% offline.
+- [x] **Fase 1 — Resolusi Teks Soal Meluber Kartu Misi (`03_MissionCard.unity` & `MissionCardController.cs`):**
+  - Mengonfigurasi UGUI BestFit pada Component 1753 `MissionInstructionText` di scene `03_MissionCard.unity` (`m_FontSize: 22`, `m_BestFit: 1`, `m_MinSize: 13`, `m_MaxSize: 22`).
+  - Menambahkan penanganan protektif BestFit pada `MissionCardController.cs` saat `OnCardSelected` (`resizeTextForBestFit = true`, min: 13, max: 22) sehingga teks soal sepanjang apa pun menyusut dinamis di dalam area kartu tanpa meluber.
+- [x] **Fase 2 — Sanitasi Nilai Nominal Bank Soal (`banksoal.json`):**
+  - Mengembangkan dan mengeksekusi script sanitasi terarah `scratch/sanitize_large_nominals.py`.
+  - Memetakan 28 soal dengan nominal besar ($\ge 100$, ribuan/ratusan ribu) di `Assets/StreamingAssets/banksoal.json` dan `Docs/banksoal.json` menjadi angka kanonik SMP bernilai $< 100$ (dalam satuan ribuan rupiah).
+  - Seluruh 60 soal bank soal tetap 100% utuh tanpa menghapus soal dan siap dimainkan dalam batas fisik 7 slot papan aljabar.
+- [x] **Fase 3 — Perbaikan Bug Kotak Bagian Akhir & Fleksibilitas Validasi (`AlgebraBoardController.cs`):**
+  - Mengubah batas loop `OnDeckCardClicked` dari `Mathf.Min(currentStage.targetTokens.Count, currentStage.slots.Count)` menjadi `currentStage.slots.Count`, memastikan seluruh 7 kotak (termasuk kotak ke-7 paling kanan) dapat diisi kartu tanpa hambatan.
+  - Memperbarui `CheckIfRowIsComplete` untuk menghitung seluruh slot yang terisi dan membandingkannya terhadap jumlah target.
+  - Menyempurnakan `ValidateStage` dengan pencocokan langsung dan fallback pencocokan string gabungan (*concatenated token matching*) untuk mendukung multi-digit input secara fleksibel.
+- [x] **Fase 4 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan 2 pengujian unit pada `AlgebraBoardTests.cs` dan `BoardTestRunner`:
+    - `TC_BOARD_21_LastSlot_7thBoxCanBeFilled`: Memastikan kotak ke-7 (terakhir) berhasil diisi dan tidak terblokir.
+    - `TC_BOARD_22_ValidateStage_ConcatenatedDigitsMatch`: Memastikan pencocokan token multi-digit fleksibel terverifikasi valid.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **22/22 PASS (100% PASS)**
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 65/65 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+- [x] **Fase 5 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-53` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/18/30.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
 
 

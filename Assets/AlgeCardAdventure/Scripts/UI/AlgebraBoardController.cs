@@ -805,7 +805,7 @@ namespace AlgeCardAdventure.UI
             if (IsAllStagesCompleted || CurrentStageIndex >= stages.Count) return;
 
             var currentStage = stages[CurrentStageIndex];
-            int maxSlots = Mathf.Min(currentStage.targetTokens.Count, currentStage.slots.Count);
+            int maxSlots = currentStage.slots.Count;
 
             CardSlotView emptySlot = null;
             for (int i = 0; i < maxSlots && i < currentStage.slots.Count; i++)
@@ -920,15 +920,16 @@ namespace AlgeCardAdventure.UI
 
         private void CheckIfRowIsComplete(BoardStageRow stage)
         {
+            if (stage == null || stage.slots == null) return;
             int filledCount = 0;
-            int totalNeeded = Mathf.Min(stage.targetTokens.Count, stage.slots.Count);
-
-            for (int i = 0; i < totalNeeded && i < stage.slots.Count; i++)
+            for (int i = 0; i < stage.slots.Count; i++)
             {
                 if (!stage.slots[i].IsEmpty) filledCount++;
             }
 
-            if (filledCount == totalNeeded)
+            int totalNeeded = stage.targetTokens != null ? Mathf.Min(stage.targetTokens.Count, stage.slots.Count) : stage.slots.Count;
+
+            if (filledCount >= totalNeeded && totalNeeded > 0)
             {
                 ShowNotice("Row filled! Tap 'Continue' to verify.", true);
             }
@@ -1110,7 +1111,9 @@ namespace AlgeCardAdventure.UI
 
         /// <summary>
         /// Memvalidasi susunan kartu di tahap tertentu dengan target tokens.
-        /// Mendukung normalisasi simbol matematika (* dengan ×, / dengan ÷).
+        /// Mendukung normalisasi simbol matematika (* dengan ×, / dengan ÷),
+        /// pencocokan posisi langsung, serta fallback pencocokan string gabungan (concatenation)
+        /// untuk mendukung input angka bertingkat/multi-digit.
         /// </summary>
         public bool ValidateStage(BoardStageRow stage)
         {
@@ -1118,19 +1121,62 @@ namespace AlgeCardAdventure.UI
 
             int targetCount = Mathf.Min(stage.targetTokens.Count, stage.slots.Count);
             if (targetCount == 0) return true;
+
+            // 1. Direct slot-by-slot matching
+            bool directMatch = true;
             for (int i = 0; i < targetCount; i++)
             {
-                if (i >= stage.slots.Count) return false;
+                if (i >= stage.slots.Count)
+                {
+                    directMatch = false;
+                    break;
+                }
                 string playerToken = NormalizeToken(stage.slots[i].currentToken);
                 string targetToken = NormalizeToken(stage.targetTokens[i]);
 
                 if (!string.Equals(playerToken, targetToken, StringComparison.OrdinalIgnoreCase))
                 {
-                    return false;
+                    directMatch = false;
+                    break;
                 }
             }
 
-            return true;
+            // Pastikan jika direct match, slot sisanya tidak ada isi yang tidak sengaja terisi
+            if (directMatch)
+            {
+                for (int i = targetCount; i < stage.slots.Count; i++)
+                {
+                    if (!stage.slots[i].IsEmpty)
+                    {
+                        directMatch = false;
+                        break;
+                    }
+                }
+            }
+
+            if (directMatch) return true;
+
+            // 2. Concatenated token matching (misal kartu digit terpisah atau pengelompokan token fleksibel)
+            var playerTokens = new List<string>();
+            for (int i = 0; i < stage.slots.Count; i++)
+            {
+                if (!stage.slots[i].IsEmpty)
+                {
+                    playerTokens.Add(NormalizeToken(stage.slots[i].currentToken));
+                }
+            }
+
+            if (playerTokens.Count == 0 && stage.targetTokens.Count == 0) return true;
+
+            string playerConcat = string.Concat(playerTokens).Replace(" ", "").ToLowerInvariant();
+            var targetNormalized = new List<string>();
+            foreach (var t in stage.targetTokens)
+            {
+                targetNormalized.Add(NormalizeToken(t));
+            }
+            string targetConcat = string.Concat(targetNormalized).Replace(" ", "").ToLowerInvariant();
+
+            return !string.IsNullOrEmpty(playerConcat) && string.Equals(playerConcat, targetConcat, StringComparison.OrdinalIgnoreCase);
         }
 
         private string NormalizeToken(string token)

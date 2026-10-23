@@ -667,6 +667,53 @@ namespace AlgeCardAdventure.Tests
             bool valid = _controller.ValidateStage(_controller.stages[0]);
             Assert.IsTrue(valid, "Penyusunan persamaan Stage 0 harus valid dan tidak deadlock!");
         }
+
+        [Test]
+        public void TC_BOARD_21_LastSlot_7thBoxCanBeFilled()
+        {
+            _controller.stages = new List<BoardStageRow>();
+            var row = new BoardStageRow();
+            for (int slotIdx = 0; slotIdx < 7; slotIdx++)
+            {
+                row.slots.Add(new CardSlotView());
+            }
+            // Walaupun targetTokens hanya 5 token, seluruh 7 slot papan tetap bisa diisi
+            row.targetTokens = new List<string> { "2", "x", "=", "1", "0" };
+            _controller.stages.Add(row);
+            _controller.SetStageActive(0);
+
+            // Masukkan 7 kartu berurutan
+            string[] testCards = { "2", "x", "+", "3", "=", "1", "0" };
+            for (int i = 0; i < 7; i++)
+            {
+                _controller.OnDeckCardClicked(testCards[i], "number");
+            }
+
+            // Verifikasi slot ke-7 (index 6, kotak terakhir) berhasil terisi dan tidak bug/terblokir
+            Assert.IsFalse(_controller.stages[0].slots[6].IsEmpty, "Kotak ke-7 (terakhir) harus bisa diisi!");
+            Assert.AreEqual("0", _controller.stages[0].slots[6].currentToken);
+        }
+
+        [Test]
+        public void TC_BOARD_22_ValidateStage_ConcatenatedDigitsMatch()
+        {
+            var row = new BoardStageRow();
+            for (int slotIdx = 0; slotIdx < 7; slotIdx++)
+            {
+                row.slots.Add(new CardSlotView());
+            }
+            // Target equation memiliki token 2 digit ("15")
+            row.targetTokens = new List<string> { "x", "=", "15" };
+
+            // Pemain memasukkan sebagai 4 kartu terpisah: ['x', '=', '1', '5']
+            row.slots[0].SetToken("x", null, Color.black);
+            row.slots[1].SetToken("=", null, Color.black);
+            row.slots[2].SetToken("1", null, Color.black);
+            row.slots[3].SetToken("5", null, Color.black);
+
+            bool valid = _controller.ValidateStage(row);
+            Assert.IsTrue(valid, "Penyusunan kartu 'x', '=', '1', '5' harus valid untuk target 'x', '=', '15'!");
+        }
     }
 }
 

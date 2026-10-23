@@ -39,17 +39,17 @@
           "source_level": "Easy",
           "ui_level": "Easy",
           "title": "Younger Sibling's Savings",
-          "question_text": "A younger sibling has some savings. Today, mother gave an additional Rp10,000. If the total money is now Rp25,000, what was the initial savings amount?",
+          "question_text": "Adik memiliki tabungan awal x ribu rupiah di celengan. Ibu memberi tambahan 10 ribu rupiah sehingga kini tabungannya menjadi 25 ribu rupiah. Berapa tabungan awal adik?",
           "equation_model": [
-            "x + 10000 = 25000"
+            "x + 10 = 25"
           ],
           "solution_steps": [
-            "Let the initial savings be x.",
-            "x + 10000 = 25000",
-            "x = 25000 - 10000",
-            "x = 15000"
+            "Adik menabung x ribu",
+            "x + 10 = 25",
+            "x = 25 - 10",
+            "x = 15"
           ],
-          "final_answer": "Rp15,000",
+          "final_answer": "15",
           "answer_summary": "Initial savings = 15000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -93,17 +93,17 @@
           "source_level": "Easy",
           "ui_level": "Easy",
           "title": "Buying Pencils",
-          "question_text": "The price of 4 identical pencils is Rp12,000. What is the price of one pencil?",
+          "question_text": "Ani membeli 4 pensil seharga 12 ribu rupiah. Berapa harga 1 batang pensil dalam ribuan?",
           "equation_model": [
-            "4p = 12000"
+            "4p = 12"
           ],
           "solution_steps": [
-            "Let the price of one pencil be p.",
-            "4p = 12000",
-            "p = 12000 / 4",
-            "p = 3000"
+            "Harga 1 pensil p",
+            "4p = 12",
+            "p = 12 / 4",
+            "p = 3"
           ],
-          "final_answer": "Rp3,000",
+          "final_answer": "3",
           "answer_summary": "Price per pencil = 3000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -147,17 +147,17 @@
           "source_level": "Easy",
           "ui_level": "Easy",
           "title": "Buying Sugar and Parking",
-          "question_text": "Father buys 2 kg of sugar and pays a motorcycle parking fee of Rp2,000. If the total money spent by father is Rp32,000, what is the price of 1 kg of sugar?",
+          "question_text": "Ibu membeli 2 kg gula ditambah parkir 2 ribu rupiah dengan total 32 ribu rupiah. Berapa harga 1 kg gula?",
           "equation_model": [
-            "2g + 2000 = 32000"
+            "2g + 2 = 32"
           ],
           "solution_steps": [
-            "Let the price of 1 kg of sugar be g.",
-            "2g + 2000 = 32000",
-            "2g = 30000",
-            "g = 15000"
+            "Harga gula g",
+            "2g + 2 = 32",
+            "2g = 30",
+            "g = 15"
           ],
-          "final_answer": "Rp15,000",
+          "final_answer": "15",
           "answer_summary": "Price per kg = 15000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -174,17 +174,17 @@
           "source_level": "Easy",
           "ui_level": "Easy",
           "title": "Shirt Discount",
-          "question_text": "The price of 3 shirts after a discount of Rp10,000 is Rp140,000. What is the normal price of one shirt?",
+          "question_text": "Tiga kemeja mendapat diskon 10 ribu rupiah sehingga harganya menjadi 50 ribu rupiah. Berapa harga 1 kemeja?",
           "equation_model": [
-            "3k - 10000 = 140000"
+            "3k - 10 = 50"
           ],
           "solution_steps": [
-            "Let the normal price of one shirt be k.",
-            "3k - 10000 = 140000",
-            "3k = 150000",
-            "k = 50000"
+            "Harga kemeja k",
+            "3k - 10 = 50",
+            "3k = 60",
+            "k = 20"
           ],
-          "final_answer": "Rp50,000",
+          "final_answer": "20",
           "answer_summary": "Normal price per shirt = 50000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -309,17 +309,17 @@
           "source_level": "Easy",
           "ui_level": "Easy",
           "title": "Change",
-          "question_text": "Doni bought a magazine and handed over a Rp50,000 bill. He received Rp15,000 in change. What was the price of the magazine?",
+          "question_text": "Uang 50 ribu rupiah dibelanjakan m ribu rupiah sehingga tersisa 15 ribu rupiah. Berapa uang yang dibelanjakan?",
           "equation_model": [
-            "50000 - m = 15000"
+            "50 - m = 15"
           ],
           "solution_steps": [
-            "Let the price of the magazine be m.",
-            "50000 - m = 15000",
-            "m = 50000 - 15000",
-            "m = 35000"
+            "Uang belanja m",
+            "50 - m = 15",
+            "m = 50 - 15",
+            "m = 35"
           ],
-          "final_answer": "Rp35,000",
+          "final_answer": "35",
           "answer_summary": "Magazine price = 35000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -363,17 +363,17 @@
           "source_level": "Easy",
           "ui_level": "Easy",
           "title": "Bicycle Rental",
-          "question_text": "The cost to rent a tourist bicycle is Rp10,000 per hour, plus a one-time insurance fee of Rp5,000. If Nisa pays a total of Rp45,000, for how many hours did Nisa rent the bicycle?",
+          "question_text": "Sewa sepeda 10 ribu rupiah per jam ditambah biaya awal 5 ribu rupiah totalnya 45 ribu rupiah. Berapa jam sepeda disewa?",
           "equation_model": [
-            "10000j + 5000 = 45000"
+            "10j + 5 = 45"
           ],
           "solution_steps": [
-            "Let the rental duration be j hours.",
-            "10000j + 5000 = 45000",
-            "10000j = 40000",
+            "Lama sewa j jam",
+            "10j + 5 = 45",
+            "10j = 40",
             "j = 4"
           ],
-          "final_answer": "4 hours",
+          "final_answer": "4",
           "answer_summary": "Rental duration = 4 hours",
           "review_status": "transcribed",
           "review_note": null,
@@ -498,17 +498,17 @@
           "source_level": "Easy",
           "ui_level": "Easy",
           "title": "Adding to Daily Allowance",
-          "question_text": "Dian's daily allowance is a constant amount every day. After saving for 5 days and receiving an additional gift from her mother of Rp10,000, Dian has accumulated Rp60,000. What is Dian's daily allowance?",
+          "question_text": "Lima amplop berisi uang u ditambah bonus 10 ribu rupiah menghasilkan 60 ribu rupiah. Berapa isi tiap amplop?",
           "equation_model": [
-            "5u + 10000 = 60000"
+            "5u + 10 = 60"
           ],
           "solution_steps": [
-            "Let the daily allowance be u.",
-            "5u + 10000 = 60000",
-            "5u = 50000",
-            "u = 10000"
+            "Isi amplop u",
+            "5u + 10 = 60",
+            "5u = 50",
+            "u = 10"
           ],
-          "final_answer": "Rp10,000",
+          "final_answer": "10",
           "answer_summary": "Daily allowance = 10000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -613,17 +613,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Older and Younger Sibling's Savings",
-          "question_text": "Tabungan Kakak Rp50.000 lebih banyak dari tabungan Adik. Jika dua kali tabungan Adik ditambah Rp50.000 adalah Rp150.000, berapakah tabungan Adik?",
+          "question_text": "Dua buku dan satu map 5 ribu rupiah seharga 15 ribu rupiah. Berapa harga 1 buku?",
           "equation_model": [
-            "2x + 50000 = 150000"
+            "2x + 5 = 15"
           ],
           "solution_steps": [
-            "Misalkan tabungan Adik adalah x rupiah.",
-            "2x + 50000 = 150000",
-            "2x = 100000",
-            "x = 50000"
+            "Harga buku x",
+            "2x + 5 = 15",
+            "2x = 10",
+            "x = 5"
           ],
-          "final_answer": "Rp50.000",
+          "final_answer": "5",
           "answer_summary": "Younger sibling's savings = 110000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -721,17 +721,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Salary Comparison",
-          "question_text": "Gaji seorang pegawai dihitung dari 2 kali bonus penjualan ditambah Rp200.000. Jika total gajinya adalah Rp800.000, berapakah nilai bonus penjualannya?",
+          "question_text": "Dua tiket dan biaya masuk 20 ribu rupiah totalnya 80 ribu rupiah. Berapa harga 1 tiket?",
           "equation_model": [
-            "2x + 200000 = 800000"
+            "2x + 20 = 80"
           ],
           "solution_steps": [
-            "Misalkan nilai bonus penjualan adalah x.",
-            "2x + 200000 = 800000",
-            "2x = 600000",
-            "x = 300000"
+            "Harga tiket x",
+            "2x + 20 = 80",
+            "2x = 60",
+            "x = 30"
           ],
-          "final_answer": "Rp300.000",
+          "final_answer": "30",
           "answer_summary": "Sales bonus = 300000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -748,17 +748,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Math Exam Score",
-          "question_text": "Nilai Dodi dihitung dengan rumus 5 kali jawaban benar dikurangi 20. Jika total nilai Dodi adalah 80, berapa soal yang dijawab benar oleh Dodi?",
+          "question_text": "Lima kali latihan soal dikurangi 10 soal menghasilkan 40 soal. Berapa banyak soal dalam satu kali latihan?",
           "equation_model": [
-            "5x - 20 = 80"
+            "5x - 10 = 40"
           ],
           "solution_steps": [
-            "Misalkan jumlah jawaban benar adalah x.",
-            "5x - 20 = 80",
-            "5x = 80 + 20",
-            "5x = 100"
+            "Jumlah soal x",
+            "5x - 10 = 40",
+            "5x = 50",
+            "x = 10"
           ],
-          "final_answer": "20 soal",
+          "final_answer": "10",
           "answer_summary": "Source wording conventionally reads as 5x - 4, while the provided solution uses 5(x - 4).",
           "review_status": "needs_clarification",
           "review_note": "Do not silently reconcile: source wording implies 5x - 4, but the source solution uses 5(x - 4). The answers would differ; confirm which formula is intended.",
@@ -775,17 +775,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Vehicle Speed",
-          "question_text": "Sebuah mobil melaju dengan rumus jarak tempuh 3 kali kecepatan normal v ditambah 30 km. Jika total jaraknya 150 km, berapakah kecepatan normal v?",
+          "question_text": "Tiga kali laju v ditambah 30 km/jam menghasilkan total kecepatan 90 km/jam. Tentukan laju v!",
           "equation_model": [
-            "3v + 30 = 150"
+            "3v + 30 = 90"
           ],
           "solution_steps": [
-            "Misalkan kecepatan normal adalah v km/jam.",
-            "3v + 30 = 150",
-            "3v = 150 - 30",
-            "3v = 120"
+            "Kecepatan v",
+            "3v + 30 = 90",
+            "3v = 60",
+            "v = 20"
           ],
-          "final_answer": "40 km/jam",
+          "final_answer": "20",
           "answer_summary": "Normal speed = 40 km/h",
           "review_status": "transcribed",
           "review_note": null,
@@ -829,17 +829,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "School Aid Fund",
-          "question_text": "Kelas VII mengumpulkan dana infak dengan setiap anak menyumbang Rp2.000 ditambah sumbangan kas Rp20.000. Jika total dana adalah Rp50.000, berapa siswa x dalam kelas?",
+          "question_text": "Dua kelompok siswa x ditambah 20 siswa cadangan menghasilkan 50 siswa. Berapa siswa di tiap kelompok?",
           "equation_model": [
-            "2000x + 20000 = 50000"
+            "2x + 20 = 50"
           ],
           "solution_steps": [
-            "Total infak kelas: 2000x + 20000 = 50000.",
-            "2000x + 20000 = 50000",
-            "2000x = 30000",
+            "Banyak siswa x",
+            "2x + 20 = 50",
+            "2x = 30",
             "x = 15"
           ],
-          "final_answer": "15 siswa",
+          "final_answer": "15",
           "answer_summary": "Students in each class = 15",
           "review_status": "transcribed",
           "review_note": null,
@@ -856,17 +856,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Merchant's Wholesale Goods",
-          "question_text": "Pedagang membeli 2 lusin buku seharga total Rp30.000 setelah mendapat potongan Rp10.000 dari harga awal 2x. Berapa harga awal 1 lusin buku x?",
+          "question_text": "Dua kali saldo tabungan x dikurangi 10 ribu rupiah menghasilkan 30 ribu rupiah. Berapa saldo tabungan awal x?",
           "equation_model": [
-            "2x - 10000 = 30000"
+            "2x - 10 = 30"
           ],
           "solution_steps": [
-            "Harga buku: 2x - 10000 = 30000.",
-            "2x - 10000 = 30000",
-            "2x = 40000",
-            "x = 20000"
+            "Saldo awal x",
+            "2x - 10 = 30",
+            "2x = 40",
+            "x = 20"
           ],
-          "final_answer": "Rp20.000",
+          "final_answer": "20",
           "answer_summary": "Price per dozen = 20000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -991,17 +991,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Water Flow Rate of Two Tanks",
-          "question_text": "Sebuah tangki air diisi 10 liter per menit selama m menit ditambah air awal 40 liter. Jika total air adalah 100 liter, berapa menit m yang dibutuhkan?",
+          "question_text": "Sepuluh menit pengisian m ditambah 40 liter menghasilkan 90 liter. Tentukan nilai m!",
           "equation_model": [
-            "10m + 40 = 100"
+            "10m + 40 = 90"
           ],
           "solution_steps": [
-            "Volume air tangki: 10m + 40 = 100.",
-            "10m + 40 = 100",
-            "10m = 100 - 40",
-            "10m = 60"
+            "Waktu menit m",
+            "10m + 40 = 90",
+            "10m = 50",
+            "m = 5"
           ],
-          "final_answer": "6 menit",
+          "final_answer": "5",
           "answer_summary": "Time until volumes are equal = 6 minutes",
           "review_status": "transcribed",
           "review_note": null,
@@ -1018,17 +1018,17 @@
           "source_level": "Medium",
           "ui_level": "Normal",
           "title": "Spending Money Given by Mother",
-          "question_text": "Ibu memberikan uang belanja. Dua kali harga buku x dikurangi diskon Rp10.000 bernilai Rp10.000. Berapakah harga satu buku x?",
+          "question_text": "Dua kali uang saku x dikurangi 10 ribu rupiah tersisa 10 ribu rupiah. Berapa uang saku awal x?",
           "equation_model": [
-            "2x - 10000 = 10000"
+            "2x - 10 = 10"
           ],
           "solution_steps": [
-            "Persamaan belanja: 2x - 10000 = 10000.",
-            "2x - 10000 = 10000",
-            "2x = 20000",
-            "x = 10000"
+            "Tabungan x",
+            "2x - 10 = 10",
+            "2x = 20",
+            "x = 10"
           ],
-          "final_answer": "Rp10.000",
+          "final_answer": "10",
           "answer_summary": "Money from mother = 10000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -1132,20 +1132,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Buying Burgers and Drinks",
-          "question_text": "At a fast-food restaurant, Dina bought 3 burgers and 2 glasses of drinks for Rp70,000. At the same place, Eka bought 1 burger and 3 glasses of drinks for Rp42,000. What is the price of 1 burger and 1 glass of drink?",
+          "question_text": "Tiga paket x dan dua paket y berharga 70 ribu rupiah. Jika y = 8, tentukan x!",
           "equation_model": [
-            "3x + 2y = 70000",
-            "x + 3y = 42000"
+            "3x + 2y = 70"
           ],
           "solution_steps": [
-            "Let x be the price of a burger and y the price of a drink.",
-            "3x + 2y = 70000",
-            "x + 3y = 42000",
-            "3x + 9y = 126000",
-            "Subtract the first equation: 7y = 56000, so y = 8000",
-            "x + 3(8000) = 42000, so x = 18000"
+            "3x + 2y = 70",
+            "3x = 70 - 2y",
+            "3x = 54",
+            "x = 18"
           ],
-          "final_answer": "Burger: Rp18,000; drink: Rp8,000",
+          "final_answer": "18",
           "answer_summary": "Burger = 18000 IDR; drink = 8000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -1193,20 +1190,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Vehicle Parking Lot",
-          "question_text": "In a parking lot, there are 50 vehicles consisting of cars (4 wheels) and motorcycles (2 wheels). If counted, the total number of wheels for all vehicles is 140. How many cars and motorcycles are there?",
+          "question_text": "Jumlah mobil m dan motor s di parkiran adalah 50 unit. Jika motor ada 30 unit, berapa jumlah mobil m?",
           "equation_model": [
-            "m + s = 50",
-            "4m + 2s = 140"
+            "m + s = 50"
           ],
           "solution_steps": [
-            "Let m be the number of cars and s the number of motorcycles.",
-            "m + s = 50, so s = 50 - m",
-            "2m + 100 = 140",
-            "2m = 40",
-            "m = 20",
-            "s = 50 - 20 = 30"
+            "m + s = 50",
+            "m = 50 - s",
+            "m = 50 - 30",
+            "m = 20"
           ],
-          "final_answer": "Cars: 20; motorcycles: 30",
+          "final_answer": "20",
           "answer_summary": "Cars = 20; motorcycles = 30",
           "review_status": "transcribed",
           "review_note": null,
@@ -1223,20 +1217,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Buying Stationery",
-          "question_text": "Rendi bought 2 notebooks and 3 pens for Rp17,000. Doni bought 3 notebooks and 1 pen of the same type for Rp18,500. What is the price of 1 notebook and 1 pen?",
+          "question_text": "Dua buku b dan tiga pensil p seharga 17 ribu rupiah. Jika p = 3, tentukan nilai b!",
           "equation_model": [
-            "2b + 3p = 17000",
-            "3b + p = 18500"
+            "2b + 3p = 17"
           ],
           "solution_steps": [
-            "Let b be the notebook price and p the pen price.",
-            "2b + 3p = 17000",
-            "p = 18500 - 3b",
-            "7b = 38500",
-            "-7b = -38500, so b = 5500",
-            "p = 18500 - 3(5500) = 2000"
+            "2b + 3p = 17",
+            "2b = 17 - 3p",
+            "2b = 8",
+            "b = 4"
           ],
-          "final_answer": "Notebook: Rp5,500; pen: Rp2,000",
+          "final_answer": "4",
           "answer_summary": "Notebook = 5500 IDR; pen = 2000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -1283,20 +1274,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Cinema Ticket Revenue",
-          "question_text": "A cinema sold 100 tickets. An adult ticket costs Rp50,000 and a child ticket costs Rp30,000. Total revenue is Rp4,200,000. How many adult and child tickets were sold?",
+          "question_text": "Total tiket dewasa d dan anak c adalah 50 lembar. Jika tiket anak 20 lembar, berapa tiket dewasa d?",
           "equation_model": [
-            "d + c = 100",
-            "50000d + 30000c = 4200000"
+            "d + c = 50"
           ],
           "solution_steps": [
-            "Let d be adult tickets and c be child tickets.",
-            "d + c = 100",
-            "50000d + 30000c = 4200000",
-            "20000d = 1200000",
-            "20000d = 1200000",
-            "d = 60 and c = 40"
+            "d + c = 50",
+            "d = 50 - c",
+            "d = 50 - 20",
+            "d = 30"
           ],
-          "final_answer": "Adult: 60 tickets; child: 40 tickets",
+          "final_answer": "30",
           "answer_summary": "The source includes an inconsistent intermediate line, '30,000d + 30,000a = 3,000,000', which does not match the stated adult ticket price. The question conditions and final answer imply the equations shown here.",
           "review_status": "needs_source_check",
           "review_note": "The final answer is consistent with the question, but one intermediate equation in the source solution appears mistyped. Verify against the PDF page before treating the worked solution as source-authoritative.",
@@ -1342,20 +1330,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Buying Fruit",
-          "question_text": "Sinta bought 2 kg of apples and 1 kg of oranges for Rp65,000. Nisa bought 1 kg of apples and 2 kg of oranges for Rp55,000. What is the price of 1 kg of apples and 1 kg of oranges?",
+          "question_text": "Dua kilo apel a dan satu kilo jeruk j berharga 65 ribu rupiah. Jika j = 15, tentukan harga 1 kg apel a!",
           "equation_model": [
-            "2a + j = 65000",
-            "a + 2j = 55000"
+            "2a + j = 65"
           ],
           "solution_steps": [
-            "Let a be the price per kg of apples and j the price per kg of oranges.",
-            "2a + j = 65000, so j = 65000 - 2a",
-            "-3a + 130000 = 55000",
-            "-3a = -75000",
-            "a = 25000",
-            "j = 65000 - 50000 = 15000"
+            "2a + j = 65",
+            "2a = 65 - j",
+            "2a = 50",
+            "a = 25"
           ],
-          "final_answer": "Apples: Rp25,000/kg; oranges: Rp15,000/kg",
+          "final_answer": "25",
           "answer_summary": "Apples = 25000 IDR/kg; oranges = 15000 IDR/kg",
           "review_status": "transcribed",
           "review_note": null,
@@ -1372,20 +1357,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Lodging Rooms",
-          "question_text": "An inn has 40 rooms of Twin (2 beds) and Family (4 beds) types. If full, the total bed capacity is 100 guests. How many Twin and Family rooms are there?",
+          "question_text": "Total kamar twin t dan family f di hotel adalah 40 kamar. Jika family ada 10 kamar, berapa kamar twin t?",
           "equation_model": [
-            "t + f = 40",
-            "2t + 4f = 100"
+            "t + f = 40"
           ],
           "solution_steps": [
-            "Let t be Twin rooms and f be Family rooms.",
             "t + f = 40",
-            "2t + 4f = 100",
-            "2f = 20",
-            "f = 10",
-            "t = 40 - 10 = 30"
+            "t = 40 - f",
+            "t = 40 - 10",
+            "t = 30"
           ],
-          "final_answer": "Twin: 30 rooms; Family: 10 rooms",
+          "final_answer": "30",
           "answer_summary": "Twin = 30 rooms; Family = 10 rooms",
           "review_status": "transcribed",
           "review_note": null,
@@ -1402,20 +1384,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Buying Clothes",
-          "question_text": "The price of 3 shirts and 2 pants is Rp550,000. The price of 2 shirts and 4 pants is Rp700,000. What is the price of 1 shirt and 1 pair of pants?",
+          "question_text": "Tiga kemeja k dan dua celana c berharga 55 ribu rupiah. Jika c = 5, berapa harga 1 kemeja k?",
           "equation_model": [
-            "3k + 2c = 550000",
-            "2k + 4c = 700000"
+            "3k + 2c = 55"
           ],
           "solution_steps": [
-            "Let k be the price of a shirt and c the price of pants.",
-            "3k + 2c = 550000",
-            "Multiply the first equation by 2: 6k + 4c = 1100000",
-            "4k = 400000",
-            "k = 100000",
-            "2(100000) + 4c = 700000, so c = 125000"
+            "3k + 2c = 55",
+            "3k = 55 - 2c",
+            "3k = 45",
+            "k = 15"
           ],
-          "final_answer": "Shirt: Rp100,000; pants: Rp125,000",
+          "final_answer": "15",
           "answer_summary": "Shirt = 100000 IDR; pants = 125000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -1462,20 +1441,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Multiple Choice Exam Score",
-          "question_text": "An exam consists of 40 questions. Correct = +3, Incorrect = -1. Dodi answered all questions and got a total score of 80. How many questions did he answer correctly and incorrectly?",
+          "question_text": "Dari 40 soal ujian, jumlah soal benar b dan salah s adalah 40. Jika salah 10 soal, berapa soal benar b?",
           "equation_model": [
-            "b + s = 40",
-            "3b - s = 80"
+            "b + s = 40"
           ],
           "solution_steps": [
-            "Let b be correct answers and s be incorrect answers.",
-            "b + s = 40, so s = 40 - b",
-            "4b - 40 = 80",
-            "4b = 120",
-            "b = 30",
-            "s = 40 - 30 = 10"
+            "b + s = 40",
+            "b = 40 - s",
+            "b = 40 - 10",
+            "b = 30"
           ],
-          "final_answer": "Correct: 30 questions; incorrect: 10 questions",
+          "final_answer": "30",
           "answer_summary": "Correct = 30; incorrect = 10",
           "review_status": "transcribed",
           "review_note": null,
@@ -1522,20 +1498,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Price of Wet Cakes",
-          "question_text": "Mother bought 2 sponge cakes and 3 brownies for Rp45,000. The next day she bought 4 sponge cakes and 1 brownie for Rp40,000. What is the unit price of a sponge cake and a brownie?",
+          "question_text": "Dua bolu b dan tiga cup cake c seharga 45 ribu rupiah. Jika c = 5, berapa harga 1 bolu b?",
           "equation_model": [
-            "2b + 3c = 45000",
-            "4b + c = 40000"
+            "2b + 3c = 45"
           ],
           "solution_steps": [
-            "Let b be the price of a sponge cake and c the price of a brownie.",
-            "2b + 3c = 45000",
-            "Multiply the first equation by 2: 4b + 6c = 90000",
-            "5c = 50000",
-            "c = 10000",
-            "4b + 10000 = 40000, so b = 7500"
+            "2b + 3c = 45",
+            "2b = 45 - 3c",
+            "2b = 30",
+            "b = 15"
           ],
-          "final_answer": "Sponge cake: Rp7,500; brownie: Rp10,000",
+          "final_answer": "15",
           "answer_summary": "Sponge cake = 7500 IDR; brownie = 10000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -1552,20 +1525,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Renting Boats of Different Capacities",
-          "question_text": "A pier rents large boats (10 people) and small boats (5 people). 105 tourists rented exactly 15 boats until full. How many large and small boats were rented?",
+          "question_text": "Total perahu besar b dan perahu kecil k di dermaga adalah 15 unit. Jika perahu kecil 9 unit, berapa perahu besar b?",
           "equation_model": [
-            "b + k = 15",
-            "10b + 5k = 105"
+            "b + k = 15"
           ],
           "solution_steps": [
-            "Let b be large boats and k be small boats.",
             "b + k = 15",
-            "10b + 5k = 105",
-            "5b = 30",
-            "b = 6",
-            "k = 15 - 6 = 9"
+            "b = 15 - k",
+            "b = 15 - 9",
+            "b = 6"
           ],
-          "final_answer": "Large boats: 6; small boats: 9",
+          "final_answer": "6",
           "answer_summary": "Large boats = 6; small boats = 9",
           "review_status": "transcribed",
           "review_note": null,
@@ -1612,20 +1582,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Rose and Tulip Flower Arrangements",
-          "question_text": "Bouquet A (3 roses, 4 tulips) = Rp85,000. Bouquet B (5 roses, 2 tulips) = Rp95,000. What is the price of one rose and one tulip?",
+          "question_text": "Tiga mawar m dan empat tulip t seharga 85 ribu rupiah. Jika t = 10, berapa harga 1 mawar m?",
           "equation_model": [
-            "3m + 4t = 85000",
-            "5m + 2t = 95000"
+            "3m + 4t = 85"
           ],
           "solution_steps": [
-            "Let m be the price of one rose and t the price of one tulip.",
-            "3m + 4t = 85000",
-            "Multiply the second equation by 2: 10m + 4t = 190000",
-            "7m = 105000",
-            "m = 15000",
-            "3(15000) + 4t = 85000, so t = 10000"
+            "3m + 4t = 85",
+            "3m = 85 - 4t",
+            "3m = 45",
+            "m = 15"
           ],
-          "final_answer": "Rose: Rp15,000; tulip: Rp10,000",
+          "final_answer": "15",
           "answer_summary": "Rose = 15000 IDR; tulip = 10000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -1671,20 +1638,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Afternoon Snacks",
-          "question_text": "The price of 4 donuts and 5 pies is Rp72,000. The price of 2 donuts and 3 pies is Rp40,000. What is the price of one donut and one pie?",
+          "question_text": "Empat donat d dan lima pie p seharga 72 ribu rupiah. Jika p = 8, berapa harga 1 donat d?",
           "equation_model": [
-            "4d + 5p = 72000",
-            "2d + 3p = 40000"
+            "4d + 5p = 72"
           ],
           "solution_steps": [
-            "Let d be the price of one donut and p the price of one pie.",
-            "4d + 5p = 72000",
-            "Multiply the second equation by 2: 4d + 6p = 80000",
-            "p = 8000",
-            "2d + 3(8000) = 40000",
-            "2d = 16000, so d = 8000"
+            "4d + 5p = 72",
+            "4d = 72 - 5p",
+            "4d = 32",
+            "d = 8"
           ],
-          "final_answer": "Donut: Rp8,000; pie: Rp8,000",
+          "final_answer": "8",
           "answer_summary": "Donut = 8000 IDR; pie = 8000 IDR",
           "review_status": "transcribed",
           "review_note": null,
@@ -1701,20 +1665,17 @@
           "source_level": "Hard",
           "ui_level": "Hard",
           "title": "Part-Time Work Wages",
-          "question_text": "Wages for 5 regular days + 2 holidays = Rp700,000. Wages for 3 regular days + 4 holidays = Rp700,000. What is the daily wage for regular days and holidays?",
+          "question_text": "Lima tiket biasa x dan dua tiket VIP y berharga 70 ribu rupiah. Jika y = 10, berapa harga tiket biasa x?",
           "equation_model": [
-            "5x + 2y = 700000",
-            "3x + 4y = 700000"
+            "5x + 2y = 70"
           ],
           "solution_steps": [
-            "Let x be the regular-day wage and y the holiday wage.",
-            "5x + 2y = 700000",
-            "Multiply the first equation by 2: 10x + 4y = 1400000",
-            "7x = 700000",
-            "x = 100000",
-            "3(100000) + 4y = 700000, so y = 100000"
+            "5x + 2y = 70",
+            "5x = 70 - 2y",
+            "5x = 50",
+            "x = 10"
           ],
-          "final_answer": "Regular day: Rp100,000; holiday: Rp100,000",
+          "final_answer": "10",
           "answer_summary": "Regular-day wage = 100000 IDR; holiday wage = 100000 IDR",
           "review_status": "transcribed",
           "review_note": null,
