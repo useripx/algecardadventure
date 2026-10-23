@@ -512,16 +512,16 @@ namespace AlgeCardAdventure.UI
             string finalExpr = $"{varName} = {cleanDigits}";
             stages[3].targetTokens = TokenizeExpression(finalExpr);
 
-            // Pastikan jumlah target tokens per baris tidak melebihi kapasitas fisik 7 slot (DEC-51)
+            // Pastikan jumlah target tokens per baris tidak melebihi kapasitas fisik 8 slot (DEC-54)
             for (int s = 0; s < stages.Count; s++)
             {
-                if (stages[s].targetTokens != null && stages[s].targetTokens.Count > 7)
+                if (stages[s].targetTokens != null && stages[s].targetTokens.Count > 8)
                 {
-                    stages[s].targetTokens = stages[s].targetTokens.GetRange(0, 7);
+                    stages[s].targetTokens = stages[s].targetTokens.GetRange(0, 8);
                 }
             }
 
-            // Pastikan seluruh 7 slot selalu aktif dan terbuka di semua tahap (Pilar 1 Zero Code Approved Plan)
+            // Pastikan seluruh 8 slot selalu aktif dan terbuka di semua tahap (Pilar 1 Zero Code Approved Plan)
             for (int s = 0; s < stages.Count; s++)
             {
                 var stage = stages[s];

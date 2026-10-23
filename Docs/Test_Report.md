@@ -187,18 +187,28 @@
 | **TC_BOARD_21** | `AlgebraBoardController` | Pengisian kotak ke-7 (terakhir) pada papan aljabar | Slot index 6 berhasil diisi melalui klik dek tanpa terblokir targetToken lebih sedikit | **PASS** |
 | **TC_BOARD_22** | `AlgebraBoardController` | Validasi susunan token gabungan (*concatenated*) | Input multi-digit angka bertingkat seperti '1' dan '5' untuk target '15' valid sukses | **PASS** |
 
+### Batch 41: Perluasan Kapasitas Papan Aljabar Menjadi 8 Slot Aktif Layar 04
+- **Tanggal:** 23 Oktober 2026 20:15 WIB
+- **Lingkungan Pengujian:** Unity `6000.6.6f1` (Windows 11) / .NET 8.0 SDK / C# 9.0
+- **Tipe Uji:** EditMode Automated Unit Tests & Standalone CLI Test Runners
+
+| ID Kasus Uji | Modul / Komponen | Skenario yang Diuji | Hasil yang Diharapkan | Status Aktual |
+|---|---|---|---|:---:|
+| **TC_BOARD_23** | `AlgebraBoardController` | Verifikasi seluruh 8 slot aktif dan dapat diisi | Baris tahap memiliki 8 slot, seluruh slot aktif dan kartu ke-8 berhasil masuk | **PASS** |
+| **TC_BOARD_24** | `AlgebraBoardController` | Validasi susunan persamaan matematika 8 token | Formula aljabar 8 kartu terisi berhasil divalidasi dan lolos tanpa hambatan | **PASS** |
+
 ---
 
-## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 40)
+## 📋 Ringkasan Hasil Pengujian Terakhir (Batch 41)
 
 - **Total Test Suite Mandiri Proyek:** 5 Runner
-  - `BoardTestRunner`: **22/22 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_22`)
+  - `BoardTestRunner`: **24/24 PASS** (`TC_BOARD_01` s.d. `TC_BOARD_24`)
   - `TFTestRunner`: **11/11 PASS** (`TC_TF_01` s.d. `TC_TF_11`)
   - `ChatbotTestRunner`: **8/8 PASS** (`TC_CHAT_01` s.d. `TC_CHAT_08`)
   - `MissionTestRunner`: **14/14 PASS** (`TC_MISSION_01` s.d. `TC_MISSION_14`)
   - `ScoreTestRunner`: **10/10 PASS** (`TC_SRES_01` s.d. `TC_SRES_10`)
-- **Total Kasus Uji Terverifikasi:** 65 Test
-- **Lulus (PASS):** 65 (100%)
+- **Total Kasus Uji Terverifikasi:** 67 Test
+- **Lulus (PASS):** 67 (100%)
 - **Gagal (FAIL):** 0
 - **Error:** 0
 - **Tingkat Kelulusan:** **100% PASS (0 GAGAL / 0 ERROR)** (**Pilar 6**)

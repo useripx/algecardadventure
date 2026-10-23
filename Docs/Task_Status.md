@@ -1106,5 +1106,38 @@
   - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/18/30.md` diperbarui.
   - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
 
+---
+
+## 📋 Checklist Batch 41 (Perluasan Kapasitas Papan Aljabar Menjadi 8 Slot Aktif Layar 04)
+
+- [x] **Pilar 1 (Approval Gate):** Rencana implementasi tertulis `expand_to_8_slots_algebra_board_plan.md` disetujui resmi oleh Yogi Ario (*The user has approved this document*).
+- [x] **Pilar 2 (Git Flow):** Pengerjaan dilakukan pada branch kerja terlindungi `develop`.
+- [x] **Pilar 4 (Proteksi Aset):** Folder acuan `Docs/Ui Template/` 100% terjaga utuh berstatus **READ-ONLY**.
+- [x] **Pilar 7 (100% Offline Game):** Data 60 soal lokal di `banksoal.json` dan evaluasi permainan berjalan 100% offline.
+- [x] **Fase 1 — Kalibrasi Layout & Penambahan Slot ke-8 (`04_AlgebraCardBoard.unity`):**
+  - Menambahkan GameObject `Slot_X_8` (ID 801-839) pada keempat tahap papan aljabar (`SlotRail_1`, `SlotRail_2`, `SlotRail_3`, `SlotRail_4`).
+  - Mengalibrasi ulang posisi $X$ kedelapan slot secara simetris terpusat ($s_x = (s_{\text{idx}} - 3.5) \times 68\text{ px}$) dengan ukuran $58 \times 76\text{ px}$ (bentang 534 px di dalam panel 660 px, margin aman 63 px di sisi kiri dan kanan).
+  - Mendaftarkan slot ke-8 ke dalam array `stages[s].slots` pada `AlgebraBoardController` di scene YAML (total 32 slot aktif terdaftar).
+- [x] **Fase 2 — Pembaruan Logika Kapasitas 8 Slot (`AlgebraBoardController.cs`):**
+  - Memperbarui `FormulateStagesFromQuestion` untuk menaikkan batas kapasitas token dari 7 menjadi 8 (`targetTokens.Count > 8`).
+  - Memastikan `OnDeckCardClicked` dapat mengisi kartu berturut-turut dari slot 1 hingga slot 8 leluasa (`maxSlots = currentStage.slots.Count = 8`).
+  - Menyelaraskan `CheckIfRowIsComplete` dan `ValidateStage` untuk mengevaluasi susunan hingga 8 kartu.
+- [x] **Fase 3 — Pengujian Otomatis 100% PASS (Pilar 6):**
+  - Penambahan 2 pengujian unit pada `AlgebraBoardTests.cs` dan `BoardTestRunner`:
+    - `TC_BOARD_23_AllEightSlotsActive_AndFillable`: Memastikan papan memiliki 8 slot dan kartu ke-8 berhasil masuk dan aktif.
+    - `TC_BOARD_24_EightSlotEquation_ValidatesSuccessfully`: Memastikan persamaan 8 token berhasil tervalidasi sukses.
+  - Kompilasi `dotnet build AlgeCardAdventure.Tests.csproj`: **0 Warning(s), 0 Error(s)**.
+  - Eksekusi seluruh 5 test runner proyek:
+    - `BoardTestRunner`: **24/24 PASS (100% PASS)**
+    - `TFTestRunner`: **11/11 PASS (100% PASS)**
+    - `ChatbotTestRunner`: **8/8 PASS (100% PASS)**
+    - `MissionTestRunner`: **14/14 PASS (100% PASS)**
+    - `ScoreTestRunner`: **10/10 PASS (100% PASS)**
+    - **Total Pengujian Proyek: 67/67 PASS (100% PASS, 0 GAGAL, 0 ERROR)**.
+- [x] **Fase 4 — Dokumentasi Tata Kelola (Pilar 5 & Pilar 8):**
+  - Keputusan arsitektur `DEC-54` dicatat di `Docs/Decision_Log.md`.
+  - `Docs/Task_Status.md`, `Docs/Test_Report.md`, dan `changelog/23/10/2026/20/15.md` diperbarui.
+  - Riwayat percakapan dicadangkan ke `Docs/chat/riwayat23102026.md`.
+
 
 

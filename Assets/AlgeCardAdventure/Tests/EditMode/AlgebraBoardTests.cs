@@ -714,6 +714,52 @@ namespace AlgeCardAdventure.Tests
             bool valid = _controller.ValidateStage(row);
             Assert.IsTrue(valid, "Penyusunan kartu 'x', '=', '1', '5' harus valid untuk target 'x', '=', '15'!");
         }
+
+        [Test]
+        public void TC_BOARD_23_AllEightSlotsActive_AndFillable()
+        {
+            _controller.stages = new List<BoardStageRow>();
+            var row = new BoardStageRow();
+            for (int slotIdx = 0; slotIdx < 8; slotIdx++)
+            {
+                row.slots.Add(new CardSlotView());
+            }
+            row.targetTokens = new List<string> { "2", "x", "+", "1", "0", "=", "3", "0" };
+            _controller.stages.Add(row);
+            _controller.SetStageActive(0);
+
+            // Masukkan 8 kartu berurutan
+            string[] testCards = { "2", "x", "+", "1", "0", "=", "3", "0" };
+            for (int i = 0; i < 8; i++)
+            {
+                _controller.OnDeckCardClicked(testCards[i], "number");
+            }
+
+            // Verifikasi slot ke-8 (index 7, slot baru) aktif dan berhasil terisi
+            Assert.AreEqual(8, _controller.stages[0].slots.Count);
+            Assert.IsFalse(_controller.stages[0].slots[7].IsEmpty, "Kotak ke-8 harus aktif dan bisa diisi!");
+            Assert.AreEqual("0", _controller.stages[0].slots[7].currentToken);
+        }
+
+        [Test]
+        public void TC_BOARD_24_EightSlotEquation_ValidatesSuccessfully()
+        {
+            var row = new BoardStageRow();
+            for (int slotIdx = 0; slotIdx < 8; slotIdx++)
+            {
+                row.slots.Add(new CardSlotView());
+            }
+            row.targetTokens = new List<string> { "2", "x", "+", "1", "0", "=", "3", "0" };
+
+            string[] testCards = { "2", "x", "+", "1", "0", "=", "3", "0" };
+            for (int i = 0; i < 8; i++)
+            {
+                row.slots[i].SetToken(testCards[i], null, Color.black);
+            }
+
+            bool valid = _controller.ValidateStage(row);
+            Assert.IsTrue(valid, "Penyusunan 8 kartu harus valid dan sukses divalidasi!");
+        }
     }
 }
 
